@@ -1,0 +1,68 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+    --color-paper: #F7F6F0;
+    --color-paper-light: #FAF9F5;
+    --color-surface: #FFFEFA;
+    --color-ink: #171715;
+    --color-ink-muted: #66645E;
+    --color-ink-light: #8E8C85;
+    --color-line: #C7C5BB;
+    --color-line-light: #E4E2D8;
+    --color-line-strong: #171715;
+
+    --color-lime: #D4FF3F;
+    --color-lime-hover: #C2F025;
+    --color-pink: #EE5BA6;
+    --color-danger: #B42318;
+    --color-success: #15803D;
+
+    --shadow-brutal-sm: 1px 1px 0px #171715;
+    --shadow-brutal: 2px 2px 0px #171715;
+    --shadow-brutal-lg: 4px 4px 0px #171715;
+    --shadow-brutal-lime: 2px 2px 0px #D4FF3F;
+}
+
+@layer base {
+    ::selection {
+        background-color: #D4FF3F;
+        color: #171715;
+    }
+
+    body {
+        background-color: #F7F6F0;
+        color: #171715;
+        font-family: var(--font-sans);
+        letter-spacing: -0.01em;
+    }
+
+    /* Crisp form controls defaults */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="search"],
+    input[type="url"],
+    input[type="tel"],
+    textarea,
+    select {
+        border-color: #C7C5BB;
+        background-color: #FFFEFA;
+        color: #171715;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+        outline: none;
+        border-color: #171715;
+        box-shadow: 2px 2px 0px #171715;
+    }
+}
