@@ -97,7 +97,7 @@ Route::middleware(['auth', 'active'])->group(function (): void {
     Route::delete('/reading-history', [ReadingHistoryController::class, 'clear'])->name('reading-history.clear');
 
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::match(['get', 'patch'], '/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
 
     Route::middleware('verified')->group(function (): void {
