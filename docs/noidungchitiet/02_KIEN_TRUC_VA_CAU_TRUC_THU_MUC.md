@@ -59,7 +59,6 @@ PhpProject/
 │   │   ├── AuthorApplicationStatus.php # Trạng thái đơn CTV: Pending, Approved, Rejected
 │   │   ├── CommentReportStatus.php     # Trạng thái báo cáo bình luận: Pending, Resolved, Dismissed
 │   │   ├── CommentStatus.php           # Trạng thái bình luận: Visible, Hidden
-│   │   ├── PostRequestPriority.php     # Mức ưu tiên yêu cầu bài: Normal, Urgent
 │   │   ├── PostRequestStatus.php       # Trạng thái yêu cầu bài: Pending, Approved, Rejected
 │   │   ├── PostRequestType.php         # Loại yêu cầu bài: Takedown (gỡ bài), Update (sửa bài)
 │   │   ├── PostStatus.php              # Trạng thái bài viết: Draft, Pending, Published, Hidden, Archived

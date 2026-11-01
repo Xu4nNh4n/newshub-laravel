@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Enums\CommentReportReason;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
@@ -150,43 +149,6 @@ class CommentThreadTest extends TestCase
             ->assertSee('Bình luận này đã bị xóa hoặc ẩn.')
             ->assertSee('&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;', false)
             ->assertDontSee('<script>alert("xss")</script>', false);
-    }
-
-    private function legacy_reporter_can_only_report_a_comment_once(): void
-    {
-        $comment = Comment::factory()->create();
-        $reporter = User::factory()->create();
-
-        $this->actingAs($reporter)->post(route('comment-reports.store', $comment), [
-            'reason' => CommentReportReason::Spam->value,
-        ])->assertRedirect()->assertSessionHas('status');
-
-        $this->actingAs($reporter)->post(route('comment-reports.store', $comment), [
-            'reason' => CommentReportReason::Irrelevant->value,
-        ])->assertRedirect()->assertSessionHasErrors([
-            'reason' => 'Bạn đã báo cáo bình luận này trước đó.',
-        ]);
-
-        $this->assertDatabaseCount('comment_reports', 1);
-    }
-
-    private function legacy_user_cannot_report_own_comment_and_other_reason_requires_description(): void
-    {
-        $comment = Comment::factory()->create();
-
-        $this->actingAs($comment->user)
-            ->post(route('comment-reports.store', $comment), [
-                'reason' => CommentReportReason::Spam->value,
-            ])
-            ->assertForbidden();
-
-        $this->actingAs(User::factory()->create())
-            ->post(route('comment-reports.store', $comment), [
-                'reason' => CommentReportReason::Other->value,
-            ])
-            ->assertSessionHasErrors('description');
-
-        $this->assertDatabaseCount('comment_reports', 0);
     }
 
     public function test_comment_reporting_route_is_removed(): void

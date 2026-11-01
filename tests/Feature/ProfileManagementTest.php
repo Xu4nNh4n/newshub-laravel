@@ -8,9 +8,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Notifications\VerifyEmailNotification;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ProfileManagementTest extends TestCase
@@ -49,61 +47,6 @@ class ProfileManagementTest extends TestCase
             'comments_count' => 2,
             'posts_count' => 1,
         ]);
-    }
-
-    private function legacy_replacing_avatar_deletes_old_file(): void
-    {
-        Storage::fake('public');
-        Storage::disk('public')->put('users/avatars/old.png', 'old');
-        $user = User::factory()->create(['avatar' => 'users/avatars/old.png']);
-
-        $response = $this->actingAs($user)->patch(route('profile.update'), [
-            'name' => $user->name,
-            'avatar' => UploadedFile::fake()->image('new-avatar.png', 1000, 600),
-        ]);
-
-        $response->assertRedirect(route('profile.edit'));
-        Storage::disk('public')->assertMissing('users/avatars/old.png');
-        $avatarPath = $user->refresh()->avatar;
-        Storage::disk('public')->assertExists($avatarPath);
-        $this->assertStringEndsWith('.webp', $avatarPath);
-        $this->assertSame('image/webp', Storage::disk('public')->mimeType($avatarPath));
-
-        $dimensions = getimagesizefromstring(Storage::disk('public')->get($avatarPath));
-        $this->assertIsArray($dimensions);
-        $this->assertSame([512, 512], [$dimensions[0], $dimensions[1]]);
-        $this->assertCount(1, Storage::disk('public')->allFiles('users/avatars'));
-    }
-
-    private function legacy_executable_avatar_is_rejected(): void
-    {
-        Storage::fake('public');
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->patch(route('profile.update'), [
-            'name' => $user->name,
-            'avatar' => UploadedFile::fake()->create('avatar.php', 10, 'application/x-php'),
-        ]);
-
-        $response->assertSessionHasErrors('avatar');
-        $this->assertNull($user->refresh()->avatar);
-        $this->assertSame([], Storage::disk('public')->allFiles());
-    }
-
-    private function legacy_user_can_remove_existing_avatar(): void
-    {
-        Storage::fake('public');
-        Storage::disk('public')->put('users/avatars/existing.webp', 'avatar');
-        $user = User::factory()->create(['avatar' => 'users/avatars/existing.webp']);
-
-        $response = $this->actingAs($user)->patch(route('profile.update'), [
-            'name' => $user->name,
-            'remove_avatar' => '1',
-        ]);
-
-        $response->assertRedirect(route('profile.edit'));
-        $this->assertNull($user->refresh()->avatar);
-        Storage::disk('public')->assertMissing('users/avatars/existing.webp');
     }
 
     public function test_user_can_change_email_and_receives_a_new_verification_notification(): void
