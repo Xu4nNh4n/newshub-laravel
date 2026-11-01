@@ -42,9 +42,9 @@ class VerifyEmailNotification extends Notification
                 'actionUrl' => $verificationUrl,
                 'expiryText' => 'Liên kết có hiệu lực trong '.Config::integer('auth.verification.expire', 60).' phút.',
                 'securityText' => 'Nếu bạn không tạo tài khoản NewsHub, hãy bỏ qua email này. Không cần thực hiện thêm thao tác nào.',
-                'accentColor' => '#22d3ee',
-                'accentTextColor' => '#083344',
-                'accentSoftColor' => '#cffafe',
+                'accentColor' => '#1D4ED8',
+                'accentTextColor' => '#FFFFFF',
+                'accentSoftColor' => '#EFF6FF',
             ]);
     }
 }

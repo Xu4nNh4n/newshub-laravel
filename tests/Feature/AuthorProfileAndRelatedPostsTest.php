@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Enums\UserRole;
 use App\Models\Category;
 use App\Models\Post;
-use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
@@ -50,25 +49,17 @@ class AuthorProfileAndRelatedPostsTest extends TestCase
             ->assertSee($post->title);
     }
 
-    public function test_related_articles_prioritize_shared_tags_before_same_category(): void
+    public function test_related_articles_are_selected_from_the_same_category(): void
     {
         $category = Category::factory()->create();
-        $otherCategory = Category::factory()->create();
-        $tag = Tag::factory()->create();
         $post = Post::factory()->published()->create(['category_id' => $category]);
-        $post->tags()->attach($tag);
-        $sharedTag = Post::factory()->published()->create([
-            'category_id' => $otherCategory,
-            'title' => 'Ưu tiên chung tag',
-        ]);
-        $sharedTag->tags()->attach($tag);
         Post::factory()->published()->create([
             'category_id' => $category,
-            'title' => 'Sau đó cùng chuyên mục',
+            'title' => 'Bài cùng chuyên mục',
         ]);
 
         $this->get(route('news.show', $post->slug))
             ->assertOk()
-            ->assertSeeInOrder(['Ưu tiên chung tag', 'Sau đó cùng chuyên mục']);
+            ->assertSee('Bài cùng chuyên mục');
     }
 }

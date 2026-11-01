@@ -7,10 +7,10 @@
         @php
             $tickerPost = $featuredPosts->first() ?? $latestPosts->first();
         @endphp
-        <aside class="flex flex-col sm:flex-row sm:items-center gap-3 border-2 border-line-strong bg-surface px-4 py-2.5 shadow-brutal-sm rounded-none" aria-label="Tin nóng 24/7">
+        <aside class="flex flex-col sm:flex-row sm:items-center gap-3 border border-line bg-surface px-4 py-2.5 shadow-brutal-sm rounded-none" aria-label="Tin nóng 24/7">
             <div class="flex items-center gap-2 shrink-0">
-                <span class="inline-flex items-center gap-1.5 border border-line-strong bg-lime px-2.5 py-0.5 text-[10px] font-bold font-mono uppercase tracking-wider text-ink">
-                    <span class="size-2 bg-ink animate-pulse"></span>
+                <span class="inline-flex items-center gap-1.5 border border-line-strong bg-lime px-2.5 py-0.5 text-[10px] font-bold font-mono uppercase tracking-wider text-white">
+                    <span class="size-2 bg-white animate-pulse"></span>
                     Tiêu điểm 24/7
                 </span>
             </div>
@@ -38,8 +38,8 @@
             <h2 id="featured-headline" class="sr-only">Tin tức tiêu điểm</h2>
 
             <!-- Lead Story (7 or 8 columns on large screens) -->
-            <article class="group lg:col-span-7 xl:col-span-8 flex flex-col justify-between border-2 border-line-strong bg-surface shadow-brutal transition-all duration-150">
-                <a href="{{ route('news.show', $leadPost->slug) }}" class="relative block aspect-[16/9] w-full overflow-hidden border-b-2 border-line-strong bg-paper">
+            <article class="group lg:col-span-7 xl:col-span-8 flex flex-col justify-between border border-line bg-surface shadow-brutal-sm transition-all duration-150 hover:border-line-strong">
+                <a href="{{ route('news.show', $leadPost->slug) }}" class="relative block aspect-[16/9] w-full overflow-hidden border-b border-line bg-paper">
                     @if ($leadPost->thumbnail)
                         <img src="{{ asset('storage/' . $leadPost->thumbnail) }}"
                              alt="{{ $leadPost->title }}"
@@ -54,7 +54,7 @@
                     @endif
 
                     @if ($leadPost->category)
-                        <span class="absolute left-3.5 top-3.5 border border-line-strong bg-paper px-3 py-1 text-xs font-bold font-mono uppercase tracking-wider text-ink shadow-2xs group-hover:bg-lime transition-colors">
+                        <span class="absolute left-3.5 top-3.5 border border-line-strong bg-paper px-3 py-1 text-xs font-bold font-mono uppercase tracking-wider text-ink shadow-2xs group-hover:bg-lime group-hover:text-white transition-colors">
                             {{ $leadPost->category->name }}
                         </span>
                     @endif
@@ -86,8 +86,8 @@
             <!-- Sub-featured List (5 or 4 columns on large screens) -->
             <div class="lg:col-span-5 xl:col-span-4 flex flex-col gap-6">
                 @foreach ($subFeatures as $subPost)
-                    <article class="group flex-1 flex flex-col justify-between border-2 border-line-strong bg-surface shadow-brutal transition-all duration-150">
-                        <a href="{{ route('news.show', $subPost->slug) }}" class="relative block aspect-[16/9] w-full overflow-hidden border-b border-line-strong bg-paper">
+                    <article class="group flex-1 flex flex-col justify-between border border-line bg-surface shadow-brutal-sm transition-all duration-150 hover:border-line-strong">
+                        <a href="{{ route('news.show', $subPost->slug) }}" class="relative block aspect-[16/9] w-full overflow-hidden border-b border-line bg-paper">
                             @if ($subPost->thumbnail)
                                 <img src="{{ asset('storage/' . $subPost->thumbnail) }}"
                                      alt="{{ $subPost->title }}"
@@ -102,7 +102,7 @@
                             @endif
 
                             @if ($subPost->category)
-                                <span class="absolute left-2.5 top-2.5 border border-line-strong bg-paper px-2.5 py-0.5 text-[10px] font-bold font-mono uppercase tracking-wider text-ink shadow-2xs group-hover:bg-lime transition-colors">
+                                <span class="absolute left-2.5 top-2.5 border border-line-strong bg-paper px-2.5 py-0.5 text-[10px] font-bold font-mono uppercase tracking-wider text-ink shadow-2xs group-hover:bg-lime group-hover:text-white transition-colors">
                                     {{ $subPost->category->name }}
                                 </span>
                             @endif
@@ -163,8 +163,8 @@
         <!-- Right: Ranked Top 5 Popular & Editorial Recruitment (4 cols) -->
         <aside class="lg:col-span-4 space-y-8" aria-label="Nội dung nổi bật">
             <!-- Top 5 Ranked Articles -->
-            <div class="border-2 border-line-strong bg-surface p-5 shadow-brutal">
-                <div class="flex items-center justify-between border-b border-line pb-3">
+            <div class="border border-line bg-surface p-5 shadow-brutal-sm">
+                <div class="flex items-center justify-between border-b-2 border-line-strong pb-3">
                     <h2 class="text-base font-black tracking-tight text-ink flex items-center gap-2 font-mono uppercase">
                         <span class="size-2.5 bg-lime border border-ink"></span>
                         <span>Đọc nhiều nhất</span>
@@ -178,8 +178,8 @@
                     @forelse ($popularPosts as $index => $item)
                         @php
                             $rankColor = match($index) {
-                                0 => 'bg-lime text-ink border-ink',
-                                1 => 'bg-pink text-ink border-ink',
+                                0 => 'bg-lime text-white border-line-strong',
+                                1 => 'bg-[#BFDBFE] text-[#1D4ED8] border-[#1D4ED8]',
                                 2 => 'bg-paper text-ink border-line-strong',
                                 default => 'bg-paper-light text-ink-muted border-line',
                             };
@@ -208,8 +208,8 @@
             </div>
 
             <!-- Categories Directory by Parent (Smooth Collapsible Accordion) -->
-            <div class="border-2 border-line-strong bg-surface p-5 shadow-brutal">
-                <div class="flex items-center justify-between border-b border-line pb-3">
+            <div class="border border-line bg-surface p-5 shadow-brutal-sm">
+                <div class="flex items-center justify-between border-b-2 border-line-strong pb-3">
                     <h2 class="text-base font-black tracking-tight text-ink font-mono uppercase">
                         Chuyên mục chủ đề
                     </h2>
@@ -255,7 +255,7 @@
                                     <div class="overflow-hidden">
                                         <div class="flex flex-wrap gap-1.5 px-3 pb-2.5 pt-1 border-t border-line font-sans">
                                             <a href="{{ route('news.index', ['category' => $parent->slug]) }}"
-                                               class="inline-flex items-center border border-line-strong bg-lime px-2 py-0.5 text-[11px] font-bold text-ink shadow-2xs">
+                                               class="inline-flex items-center border border-line-strong bg-lime px-2 py-0.5 text-[11px] font-bold text-white shadow-2xs hover:bg-ink hover:text-white transition-colors">
                                                 <span>Xem tất cả &rarr;</span>
                                             </a>
                                             @foreach ($children as $child)
@@ -274,7 +274,7 @@
             </div>
 
             <!-- Editorial Contributor Recruitment CTA -->
-            <div class="border-2 border-line-strong bg-lime/20 p-5 shadow-brutal">
+            <div class="border-2 border-line-strong bg-lime/10 p-5 shadow-brutal rounded-none">
                 <div class="flex items-center gap-2 text-ink font-bold text-xs uppercase tracking-wider font-mono">
                     <svg class="size-4 text-ink" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clip-rule="evenodd" />
@@ -288,7 +288,7 @@
                     Bạn có câu chuyện, phân tích chuyên môn hay muốn chia sẻ thông tin giá trị? Hãy nộp đơn ứng tuyển làm Tác giả chính thức trên NewsHub.
                 </p>
                 <div class="mt-4">
-                    <a href="{{ route('dashboard') }}" class="inline-flex min-h-9 items-center justify-center border-2 border-line-strong bg-ink px-4 py-1.5 text-xs font-bold font-mono text-lime shadow-brutal-sm hover:bg-lime hover:text-ink transition-colors">
+                    <a href="{{ route('dashboard') }}" class="inline-flex min-h-9 items-center justify-center border-2 border-line-strong bg-lime px-4 py-1.5 text-xs font-bold font-mono text-white shadow-brutal-sm hover:bg-ink hover:text-white transition-colors">
                         Đăng ký làm Tác giả ngay &rarr;
                     </a>
                 </div>

@@ -21,7 +21,6 @@ class CategoryFactory extends Factory
             'parent_id' => null,
             'name' => fake()->unique()->words(2, true),
             'slug' => fake()->unique()->slug(),
-            'description' => fake()->sentence(),
             'status' => 'active',
         ];
     }

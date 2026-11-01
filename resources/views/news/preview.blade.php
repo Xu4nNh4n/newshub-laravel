@@ -3,7 +3,7 @@
 @section('content')
 <div class="mx-auto max-w-4xl space-y-8 bg-surface border-x-2 border-line-strong p-4 sm:p-8 shadow-brutal font-sans">
     <!-- Preview Mode Alert Banner -->
-    <div class="border-2 border-line-strong bg-amber-100 p-4 text-xs text-ink flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-brutal-sm font-mono">
+    <div class="border-2 border-line-strong bg-[#dce6f2] p-4 text-xs text-ink flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-brutal-sm font-mono">
         <div class="flex items-center gap-2.5">
             <svg class="size-5 shrink-0 text-ink" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd" />
@@ -19,7 +19,7 @@
                 &larr; Quản lý bài viết
             </a>
             @can('update', $post)
-                <a href="{{ route('author.posts.edit', $post) }}" class="inline-flex min-h-8 items-center justify-center border border-line-strong bg-lime px-3.5 py-1.5 text-xs font-bold text-ink shadow-brutal-sm hover:bg-lime-hover transition-colors">
+                <a href="{{ route('author.posts.edit', $post) }}" class="inline-flex min-h-8 items-center justify-center border border-line-strong bg-lime px-3.5 py-1.5 text-xs font-bold text-white shadow-brutal-sm hover:bg-ink hover:text-white transition-colors">
                     Sửa bài viết
                 </a>
             @endcan
@@ -50,7 +50,7 @@
             </div>
         @endif
 
-        @if ($thumbnailUrl && $post->show_thumbnail_in_post)
+        @if ($thumbnailUrl)
             <figure class="overflow-hidden border-2 border-line-strong bg-paper">
                 <img src="{{ $thumbnailUrl }}"
                      alt="{{ $post->title }}"
@@ -62,18 +62,6 @@
             {!! $safeContent !!}
         </div>
 
-        @if ($post->tags->isNotEmpty())
-            <div class="border-t-2 border-line-strong pt-5 space-y-2 font-mono">
-                <p class="text-xs font-bold uppercase tracking-wider text-ink">Thẻ bài viết:</p>
-                <div class="flex flex-wrap gap-2">
-                    @foreach ($post->tags as $tag)
-                        <span class="inline-flex items-center gap-1 border border-line bg-paper px-3 py-1 text-xs font-bold text-ink">
-                            #{{ $tag->name }}
-                        </span>
-                    @endforeach
-                </div>
-            </div>
-        @endif
     </article>
 </div>
 @endsection

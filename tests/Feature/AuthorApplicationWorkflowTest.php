@@ -8,6 +8,8 @@ use App\Models\AuthorApplication;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class AuthorApplicationWorkflowTest extends TestCase
@@ -16,14 +18,14 @@ class AuthorApplicationWorkflowTest extends TestCase
 
     public function test_verified_user_can_submit_one_pending_application(): void
     {
+        Storage::fake('local');
         $user = User::factory()->create();
         $category = Category::factory()->create();
 
         $response = $this->actingAs($user)->post(route('author-applications.store'), [
             'category_id' => $category->id,
             'bio' => 'Tôi có kinh nghiệm viết bài công nghệ.',
-            'sample_title' => 'Xu hướng AI trong năm nay',
-            'sample_content' => 'Đây là nội dung bài viết mẫu của tôi.',
+            'cv' => UploadedFile::fake()->create('cv.pdf', 50, 'application/pdf'),
         ]);
 
         $response->assertRedirect(route('dashboard'))
@@ -38,6 +40,7 @@ class AuthorApplicationWorkflowTest extends TestCase
 
     public function test_user_cannot_submit_a_second_pending_application(): void
     {
+        Storage::fake('local');
         $user = User::factory()->create();
         $category = Category::factory()->create();
         AuthorApplication::factory()->create([
@@ -49,8 +52,7 @@ class AuthorApplicationWorkflowTest extends TestCase
         $this->actingAs($user)->post(route('author-applications.store'), [
             'category_id' => $category->id,
             'bio' => 'Thông tin mới.',
-            'sample_title' => 'Bài viết mới',
-            'sample_content' => 'Nội dung bài viết mới.',
+            'cv' => UploadedFile::fake()->create('cv.pdf', 50, 'application/pdf'),
         ])->assertSessionHasErrors('application', 'Bạn đang có một đơn ứng tuyển chờ duyệt.');
 
         $this->assertSame(1, AuthorApplication::query()->where('user_id', $user->id)->count());
@@ -64,8 +66,6 @@ class AuthorApplicationWorkflowTest extends TestCase
         $this->actingAs($author)->post(route('author-applications.store'), [
             'category_id' => $category->id,
             'bio' => 'Thông tin.',
-            'sample_title' => 'Bài viết',
-            'sample_content' => 'Nội dung.',
         ])->assertForbidden();
 
         $this->assertSame(0, AuthorApplication::query()->count());
@@ -79,14 +79,12 @@ class AuthorApplicationWorkflowTest extends TestCase
         $this->actingAs($user)->post(route('author-applications.store'), [
             'category_id' => $category->id,
             'bio' => 'Thông tin.',
-            'sample_title' => 'Bài viết',
-            'sample_content' => 'Nội dung.',
         ])->assertRedirect(route('verification.notice'));
 
         $this->assertSame(0, AuthorApplication::query()->count());
     }
 
-    public function test_admin_approval_promotes_user_and_writes_an_activity_log(): void
+    public function test_admin_approval_promotes_user(): void
     {
         $this->travelTo('2026-10-04 10:30:00');
         $admin = User::factory()->create(['role' => UserRole::Admin]);
@@ -107,11 +105,6 @@ class AuthorApplicationWorkflowTest extends TestCase
         $this->assertSame($admin->id, $application->reviewed_by);
         $this->assertSame('2026-10-04 10:30:00', $application->reviewed_at?->format('Y-m-d H:i:s'));
         $this->assertSame(UserRole::Author, $user->refresh()->role);
-        $this->assertDatabaseHas('activity_logs', [
-            'user_id' => $admin->id,
-            'action' => 'author_application.approved',
-            'subject_id' => $application->id,
-        ]);
     }
 
     public function test_admin_must_give_a_reason_when_rejecting_an_application(): void
@@ -128,6 +121,7 @@ class AuthorApplicationWorkflowTest extends TestCase
 
     public function test_rejected_user_can_submit_a_new_application(): void
     {
+        Storage::fake('local');
         $admin = User::factory()->create(['role' => UserRole::Admin]);
         $user = User::factory()->create();
         $category = Category::factory()->create();
@@ -150,8 +144,7 @@ class AuthorApplicationWorkflowTest extends TestCase
         $this->actingAs($user)->post(route('author-applications.store'), [
             'category_id' => $category->id,
             'bio' => 'Thông tin đã bổ sung.',
-            'sample_title' => 'Bài mẫu chi tiết',
-            'sample_content' => 'Nội dung mới đầy đủ và chi tiết hơn.',
+            'cv' => UploadedFile::fake()->create('cv.pdf', 50, 'application/pdf'),
         ])->assertRedirect(route('dashboard'));
 
         $this->assertSame(1, AuthorApplication::query()

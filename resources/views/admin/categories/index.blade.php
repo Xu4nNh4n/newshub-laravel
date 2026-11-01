@@ -84,7 +84,7 @@
                         <td class="px-5 py-4 whitespace-nowrap">
                             <span @class([
                                 'inline-flex border px-2 py-0.5 font-mono text-[11px] font-bold uppercase',
-                                'border-line-strong bg-lime text-ink' => $parent->status === \App\Enums\CategoryStatus::Active,
+                                'border-line-strong bg-lime text-white' => $parent->status === \App\Enums\CategoryStatus::Active,
                                 'border-line bg-paper text-ink-muted' => $parent->status !== \App\Enums\CategoryStatus::Active,
                             ])>
                                 {{ $parent->status->value }}
@@ -114,7 +114,6 @@
                                         data-id="{{ $parent->id }}"
                                         data-name="{{ $parent->name }}"
                                         data-slug="{{ $parent->slug }}"
-                                        data-description="{{ $parent->description ?? '' }}"
                                         data-parent-id="{{ $parent->parent_id ?? '' }}"
                                         data-status="{{ $parent->status->value }}"
                                         data-action="{{ route('admin.categories.update', $parent) }}"
@@ -161,7 +160,7 @@
                                                     <div class="w-2/12 whitespace-nowrap">
                                                         <span @class([
                                                             'inline-flex border px-2 py-0.5 font-mono text-[10px] font-bold uppercase',
-                                                            'border-line-strong bg-lime text-ink' => $child->status === \App\Enums\CategoryStatus::Active,
+                                                            'border-line-strong bg-lime text-white' => $child->status === \App\Enums\CategoryStatus::Active,
                                                             'border-line bg-surface text-ink-muted' => $child->status !== \App\Enums\CategoryStatus::Active,
                                                         ])>
                                                             {{ $child->status->value }}
@@ -177,7 +176,6 @@
                                                                     data-id="{{ $child->id }}"
                                                                     data-name="{{ $child->name }}"
                                                                     data-slug="{{ $child->slug }}"
-                                                                    data-description="{{ $child->description ?? '' }}"
                                                                     data-parent-id="{{ $child->parent_id }}"
                                                                     data-status="{{ $child->status->value }}"
                                                                     data-action="{{ route('admin.categories.update', $child) }}"
@@ -237,7 +235,6 @@
                                             data-id="{{ $orphan->id }}"
                                             data-name="{{ $orphan->name }}"
                                             data-slug="{{ $orphan->slug }}"
-                                            data-description="{{ $orphan->description ?? '' }}"
                                             data-parent-id="{{ $orphan->parent_id ?? '' }}"
                                             data-status="{{ $orphan->status->value }}"
                                             data-action="{{ route('admin.categories.update', $orphan) }}"
@@ -313,16 +310,6 @@
                        class="mt-1.5 w-full border-2 border-line bg-paper px-3.5 py-2.5 text-xs font-mono text-ink outline-none focus:border-ink">
             </div>
 
-            <div>
-                <label for="cat-desc-input" class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">
-                    Mô tả (Tùy chọn)
-                </label>
-                <textarea id="cat-desc-input"
-                          name="description"
-                          rows="2"
-                          placeholder="Mô tả tóm tắt về chuyên mục này..."
-                          class="mt-1.5 w-full border-2 border-line bg-paper px-3.5 py-2.5 text-xs text-ink outline-none focus:border-ink"></textarea>
-            </div>
 
             <div>
                 <label for="cat-parent-input" class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">
@@ -499,7 +486,6 @@
         const catFormMethod = document.getElementById('cat-form-method');
         const catNameInput = document.getElementById('cat-name-input');
         const catSlugInput = document.getElementById('cat-slug-input');
-        const catDescInput = document.getElementById('cat-desc-input');
         const catParentInput = document.getElementById('cat-parent-input');
         const catStatusInput = document.getElementById('cat-status-input');
         const catBtnSubmit = document.getElementById('cat-btn-submit');
@@ -537,7 +523,6 @@
             const id = btn.getAttribute('data-id');
             const name = btn.getAttribute('data-name');
             const slug = btn.getAttribute('data-slug');
-            const desc = btn.getAttribute('data-description') || '';
             const parentId = btn.getAttribute('data-parent-id') || '';
             const status = btn.getAttribute('data-status') || 'Active';
             const action = btn.getAttribute('data-action');
@@ -550,7 +535,6 @@
 
             catNameInput.value = name;
             catSlugInput.value = slug;
-            catDescInput.value = desc;
 
             if (catParentInput) {
                 Array.from(catParentInput.options).forEach(opt => {

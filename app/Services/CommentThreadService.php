@@ -41,7 +41,6 @@ class CommentThreadService
         return $post->comments()->create([
             'user_id' => $user->id,
             'parent_id' => $rootId,
-            'reply_to_id' => $replyTo?->id,
             'content' => $content,
             'status' => CommentStatus::Visible,
         ]);

@@ -44,7 +44,6 @@ class UpdateCategoryRequest extends FormRequest
             ],
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', Rule::unique(Category::class)->ignore($this->route('category'))],
-            'description' => ['nullable', 'string', 'max:2000'],
             'status' => ['required', Rule::enum(CategoryStatus::class)],
         ];
     }

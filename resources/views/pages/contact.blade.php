@@ -99,7 +99,7 @@
             <!-- Dịch vụ Quảng cáo & Booking -->
             <div class="border-2 border-line-strong bg-paper p-5 space-y-4 shadow-brutal-sm">
                 <div class="flex items-center gap-2 text-ink font-mono font-bold text-xs uppercase tracking-wider pb-3 border-b border-line">
-                    <span class="bg-lime text-ink px-1.5 py-0.5 text-[10px] font-bold border border-ink">ADS</span>
+                    <span class="bg-lime text-white px-1.5 py-0.5 text-[10px] font-bold border border-line-strong">ADS</span>
                     Phòng Quảng Cáo & Truyền Thông
                 </div>
                 <p class="text-xs text-ink-muted leading-relaxed">
@@ -261,7 +261,7 @@
 
                 <div class="pt-2">
                     <button type="submit"
-                            class="inline-flex w-full sm:w-auto items-center justify-center gap-2 border-2 border-line-strong bg-lime px-6 py-3 text-xs font-mono font-bold uppercase tracking-wider text-ink hover:bg-lime-hover shadow-brutal hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-brutal-sm transition-all cursor-pointer">
+                            class="inline-flex w-full sm:w-auto items-center justify-center gap-2 border-2 border-line-strong bg-lime px-6 py-3 text-xs font-mono font-bold uppercase tracking-wider text-white hover:bg-ink hover:text-white shadow-brutal hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-brutal-sm transition-all cursor-pointer">
                         <svg class="size-4" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M3.105 2.289a.75.75 0 00-.826.95l1.414 4.925A1.5 1.5 0 004.835 9.25h4.415a.75.75 0 010 1.5H4.835a1.5 1.5 0 00-1.142 1.086l-1.414 4.926a.75.75 0 00.826.95 28.896 28.896 0 0015.293-7.154.75.75 0 000-1.114A28.897 28.897 0 003.105 2.289z" />
                         </svg>

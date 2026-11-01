@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AuthorApplication extends Model
 {
+    public const UPDATED_AT = null;
+
     /** @use HasFactory<AuthorApplicationFactory> */
     use HasFactory;
 
@@ -18,8 +20,7 @@ class AuthorApplication extends Model
         'pending_user_id',
         'category_id',
         'bio',
-        'sample_title',
-        'sample_content',
+        'cv_path',
         'status',
         'rejection_reason',
         'reviewed_by',

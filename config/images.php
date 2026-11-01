@@ -15,7 +15,4 @@ return [
         'max_height' => 1920,
     ],
 
-    'avatar' => [
-        'size' => 512,
-    ],
 ];

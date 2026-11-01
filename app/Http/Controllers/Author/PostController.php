@@ -7,12 +7,9 @@ use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Author\StorePostRequest;
 use App\Http\Requests\Author\UpdatePostRequest;
-use App\Models\ActivityLog;
 use App\Models\Category;
 use App\Models\Post;
-use App\Models\Tag;
 use App\Services\PostContentSanitizer;
-use App\Services\PostTagService;
 use App\Services\PostThumbnailService;
 use App\Services\PostWorkflowService;
 use Carbon\CarbonImmutable;
@@ -71,7 +68,6 @@ class PostController extends Controller
         StorePostRequest $request,
         PostThumbnailService $thumbnails,
         PostWorkflowService $workflow,
-        PostTagService $tags,
         PostContentSanitizer $contentSanitizer,
     ): RedirectResponse {
         $shouldPublish = $request->string('action')->toString() === 'publish'
@@ -82,28 +78,14 @@ class PostController extends Controller
         $thumbnailPath = $request->hasFile('thumbnail') ? $thumbnails->store($request->file('thumbnail')) : null;
 
         try {
-            $post = DB::transaction(function () use ($request, $thumbnailPath, $shouldPublish, $publishedAt, $workflow, $tags, $contentSanitizer): Post {
-                $attributes = $request->safe()->except(['tag_ids', 'tag_names', 'thumbnail', 'action', 'published_at']);
+            $post = DB::transaction(function () use ($request, $thumbnailPath, $shouldPublish, $publishedAt, $workflow, $contentSanitizer): Post {
+                $attributes = $request->safe()->except(['thumbnail', 'action', 'published_at']);
                 $attributes['content'] = $contentSanitizer->sanitize($attributes['content']);
                 $attributes['thumbnail'] = $thumbnailPath;
-                $attributes['show_thumbnail_in_post'] = $this->showThumbnailInPost($request, true);
                 $post = $request->user()->posts()->create($attributes);
-                $post->tags()->sync($tags->resolveIds(
-                    $request->validated('tag_ids', []),
-                    $request->validated('tag_names', []),
-                ));
-
                 if ($shouldPublish) {
                     $workflow->publish($post, $request->user(), $publishedAt);
                 }
-
-                ActivityLog::query()->create([
-                    'user_id' => $request->user()->id,
-                    'action' => 'post.created',
-                    'subject_type' => Post::class,
-                    'subject_id' => $post->id,
-                    'description' => 'Tạo bài viết mới: '.$post->title,
-                ]);
 
                 return $post;
             });
@@ -126,7 +108,7 @@ class PostController extends Controller
 
         return view('author.posts.form', [
             ...$this->formData(),
-            'post' => $post->load(['tags', 'requests']),
+            'post' => $post->load('requests'),
             'editorContent' => $contentSanitizer->sanitize((string) $request->old('content', $post->content)),
             'breadcrumbs' => $this->formBreadcrumbs('Sửa bài viết'),
         ]);
@@ -140,7 +122,6 @@ class PostController extends Controller
         Post $post,
         PostThumbnailService $thumbnails,
         PostWorkflowService $workflow,
-        PostTagService $tags,
         PostContentSanitizer $contentSanitizer,
     ): RedirectResponse {
         $action = $request->string('action')->toString();
@@ -157,21 +138,14 @@ class PostController extends Controller
         $newThumbnail = $request->hasFile('thumbnail') ? $thumbnails->store($request->file('thumbnail')) : null;
 
         try {
-            DB::transaction(function () use ($request, $post, $newThumbnail, $action, $shouldPublish, $publishedAt, $workflow, $tags, $contentSanitizer): void {
+            DB::transaction(function () use ($request, $post, $newThumbnail, $action, $shouldPublish, $publishedAt, $workflow, $contentSanitizer): void {
                 $attributes = $request->safe()->except([
-                    'tag_ids',
-                    'tag_names',
                     'thumbnail',
                     'remove_thumbnail',
                     'action',
                     'published_at',
                 ]);
                 $attributes['content'] = $contentSanitizer->sanitize($attributes['content']);
-                $attributes['show_thumbnail_in_post'] = $this->showThumbnailInPost(
-                    $request,
-                    $post->show_thumbnail_in_post,
-                );
-
                 if ($newThumbnail !== null || $request->boolean('remove_thumbnail')) {
                     $attributes['thumbnail'] = $newThumbnail;
                 }
@@ -183,22 +157,10 @@ class PostController extends Controller
                 }
 
                 $post->update($attributes);
-                $post->tags()->sync($tags->resolveIds(
-                    $request->validated('tag_ids', []),
-                    $request->validated('tag_names', []),
-                ));
-
                 if ($shouldPublish) {
                     $workflow->publish($post, $request->user(), $publishedAt);
                 }
 
-                ActivityLog::query()->create([
-                    'user_id' => $request->user()->id,
-                    'action' => 'post.updated',
-                    'subject_type' => Post::class,
-                    'subject_id' => $post->id,
-                    'description' => 'Chỉnh sửa nội dung bài viết: '.$post->title,
-                ]);
             });
         } catch (\Throwable $exception) {
             $thumbnails->delete($newThumbnail);
@@ -226,12 +188,11 @@ class PostController extends Controller
         return redirect()->route('author.posts.index')->with('status', 'Đã xóa bài viết.');
     }
 
-    /** @return array{categories: Collection, tags: Collection} */
+    /** @return array{categories: Collection} */
     private function formData(): array
     {
         return [
             'categories' => Category::query()->where('status', 'active')->orderBy('name')->get(),
-            'tags' => Tag::query()->orderBy('name')->get(),
         ];
     }
 
@@ -242,12 +203,5 @@ class PostController extends Controller
             ['label' => 'Bài viết của tôi', 'url' => route('author.posts.index')],
             ['label' => $currentLabel, 'url' => null],
         ];
-    }
-
-    private function showThumbnailInPost(Request $request, bool $default): bool
-    {
-        return $request->has('show_thumbnail_in_post')
-            ? $request->boolean('show_thumbnail_in_post')
-            : $default;
     }
 }

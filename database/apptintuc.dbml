@@ -1,0 +1,108 @@
+// BAN XEM TRUOC - chua ap dung vao MySQL hay migrations.
+// Dan vao https://dbdiagram.io de xem so do.
+
+Table users {
+  id bigint [pk, increment, note: 'Mã người dùng']
+  name varchar(255) [not null, note: 'Họ tên']
+  email varchar(255) [not null, unique, note: 'Email đăng nhập']
+  email_verified_at timestamp [note: 'Thời điểm xác minh email']
+  password varchar(255) [not null, note: 'Mật khẩu đã mã hóa']
+  role_id bigint [not null, default: 1, note: 'Mã vai trò của người dùng']
+  status varchar(255) [not null, default: 'active', note: 'Trạng thái tài khoản']
+  remember_token varchar(100) [note: 'Mã ghi nhớ đăng nhập']
+  created_at timestamp [note: 'Thời điểm tạo']
+  updated_at timestamp [note: 'Thời điểm cập nhật gần nhất']
+}
+
+Table roles {
+  id bigint [pk, increment, note: 'Mã vai trò']
+  code varchar(50) [not null, unique, note: 'Mã hệ thống: user, author hoặc admin']
+  name varchar(100) [not null, note: 'Tên hiển thị bằng tiếng Việt']
+  created_at timestamp [note: 'Thời điểm tạo']
+  updated_at timestamp [note: 'Thời điểm cập nhật gần nhất']
+}
+
+Table categories {
+  id bigint [pk, increment, note: 'Mã chuyên mục']
+  parent_id bigint [note: 'Mã chuyên mục cha; tham chiếu đến categories.id, để trống nếu là chuyên mục gốc']
+  name varchar(255) [not null, note: 'Tên chuyên mục']
+  slug varchar(255) [not null, unique, note: 'Đường dẫn chuyên mục']
+  status varchar(255) [not null, default: 'active', note: 'Trạng thái chuyên mục']
+  created_at timestamp [note: 'Thời điểm tạo']
+  updated_at timestamp [note: 'Thời điểm cập nhật gần nhất']
+  deleted_at timestamp [note: 'Thời điểm xóa mềm']
+}
+
+Table posts {
+  id bigint [pk, increment, note: 'Mã bài viết']
+  author_id bigint [not null, note: 'Mã tác giả']
+  category_id bigint [not null, note: 'Mã chuyên mục']
+  title varchar(255) [not null, note: 'Tiêu đề']
+  slug varchar(255) [not null, unique, note: 'Đường dẫn bài viết']
+  summary text [note: 'Tóm tắt bài viết']
+  content longtext [not null, note: 'Nội dung bài viết']
+  thumbnail varchar(255) [note: 'Ảnh đại diện bài viết; giữ để hiện trên danh sách tin']
+  view_count bigint [not null, default: 0, note: 'Tổng lượt xem; không lưu lịch sử theo người/ngày']
+  status varchar(255) [not null, default: 'draft', note: 'Trạng thái: nháp, chờ duyệt, đã đăng hoặc bị từ chối']
+  rejection_reason text [note: 'Lý do từ chối bài viết']
+  published_at timestamp [note: 'Thời điểm xuất bản']
+  created_at timestamp [note: 'Thời điểm tạo']
+  updated_at timestamp [note: 'Thời điểm cập nhật gần nhất']
+  deleted_at timestamp [note: 'Thời điểm xóa mềm']
+}
+
+Table comments {
+  id bigint [pk, increment, note: 'Mã bình luận']
+  post_id bigint [not null, note: 'Mã bài viết']
+  user_id bigint [not null, note: 'Mã người bình luận']
+  parent_id bigint [note: 'Mã bình luận cha trong luồng trả lời']
+  content text [not null, note: 'Nội dung bình luận']
+  status varchar(255) [not null, default: 'visible', note: 'Trạng thái hiển thị']
+  created_at timestamp [note: 'Thời điểm gửi']
+  updated_at timestamp [note: 'Thời điểm cập nhật gần nhất']
+  deleted_at timestamp [note: 'Thời điểm xóa mềm']
+}
+
+Table author_applications {
+  id bigint [pk, increment, note: 'Mã đơn ứng tuyển tác giả']
+  user_id bigint [not null, note: 'Mã người nộp đơn']
+  pending_user_id bigint [unique, note: 'Mã người đang có đơn chờ duyệt']
+  category_id bigint [not null, note: 'Mã chuyên mục đăng ký phụ trách']
+  bio text [not null, note: 'Giới thiệu ứng viên']
+  cv_path varchar(255) [note: 'Đường dẫn tệp CV; để trống với đơn cũ']
+  status varchar(255) [not null, default: 'pending', note: 'Trạng thái xét duyệt']
+  rejection_reason varchar(255) [note: 'Lý do từ chối']
+  reviewed_by bigint [note: 'Mã quản trị viên xét duyệt']
+  reviewed_at timestamp [note: 'Thời điểm xét duyệt']
+  created_at timestamp [note: 'Thời điểm nộp đơn']
+}
+
+Table post_requests {
+  id bigint [pk, increment, note: 'Mã yêu cầu xử lý bài viết']
+  post_id bigint [not null, note: 'Mã bài viết được yêu cầu xử lý']
+  pending_post_id bigint [unique, note: 'Mã bài đang có yêu cầu chờ xử lý']
+  author_id bigint [not null, note: 'Mã tác giả gửi yêu cầu']
+  type varchar(255) [not null, note: 'Loại yêu cầu: chỉnh sửa hoặc gỡ bài']
+  reason varchar(255) [not null, note: 'Lý do yêu cầu']
+  notes text [not null, note: 'Nội dung chi tiết']
+  status varchar(255) [not null, default: 'pending', note: 'Trạng thái xử lý']
+  admin_notes text [note: 'Ghi chú phản hồi của quản trị viên']
+  handled_by bigint [note: 'Mã quản trị viên xử lý']
+  handled_at timestamp [note: 'Thời điểm xử lý']
+  created_at timestamp [note: 'Thời điểm gửi yêu cầu']
+  updated_at timestamp [note: 'Thời điểm cập nhật gần nhất']
+}
+
+Ref: users.role_id > roles.id
+Ref: categories.parent_id > categories.id
+Ref: posts.author_id > users.id
+Ref: posts.category_id > categories.id
+Ref: comments.post_id > posts.id
+Ref: comments.user_id > users.id
+Ref: comments.parent_id > comments.id
+Ref: author_applications.user_id > users.id
+Ref: author_applications.category_id > categories.id
+Ref: author_applications.reviewed_by > users.id
+Ref: post_requests.post_id > posts.id
+Ref: post_requests.author_id > users.id
+Ref: post_requests.handled_by > users.id

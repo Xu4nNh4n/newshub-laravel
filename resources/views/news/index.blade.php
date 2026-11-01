@@ -1,295 +1,188 @@
-@extends('layouts.app', ['title' => 'Tin tức & Bài viết - NewsHub'])
+@extends('layouts.app', ['title' => ($selectedCategory ? $selectedCategory->name . ' - ' : '') . 'Tin tức - NewsHub'])
 
 @section('content')
 @php
-    $activeCategoryModel = !empty($filters['category'])
-        ? \App\Models\Category::where('slug', $filters['category'])->first()
-        : null;
+    $currentCatSlug = $filters['category'] ?? null;
+    $currentSort = $filters['sort'] ?? 'latest';
+    $searchQuery = $filters['q'] ?? null;
+
+    // Determine main section title, parent URL, and horizontal topic list (matching docs/docs/2.png)
+    if ($selectedCategory) {
+        if ($selectedCategory->parent_id !== null && $selectedCategory->parent) {
+            // Viewing a child category (e.g. "Sức khỏe" under "Đời sống")
+            $mainTitle = $selectedCategory->parent->name;
+            $mainTitleUrl = route('news.index', array_filter(['category' => $selectedCategory->parent->slug, 'q' => $searchQuery, 'sort' => $currentSort]));
+            $topicList = $selectedCategory->parent->children;
+            $allPillActive = false;
+            $allPillUrl = route('news.index', array_filter(['category' => $selectedCategory->parent->slug, 'q' => $searchQuery, 'sort' => $currentSort]));
+            $allPillLabel = 'Tất cả ' . $selectedCategory->parent->name;
+        } else {
+            // Viewing a parent category (e.g. "Đời sống")
+            $mainTitle = $selectedCategory->name;
+            $mainTitleUrl = route('news.index', array_filter(['category' => $selectedCategory->slug, 'q' => $searchQuery, 'sort' => $currentSort]));
+            $topicList = $selectedCategory->children;
+            $allPillActive = true;
+            $allPillUrl = route('news.index', array_filter(['category' => $selectedCategory->slug, 'q' => $searchQuery, 'sort' => $currentSort]));
+            $allPillLabel = 'Tất cả ' . $selectedCategory->name;
+        }
+    } else {
+        // All news or search results
+        $mainTitle = $searchQuery ? 'Tìm kiếm' : 'Tin tức mới';
+        $mainTitleUrl = route('news.index', array_filter(['q' => $searchQuery, 'sort' => $currentSort]));
+        $topicList = $parentCategories ?? collect();
+        $allPillActive = empty($currentCatSlug);
+        $allPillUrl = route('news.index', array_filter(['q' => $searchQuery, 'sort' => $currentSort]));
+        $allPillLabel = 'Tất cả';
+    }
 @endphp
-<div class="space-y-8">
-    <!-- Breadcrumb & Page Header -->
-    <div class="space-y-2 border-b-2 border-line-strong pb-6">
-        <nav aria-label="Breadcrumb" class="text-xs font-mono text-ink-muted">
-            <ol class="flex items-center gap-1.5 flex-wrap">
-                <li><a href="{{ route('home') }}" class="hover:text-ink hover:underline transition-colors">Trang chủ</a></li>
+<div class="space-y-6">
+    <!-- Breadcrumb -->
+    <nav aria-label="Breadcrumb" class="text-xs font-mono text-ink-muted">
+        <ol class="flex items-center gap-1.5 flex-wrap">
+            <li><a href="{{ route('home') }}" class="hover:text-ink hover:underline transition-colors">Trang chủ</a></li>
+            <li class="text-line">/</li>
+            <li><a href="{{ route('news.index') }}" class="hover:text-ink hover:underline transition-colors">Tin tức</a></li>
+            @if ($selectedCategory)
+                @if ($selectedCategory->parent)
+                    <li class="text-line">/</li>
+                    <li>
+                        <a href="{{ route('news.index', ['category' => $selectedCategory->parent->slug]) }}" class="hover:text-ink hover:underline transition-colors">
+                            {{ $selectedCategory->parent->name }}
+                        </a>
+                    </li>
+                @endif
                 <li class="text-line">/</li>
-                @if (!empty($filters['category']))
-                    <li><a href="{{ route('news.index') }}" class="hover:text-ink hover:underline transition-colors">Tin tức</a></li>
-                    <li class="text-line">/</li>
-                    <li class="font-bold text-ink uppercase tracking-wide">
-                        Chuyên mục: {{ $activeCategoryModel?->name ?? $filters['category'] }}
-                    </li>
-                @elseif (!empty($filters['tag']))
-                    <li><a href="{{ route('news.index') }}" class="hover:text-ink hover:underline transition-colors">Tin tức</a></li>
-                    <li class="text-line">/</li>
-                    <li class="font-bold text-ink font-mono">
-                        #{{ $filters['tag'] }}
-                    </li>
-                @else
-                    <li class="font-bold text-ink">Tất cả tin tức</li>
-                @endif
-            </ol>
-        </nav>
+                <li class="font-bold text-ink uppercase tracking-wide">
+                    {{ $selectedCategory->name }}
+                </li>
+            @endif
+        </ol>
+    </nav>
 
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between pt-2">
-            <div>
-                <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-ink font-sans">
-                    @if (!empty($filters['q']))
-                        Kết quả tìm kiếm: <span class="underline decoration-lime decoration-4">"{{ $filters['q'] }}"</span>
-                    @elseif (!empty($filters['category']))
-                        Chuyên mục: <span class="underline decoration-lime decoration-4">{{ $activeCategoryModel?->name ?? str_replace('-', ' ', $filters['category']) }}</span>
-                    @elseif (!empty($filters['tag']))
-                        Chủ đề gắn thẻ: <span class="underline decoration-lime decoration-4 font-mono">#{{ $filters['tag'] }}</span>
-                    @else
-                        Tin tức & Bài viết mới nhất
-                    @endif
+    <!-- Category Header Strip (Designed from docs/docs/2.png) -->
+    <div class="border-b-2 border-line-strong pb-3">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4">
+            <!-- Left: Prominent Category Title + Subcategories Row -->
+            <div class="flex items-center gap-3 sm:gap-6 flex-1 min-w-0">
+                <!-- Large Category Title (as in 2.png) -->
+                <h1 class="text-xl sm:text-2xl lg:text-3xl font-serif font-black tracking-tight text-lime shrink-0">
+                    <a href="{{ $mainTitleUrl }}" class="hover:underline transition-colors">
+                        {{ $mainTitle }}
+                    </a>
                 </h1>
-                <p class="mt-1 text-xs sm:text-sm text-ink-muted">
-                    Cập nhật dòng chảy thông tin thời sự, kinh tế, công nghệ và đời sống.
-                </p>
+
+                <!-- Vertical Separator -->
+                <div class="hidden sm:block h-6 w-px bg-line shrink-0" aria-hidden="true"></div>
+
+                <!-- Horizontal Subcategories / Topics with Slider Controls (as in docs/docs/3.png) -->
+                <div class="relative flex items-center min-w-0 flex-1 overflow-hidden" data-subcat-slider>
+                    <!-- Left Scroll Button (appears when scrolled right) -->
+                    <button type="button"
+                            data-subcat-prev
+                            aria-label="Cuộn sang trái"
+                            title="Cuộn sang trái"
+                            class="hidden absolute left-0 top-1/2 -translate-y-1/2 z-10 h-7 w-7 items-center justify-center border border-line bg-paper text-ink hover:text-lime hover:border-lime hover:bg-lime/5 shadow-2xs transition-all cursor-pointer">
+                        <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m15 18-6-6 6-6"/>
+                        </svg>
+                    </button>
+                    <!-- Left Fade Mask -->
+                    <div data-subcat-fade-left class="hidden absolute left-0 top-0 bottom-0 w-10 pointer-events-none bg-gradient-to-r from-paper via-paper/90 to-transparent z-[5]"></div>
+
+                    <!-- Track of Subcategories -->
+                    <div data-subcat-track
+                         class="flex items-center gap-3 sm:gap-5 text-xs sm:text-sm overflow-x-auto scrollbar-none scroll-smooth py-1 px-0.5 min-w-0 flex-1 font-sans">
+                        <!-- 'All' of this group -->
+                        <a href="{{ $allPillUrl }}"
+                           @class([
+                               'shrink-0 whitespace-nowrap transition-colors pb-0.5',
+                               'text-lime font-bold border-b-2 border-lime' => $allPillActive,
+                               'text-ink-muted hover:text-lime font-medium' => ! $allPillActive,
+                           ])
+                           @if($allPillActive) data-active-topic @endif>
+                            {{ $allPillLabel }}
+                        </a>
+
+                        @foreach ($topicList as $topic)
+                            @php
+                                $isTopicActive = $currentCatSlug === $topic->slug;
+                                $topicUrl = route('news.index', array_filter([
+                                    'category' => $topic->slug,
+                                    'q' => $searchQuery,
+                                    'sort' => $currentSort,
+                                ]));
+                            @endphp
+                            <a href="{{ $topicUrl }}"
+                               @class([
+                                   'shrink-0 whitespace-nowrap transition-colors pb-0.5',
+                                   'text-lime font-bold border-b-2 border-lime' => $isTopicActive,
+                                   'text-ink-muted hover:text-lime font-medium' => ! $isTopicActive,
+                               ])
+                               @if($isTopicActive) data-active-topic @endif>
+                                {{ $topic->name }}
+                            </a>
+                        @endforeach
+                    </div>
+
+                    <!-- Right Fade Mask -->
+                    <div data-subcat-fade-right class="hidden absolute right-0 top-0 bottom-0 w-12 pointer-events-none bg-gradient-to-l from-paper via-paper/90 to-transparent z-[5]"></div>
+
+                    <!-- Right Scroll Button (as in docs/docs/3.png) -->
+                    <button type="button"
+                            data-subcat-next
+                            aria-label="Xem thêm danh mục con"
+                            title="Xem thêm danh mục con"
+                            class="hidden absolute right-0 top-1/2 -translate-y-1/2 z-10 h-7 w-7 items-center justify-center border border-line bg-paper text-lime hover:border-lime hover:bg-lime/5 shadow-2xs transition-all cursor-pointer">
+                        <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m9 18 6-6-6-6"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
 
-            @if ($posts->total() > 0)
-                <span class="border-2 border-line-strong bg-surface px-3 py-1 text-xs font-bold font-mono tabular-nums text-ink shadow-2xs shrink-0">
-                    {{ number_format($posts->total()) }} BÀI VIẾT
-                </span>
-            @endif
+            <!-- Right: Sort Pills & Article Count -->
+            <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 text-xs font-mono pt-1 lg:pt-0 border-t lg:border-t-0 border-line">
+                <!-- Quick Sort Filter -->
+                <div class="inline-flex items-center rounded-none border border-line bg-paper p-0.5 shadow-2xs">
+                    <a href="{{ route('news.index', array_filter(['category' => $currentCatSlug, 'q' => $searchQuery, 'sort' => 'latest'])) }}"
+                       @class([
+                           'px-2.5 py-1 text-xs font-semibold transition-colors',
+                           'bg-lime text-white font-bold' => $currentSort === 'latest',
+                           'text-ink-muted hover:text-ink' => $currentSort !== 'latest',
+                       ])>
+                        Mới nhất
+                    </a>
+                    <a href="{{ route('news.index', array_filter(['category' => $currentCatSlug, 'q' => $searchQuery, 'sort' => 'popular'])) }}"
+                       @class([
+                           'px-2.5 py-1 text-xs font-semibold transition-colors',
+                           'bg-lime text-white font-bold' => $currentSort === 'popular',
+                           'text-ink-muted hover:text-ink' => $currentSort !== 'popular',
+                       ])>
+                        Xem nhiều
+                    </a>
+                </div>
+
+                @if ($posts->total() > 0)
+                    <span class="text-ink-muted font-mono text-[11px] font-semibold whitespace-nowrap">
+                        {{ number_format($posts->total()) }} bài viết
+                    </span>
+                @endif
+            </div>
         </div>
-    </div>
 
-    <!-- Filter & Search Controls -->
-    <div class="space-y-4">
-        <form method="GET" action="{{ route('news.index') }}" class="grid gap-3 border-2 border-line-strong bg-surface p-4 sm:grid-cols-12 items-center shadow-brutal rounded-none font-sans">
-            <!-- Keyword Search -->
-            <div class="sm:col-span-6 relative">
-                <label for="search-q" class="sr-only">Tìm kiếm tin tức</label>
-                <input id="search-q"
-                       type="text"
-                       name="q"
-                       value="{{ $filters['q'] ?? '' }}"
-                       placeholder="Nhập từ khóa tìm kiếm bài viết..."
-                       class="w-full border border-line bg-paper py-2 pl-9 pr-3 text-xs text-ink placeholder:text-ink-muted outline-none focus:border-line-strong focus:shadow-brutal-sm">
-                <svg class="pointer-events-none absolute left-3 top-2.5 size-4 text-ink-muted" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
-                </svg>
-            </div>
-
-            <!-- Sort By -->
-            <div class="sm:col-span-4">
-                <label for="sort-select" class="sr-only">Sắp xếp theo</label>
-                <select id="sort-select"
-                        name="sort"
-                        class="w-full border border-line bg-paper px-3 py-2 text-xs text-ink font-mono outline-none focus:border-line-strong focus:shadow-brutal-sm">
-                    <option value="latest" @selected(($filters['sort'] ?? '') !== 'popular')>Mới nhất trước</option>
-                    <option value="popular" @selected(($filters['sort'] ?? '') === 'popular')>Lượt xem nhiều nhất</option>
-                </select>
-            </div>
-
-            <!-- Preserve category & tag if present -->
-            @if (!empty($filters['category']))
-                <input type="hidden" name="category" value="{{ $filters['category'] }}">
-            @endif
-            @if (!empty($filters['tag']))
-                <input type="hidden" name="tag" value="{{ $filters['tag'] }}">
-            @endif
-
-            <!-- Submit Button -->
-            <div class="sm:col-span-2">
-                <button type="submit"
-                        class="flex w-full min-h-9 items-center justify-center gap-1.5 border border-line-strong bg-lime px-4 py-2 text-xs font-bold font-mono text-ink shadow-brutal-sm transition-colors hover:bg-lime-hover active:scale-[0.98] cursor-pointer">
-                    <svg class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 01.628.74v2.288a2.25 2.25 0 01-.659 1.59l-4.682 4.683a2.25 2.25 0 00-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 018 18.25v-5.757a2.25 2.25 0 00-.659-1.591L2.659 6.22A2.25 2.25 0 012 4.629V2.34a.75.75 0 01.628-.74z" clip-rule="evenodd" />
-                    </svg>
-                    <span>Lọc tin</span>
-                </button>
-            </div>
-        </form>
-
-        @php
-            $currentCatSlug = $filters['category'] ?? null;
-            $activeCategoryModel = $currentCatSlug
-                ? \App\Models\Category::where('slug', $currentCatSlug)->first()
-                : null;
-
-            $parentCategories = \App\Models\Category::query()
-                ->where('status', \App\Enums\CategoryStatus::Active)
-                ->whereNull('parent_id')
-                ->with(['children' => fn ($q) => $q->where('status', \App\Enums\CategoryStatus::Active)->orderBy('name')])
-                ->orderBy('name')
-                ->get();
-        @endphp
-
-        <!-- Active Filter Tags indicator -->
-        @if (!empty($filters['q']) || !empty($filters['category']) || !empty($filters['tag']))
-            <div class="flex flex-wrap items-center gap-2 pt-1 text-xs font-mono">
-                <span class="text-ink-muted">Bộ lọc đang áp dụng:</span>
-                @if (!empty($filters['q']))
-                    <span class="inline-flex items-center gap-1 border border-line-strong bg-surface px-2.5 py-1 text-ink font-semibold">
-                        Từ khóa: <strong>{{ $filters['q'] }}</strong>
-                    </span>
-                @endif
-                @if (!empty($filters['category']))
-                    <span class="inline-flex items-center gap-1 border border-line-strong bg-surface px-2.5 py-1 text-ink font-semibold">
-                        Chuyên mục: <strong>{{ $activeCategoryModel?->name ?? $filters['category'] }}</strong>
-                    </span>
-                @endif
-                @if (!empty($filters['tag']))
-                    <span class="inline-flex items-center gap-1 border border-line-strong bg-surface px-2.5 py-1 text-ink font-bold">
-                        #{{ $filters['tag'] }}
-                    </span>
-                @endif
-                <a href="{{ route('news.index') }}" class="text-xs font-bold text-danger hover:underline">
-                    Xóa tất cả &times;
+        <!-- Search Keyword Active Badge (if searching) -->
+        @if (!empty($filters['q']))
+            <div class="mt-3 flex items-center gap-2 text-xs font-mono pt-2 border-t border-line">
+                <span class="text-ink-muted">Kết quả tìm kiếm cho:</span>
+                <span class="inline-flex items-center gap-1 border border-line-strong bg-paper px-2 py-0.5 text-ink font-bold">
+                    "{{ $filters['q'] }}"
+                </span>
+                <a href="{{ route('news.index', array_filter(['category' => $currentCatSlug, 'sort' => $currentSort])) }}"
+                   class="text-xs font-bold text-danger hover:underline">
+                    Xóa từ khóa &times;
                 </a>
             </div>
         @endif
-
-        <!-- Category & Topic Filter Strip -->
-        <div class="border-2 border-line-strong bg-surface p-4 space-y-3 shadow-brutal rounded-none font-mono">
-            <div class="flex items-center justify-between flex-wrap gap-2 text-xs border-b border-line pb-2.5">
-                <div class="flex items-center gap-2">
-                    <span class="size-2 bg-lime border border-ink"></span>
-                    <span class="font-bold uppercase tracking-wider text-ink">
-                        @if ($activeCategoryModel)
-                            Đang lọc: <span class="underline decoration-lime">{{ $activeCategoryModel->name }}</span>
-                            @if ($activeCategoryModel->parent)
-                                <span class="text-ink-muted font-normal text-[11px]">(thuộc {{ $activeCategoryModel->parent->name }})</span>
-                            @endif
-                        @else
-                            Khám phá theo chuyên mục
-                        @endif
-                    </span>
-                </div>
-
-                @if (!empty($filters['category']))
-                    <a href="{{ route('news.index', array_filter(['q' => $filters['q'] ?? null, 'sort' => $filters['sort'] ?? null])) }}"
-                       class="text-xs text-ink-muted hover:text-ink hover:underline transition-colors flex items-center gap-1 font-bold">
-                        <span>&larr; Xem tất cả chuyên mục</span>
-                    </a>
-                @endif
-            </div>
-
-            <!-- Parent Category Strip -->
-            <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                <!-- All News Pill -->
-                <a href="{{ route('news.index', array_filter(['q' => $filters['q'] ?? null, 'sort' => $filters['sort'] ?? null])) }}"
-                   @class([
-                       'inline-flex items-center gap-1.5 border px-3 py-1.5 text-xs font-bold transition-all uppercase tracking-wider',
-                       'border-line-strong bg-ink text-lime shadow-2xs' => empty($filters['category']),
-                       'border-line bg-paper text-ink hover:border-line-strong hover:bg-surface' => !empty($filters['category']),
-                   ])>
-                    <span>Tất cả</span>
-                </a>
-
-                @foreach ($parentCategories as $pCat)
-                    @php
-                        $hasChildren = $pCat->children->isNotEmpty();
-                        $isParentDirectActive = $currentCatSlug === $pCat->slug;
-                        $activeChild = $hasChildren
-                            ? $pCat->children->firstWhere('slug', $currentCatSlug)
-                            : null;
-                        $isChildActive = (bool) $activeChild;
-                        $isDrawerOpenOnLoad = $isParentDirectActive || $isChildActive;
-                    @endphp
-
-                    @if ($hasChildren)
-                        <!-- Parent Category Accordion Toggle Button -->
-                        <button type="button"
-                                data-cat-toggle="{{ $pCat->slug }}"
-                                data-cat-active="{{ $isDrawerOpenOnLoad ? 'true' : 'false' }}"
-                                aria-expanded="{{ $isDrawerOpenOnLoad ? 'true' : 'false' }}"
-                                aria-controls="cat-drawer-{{ $pCat->slug }}"
-                                @class([
-                                    'inline-flex items-center gap-1.5 border px-3 py-1.5 text-xs font-bold transition-all cursor-pointer select-none uppercase tracking-wider',
-                                    'border-line-strong bg-ink text-lime shadow-2xs' => $isParentDirectActive,
-                                    'border-line-strong bg-lime text-ink' => $isChildActive && !$isParentDirectActive,
-                                    'border-line bg-paper text-ink hover:border-line-strong hover:bg-surface' => !$isParentDirectActive && !$isChildActive,
-                                ])>
-                            <span>{{ $pCat->name }}</span>
-                            @if ($isChildActive)
-                                <span class="bg-ink px-1 text-[10px] font-bold text-lime">
-                                    : {{ $activeChild->name }}
-                                </span>
-                            @endif
-                            <svg data-cat-chevron
-                                 class="size-3.5 transition-transform duration-200 {{ $isDrawerOpenOnLoad ? 'rotate-180' : '' }}"
-                                 viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    @else
-                        <!-- Direct Link -->
-                        <a href="{{ route('news.index', array_filter(['category' => $pCat->slug, 'q' => $filters['q'] ?? null, 'sort' => $filters['sort'] ?? null])) }}"
-                           @class([
-                               'inline-flex items-center gap-1 border px-3 py-1.5 text-xs font-bold transition-all uppercase tracking-wider',
-                               'border-line-strong bg-ink text-lime shadow-2xs' => $isParentDirectActive,
-                               'border-line bg-paper text-ink hover:border-line-strong hover:bg-surface' => !$isParentDirectActive,
-                           ])>
-                            <span>{{ $pCat->name }}</span>
-                        </a>
-                    @endif
-                @endforeach
-            </div>
-
-            <!-- Subcategory Drawers -->
-            @foreach ($parentCategories as $pCat)
-                @if ($pCat->children->isNotEmpty())
-                    @php
-                        $isDrawerOpen = $currentCatSlug === $pCat->slug || $pCat->children->contains('slug', $currentCatSlug);
-                    @endphp
-                    <div id="cat-drawer-{{ $pCat->slug }}"
-                         data-cat-drawer="{{ $pCat->slug }}"
-                         class="grid transition-[grid-template-rows] duration-200 ease-in-out {{ $isDrawerOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]' }}">
-                        <div class="overflow-hidden">
-                            <div class="mt-2.5 border-t border-line pt-3 bg-paper p-3">
-                                <div class="flex items-center justify-between flex-wrap gap-2 pb-2 mb-2 border-b border-line">
-                                    <div class="flex items-center gap-1.5">
-                                        <span class="size-1.5 bg-ink"></span>
-                                        <span class="text-[11px] font-bold uppercase tracking-wider text-ink font-mono">
-                                            Chuyên mục con {{ $pCat->name }}:
-                                        </span>
-                                    </div>
-                                    <a href="{{ route('news.index', array_filter(['category' => $pCat->slug, 'q' => $filters['q'] ?? null, 'sort' => $filters['sort'] ?? null])) }}"
-                                       class="text-[11px] font-bold text-ink hover:underline transition-colors flex items-center gap-1 font-mono">
-                                        <span>Xem tất cả bài {{ $pCat->name }}</span>
-                                        <span>&rarr;</span>
-                                    </a>
-                                </div>
-                                <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 font-sans">
-                                    <!-- All of this parent pill -->
-                                    <a href="{{ route('news.index', array_filter(['category' => $pCat->slug, 'q' => $filters['q'] ?? null, 'sort' => $filters['sort'] ?? null])) }}"
-                                       @class([
-                                           'inline-flex items-center gap-1 border px-2.5 py-1 text-xs font-bold transition-all',
-                                           'border-line-strong bg-ink text-lime shadow-2xs' => $currentCatSlug === $pCat->slug,
-                                           'border-line bg-surface text-ink hover:border-line-strong hover:bg-paper' => $currentCatSlug !== $pCat->slug,
-                                       ])>
-                                        <span>Tất cả {{ $pCat->name }}</span>
-                                    </a>
-
-                                    <!-- Child Category Pills -->
-                                    @foreach ($pCat->children as $cCat)
-                                        @php
-                                            $isCurrentSub = $currentCatSlug === $cCat->slug;
-                                        @endphp
-                                        <a href="{{ route('news.index', array_filter(['category' => $cCat->slug, 'q' => $filters['q'] ?? null, 'sort' => $filters['sort'] ?? null])) }}"
-                                           @class([
-                                               'inline-flex items-center gap-1 border px-2.5 py-1 text-xs font-bold transition-all',
-                                               'border-line-strong bg-lime text-ink shadow-2xs' => $isCurrentSub,
-                                               'border-line bg-surface text-ink hover:border-line-strong hover:bg-paper' => !$isCurrentSub,
-                                           ])>
-                                            <span>{{ $cCat->name }}</span>
-                                            @if ($isCurrentSub)
-                                                <span class="font-mono text-ink ml-0.5">✓</span>
-                                            @endif
-                                        </a>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-            @endforeach
-        </div>
     </div>
 
     <!-- News Grid -->
@@ -308,7 +201,7 @@
                 <p class="mt-1 max-w-sm text-xs text-ink-muted leading-relaxed">
                     Rất tiếc, không có bài viết nào khớp với tiêu chí tìm kiếm hoặc chuyên mục bạn chọn.
                 </p>
-                <a href="{{ route('news.index') }}" class="mt-4 inline-flex min-h-9 items-center gap-1.5 border border-line-strong bg-lime px-4 py-2 text-xs font-bold font-mono text-ink shadow-brutal-sm hover:bg-lime-hover transition-colors">
+                <a href="{{ route('news.index') }}" class="mt-4 inline-flex min-h-9 items-center gap-1.5 border-2 border-line-strong bg-lime px-4 py-2 text-xs font-bold font-mono text-white shadow-brutal-sm hover:bg-ink hover:text-white transition-colors">
                     Xem toàn bộ bài viết
                 </a>
             </div>
@@ -324,34 +217,80 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const toggles = document.querySelectorAll('[data-cat-toggle]');
-        toggles.forEach((toggle) => {
-            toggle.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const slug = toggle.getAttribute('data-cat-toggle');
-                const targetDrawer = document.getElementById(`cat-drawer-${slug}`);
-                const chevron = toggle.querySelector('[data-cat-chevron]');
-                const isOpen = targetDrawer?.classList.contains('grid-rows-[1fr]');
+    (function () {
+        function initSubcatSlider() {
+            const slider = document.querySelector('[data-subcat-slider]');
+            if (!slider) return;
 
-                document.querySelectorAll('[data-cat-drawer]').forEach((drawer) => {
-                    drawer.classList.remove('grid-rows-[1fr]');
-                    drawer.classList.add('grid-rows-[0fr]');
-                });
-                document.querySelectorAll('[data-cat-toggle]').forEach((btn) => {
-                    btn.setAttribute('aria-expanded', 'false');
-                    btn.querySelector('[data-cat-chevron]')?.classList.remove('rotate-180');
-                });
+            const track = slider.querySelector('[data-subcat-track]');
+            const prevBtn = slider.querySelector('[data-subcat-prev]');
+            const nextBtn = slider.querySelector('[data-subcat-next]');
+            const fadeLeft = slider.querySelector('[data-subcat-fade-left]');
+            const fadeRight = slider.querySelector('[data-subcat-fade-right]');
 
-                if (!isOpen && targetDrawer) {
-                    targetDrawer.classList.remove('grid-rows-[0fr]');
-                    targetDrawer.classList.add('grid-rows-[1fr]');
-                    toggle.setAttribute('aria-expanded', 'true');
-                    chevron?.classList.add('rotate-180');
+            if (!track) return;
+
+            function update() {
+                const scrollLeft = Math.ceil(track.scrollLeft);
+                const maxScroll = track.scrollWidth - track.clientWidth;
+                const canPrev = scrollLeft > 6;
+                const canNext = maxScroll > 6 && scrollLeft < maxScroll - 6;
+
+                if (prevBtn) {
+                    prevBtn.classList.toggle('hidden', !canPrev);
+                    prevBtn.classList.toggle('flex', canPrev);
                 }
+                if (fadeLeft) {
+                    fadeLeft.classList.toggle('hidden', !canPrev);
+                }
+
+                if (nextBtn) {
+                    nextBtn.classList.toggle('hidden', !canNext);
+                    nextBtn.classList.toggle('flex', canNext);
+                }
+                if (fadeRight) {
+                    fadeRight.classList.toggle('hidden', !canNext);
+                }
+            }
+
+            prevBtn?.addEventListener('click', (e) => {
+                e.preventDefault();
+                track.scrollBy({ left: -240, behavior: 'smooth' });
+                setTimeout(update, 260);
             });
-        });
-    });
+
+            nextBtn?.addEventListener('click', (e) => {
+                e.preventDefault();
+                track.scrollBy({ left: 240, behavior: 'smooth' });
+                setTimeout(update, 260);
+            });
+
+            track.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('resize', update);
+
+            // Auto-scroll active item into visible area on page load
+            const activeItem = track.querySelector('[data-active-topic]');
+            if (activeItem) {
+                const itemLeft = activeItem.offsetLeft;
+                const itemWidth = activeItem.offsetWidth;
+                const trackWidth = track.clientWidth;
+                if (itemLeft + itemWidth > trackWidth || itemLeft < track.scrollLeft) {
+                    track.scrollLeft = Math.max(0, itemLeft - (trackWidth / 2) + (itemWidth / 2));
+                }
+            }
+
+            update();
+            setTimeout(update, 100);
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(update);
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initSubcatSlider);
+        } else {
+            initSubcatSlider();
+        }
+    })();
 </script>
 @endsection

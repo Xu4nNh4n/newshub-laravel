@@ -10,8 +10,10 @@ use App\Services\AuthorApplicationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AuthorApplicationController extends Controller
 {
@@ -27,7 +29,7 @@ class AuthorApplicationController extends Controller
         return view('admin.author-applications.index', [
             'applications' => AuthorApplication::query()
                 ->where('status', $status)
-                ->with(['user:id,name,email,role', 'category:id,name', 'reviewer:id,name'])
+                ->with(['user:id,name,email,role_id', 'user.userRole:id,code', 'category:id,name', 'reviewer:id,name'])
                 ->latest('created_at')
                 ->latest('id')
                 ->paginate(20)
@@ -38,6 +40,14 @@ class AuthorApplicationController extends Controller
                 ['label' => 'Đơn ứng tuyển tác giả', 'url' => null],
             ],
         ]);
+    }
+
+    public function downloadCv(AuthorApplication $application): StreamedResponse
+    {
+        Gate::authorize('view', $application);
+        abort_if($application->cv_path === null || ! Storage::disk('local')->exists($application->cv_path), 404);
+
+        return Storage::disk('local')->download($application->cv_path);
     }
 
     public function approve(

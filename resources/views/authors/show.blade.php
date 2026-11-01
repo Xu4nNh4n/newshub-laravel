@@ -18,19 +18,15 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
             <div class="flex items-center gap-5">
                 <div class="size-20 sm:size-24 shrink-0 overflow-hidden border-2 border-line-strong bg-paper">
-                    @if ($avatarUrl)
-                        <img src="{{ $avatarUrl }}" alt="{{ $author->name }}" class="size-full object-cover">
-                    @else
-                        <div class="size-full grid place-items-center bg-ink text-2xl font-black font-mono text-lime">
-                            {{ mb_strtoupper(mb_substr($author->name, 0, 1)) }}
-                        </div>
-                    @endif
+                    <div class="size-full grid place-items-center bg-[#1D4ED8] text-2xl font-bold font-mono text-white" aria-hidden="true">
+                        {{ mb_strtoupper(mb_substr($author->name, 0, 1)) }}
+                    </div>
                 </div>
 
                 <div class="space-y-1.5">
                     <div class="flex flex-wrap items-center gap-2">
                         <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-ink">{{ $author->name }}</h1>
-                        <span class="border border-line-strong bg-lime px-2.5 py-0.5 text-xs font-bold font-mono uppercase tracking-wider text-ink shadow-2xs">
+                        <span class="border border-line-strong bg-lime px-2.5 py-0.5 text-xs font-bold font-mono uppercase tracking-wider text-white shadow-2xs">
                             {{ $author->role->value }}
                         </span>
                     </div>

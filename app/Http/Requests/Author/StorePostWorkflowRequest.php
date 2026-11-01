@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Author;
 
-use App\Enums\PostRequestPriority;
 use App\Enums\PostRequestType;
 use App\Models\Post;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -25,7 +24,6 @@ class StorePostWorkflowRequest extends FormRequest
     {
         return [
             'type' => ['required', Rule::enum(PostRequestType::class)],
-            'priority' => ['required', Rule::enum(PostRequestPriority::class)],
             'reason' => ['required', 'string', 'max:255'],
             'notes' => ['nullable', 'string', 'max:2000'],
         ];

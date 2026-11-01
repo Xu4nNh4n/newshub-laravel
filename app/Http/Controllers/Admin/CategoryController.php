@@ -68,7 +68,7 @@ class CategoryController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Đã tạo chuyên mục.',
-                'data' => $category->only(['id', 'parent_id', 'name', 'slug', 'description', 'status']),
+                'data' => $category->only(['id', 'parent_id', 'name', 'slug', 'status']),
             ], 201);
         }
 
@@ -107,7 +107,7 @@ class CategoryController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Đã cập nhật chuyên mục.',
-                'data' => $category->only(['id', 'parent_id', 'name', 'slug', 'description', 'status']),
+                'data' => $category->only(['id', 'parent_id', 'name', 'slug', 'status']),
             ]);
         }
 

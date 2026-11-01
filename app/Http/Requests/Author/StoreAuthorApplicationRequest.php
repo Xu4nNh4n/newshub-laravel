@@ -34,8 +34,7 @@ class StoreAuthorApplicationRequest extends FormRequest
                     ->whereNull('deleted_at'),
             ],
             'bio' => ['required', 'string', 'max:5000'],
-            'sample_title' => ['required', 'string', 'max:255'],
-            'sample_content' => ['required', 'string', 'max:20000'],
+            'cv' => ['required', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
         ];
     }
 }

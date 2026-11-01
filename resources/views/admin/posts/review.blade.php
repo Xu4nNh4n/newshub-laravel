@@ -31,16 +31,6 @@
                             {{ $post->title }}
                         </h2>
 
-                        @if($post->tags->isNotEmpty())
-                            <div class="mt-3 flex flex-wrap items-center gap-1.5">
-                                <span class="font-mono text-[11px] font-bold text-ink-muted uppercase">Thẻ:</span>
-                                @foreach($post->tags as $t)
-                                    <span class="inline-flex items-center border border-line bg-paper px-2 py-0.5 font-mono text-[11px] font-bold text-ink">
-                                        #{{ $t->name }}
-                                    </span>
-                                @endforeach
-                            </div>
-                        @endif
                     </div>
                     <a href="{{ route('posts.preview', $post) }}" class="inline-flex shrink-0 items-center gap-1.5 border-2 border-line-strong bg-paper px-3.5 py-1.5 font-mono text-xs font-bold uppercase text-ink shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
                         <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>

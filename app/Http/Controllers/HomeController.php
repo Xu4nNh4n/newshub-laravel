@@ -19,7 +19,7 @@ class HomeController extends Controller
         $baseQuery = fn () => Post::query()->publiclyVisible()->with(['author:id,name', 'category:id,name,slug']);
 
         return view('home', [
-            'featuredPosts' => $baseQuery()->where('is_featured', true)->latest('published_at')->limit(3)->get(),
+            'featuredPosts' => $baseQuery()->latest('published_at')->latest('id')->limit(3)->get(),
             'latestPosts' => $baseQuery()->latest('published_at')->latest('id')->limit(9)->get(),
             'popularPosts' => $baseQuery()->orderByDesc('view_count')->latest('published_at')->limit(5)->get(),
             'categories' => Category::query()->where('status', CategoryStatus::Active)->orderBy('name')->get(),

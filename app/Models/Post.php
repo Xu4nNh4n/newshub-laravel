@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -17,16 +16,13 @@ class Post extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'author_id', 'category_id', 'title', 'meta_title', 'slug', 'summary',
-        'meta_description', 'content', 'thumbnail', 'status', 'rejection_reason',
-        'show_thumbnail_in_post', 'is_featured', 'published_at',
+        'author_id', 'category_id', 'title', 'slug', 'summary', 'content',
+        'thumbnail', 'status', 'rejection_reason', 'published_at',
     ];
 
     protected function casts(): array
     {
         return [
-            'is_featured' => 'boolean',
-            'show_thumbnail_in_post' => 'boolean',
             'published_at' => 'datetime',
             'status' => PostStatus::class,
         ];
@@ -54,24 +50,9 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function tags(): BelongsToMany
-    {
-        return $this->belongsToMany(Tag::class);
-    }
-
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
-    }
-
-    public function favorites(): HasMany
-    {
-        return $this->hasMany(Favorite::class);
-    }
-
-    public function views(): HasMany
-    {
-        return $this->hasMany(PostView::class);
     }
 
     public function requests(): HasMany

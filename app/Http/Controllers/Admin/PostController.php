@@ -51,7 +51,7 @@ class PostController extends Controller
             'statuses' => PostStatus::cases(),
             'categories' => Category::query()->orderBy('name')->get(['id', 'name']),
             'authors' => User::query()
-                ->whereIn('role', [UserRole::Author, UserRole::Admin])
+                ->whereHas('userRole', fn (Builder $query): Builder => $query->whereIn('code', [UserRole::Author->value, UserRole::Admin->value]))
                 ->orderBy('name')
                 ->get(['id', 'name']),
         ]);
@@ -75,7 +75,7 @@ class PostController extends Controller
         $response = new StreamedResponse(function (): void {
             $handle = fopen('php://output', 'w');
             fwrite($handle, "\xEF\xBB\xBF");
-            fputcsv($handle, ['ID', 'Tiêu đề', 'Chuyên mục', 'Tác giả', 'Trạng thái', 'Nổi bật', 'Lượt xem', 'Ngày xuất bản', 'Ngày tạo']);
+            fputcsv($handle, ['ID', 'Tiêu đề', 'Chuyên mục', 'Tác giả', 'Trạng thái', 'Ngày xuất bản', 'Ngày tạo']);
 
             Post::query()
                 ->with(['author:id,name', 'category:id,name'])
@@ -88,8 +88,6 @@ class PostController extends Controller
                             $post->category?->name ?? '',
                             $post->author?->name ?? '',
                             $post->status->value,
-                            $post->is_featured ? 'Có' : 'Không',
-                            $post->view_count,
                             $post->published_at ? $post->published_at->format('d/m/Y H:i') : '',
                             $post->created_at->format('d/m/Y H:i'),
                         ]);

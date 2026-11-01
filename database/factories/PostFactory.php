@@ -27,9 +27,7 @@ class PostFactory extends Factory
             'slug' => fake()->unique()->slug(),
             'summary' => fake()->paragraph(),
             'content' => fake()->paragraphs(3, true),
-            'show_thumbnail_in_post' => true,
             'status' => PostStatus::Draft,
-            'is_featured' => false,
             'published_at' => null,
         ];
     }

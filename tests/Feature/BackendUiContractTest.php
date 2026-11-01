@@ -2,13 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Enums\CommentReportStatus;
 use App\Enums\UserRole;
 use App\Models\AuthorApplication;
 use App\Models\Category;
-use App\Models\CommentReport;
 use App\Models\Post;
-use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\ViewErrorBag;
@@ -22,16 +19,10 @@ class BackendUiContractTest extends TestCase
     {
         $admin = User::factory()->create(['role' => UserRole::Admin]);
         Post::factory()->count(2)->pendingReview()->create();
-        CommentReport::factory()->count(3)->create(['status' => CommentReportStatus::Pending]);
 
         $response = $this->actingAs($admin)->get(route('admin.categories.index'));
 
-        $response->assertOk()->assertSeeTextInOrder([
-            'Duyệt bài',
-            '2',
-            'Báo cáo bình luận',
-            '3',
-        ]);
+        $response->assertOk()->assertSeeTextInOrder(['Duyệt bài', '2']);
     }
 
     public function test_dashboard_layout_composer_exposes_pending_author_application_count(): void
@@ -51,22 +42,14 @@ class BackendUiContractTest extends TestCase
         $this->assertSame(2, $view->getData()['adminStats']['pending_applications']);
     }
 
-    public function test_admin_category_and_tag_forms_receive_breadcrumb_contracts(): void
+    public function test_admin_category_form_receives_breadcrumb_contract(): void
     {
         $admin = User::factory()->create(['role' => UserRole::Admin]);
         $category = Category::factory()->create();
-        $tag = Tag::factory()->create();
-
         $this->actingAs($admin)->get(route('admin.categories.edit', $category))
             ->assertViewHas('breadcrumbs', [
                 ['label' => 'Danh mục', 'url' => route('admin.categories.index')],
                 ['label' => 'Sửa chuyên mục', 'url' => null],
-            ]);
-
-        $this->actingAs($admin)->get(route('admin.tags.edit', $tag))
-            ->assertViewHas('breadcrumbs', [
-                ['label' => 'Thẻ', 'url' => route('admin.tags.index')],
-                ['label' => 'Sửa thẻ', 'url' => null],
             ]);
     }
 

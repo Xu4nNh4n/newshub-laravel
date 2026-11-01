@@ -18,20 +18,20 @@
     <div id="dashboard-overlay" class="fixed inset-0 z-40 hidden bg-ink/70 backdrop-blur-xs transition-opacity lg:hidden" aria-hidden="true"></div>
 
     <!-- Sidebar -->
-    <aside id="dashboard-sidebar" class="fixed inset-y-0 left-0 z-50 flex w-64 -translate-x-full flex-col border-r-2 border-line-strong bg-paper transition-transform duration-200 ease-in-out motion-reduce:transition-none lg:translate-x-0" aria-label="Điều hướng bảng điều khiển">
+    <aside id="dashboard-sidebar" class="fixed inset-y-0 left-0 z-50 flex w-64 -translate-x-full flex-col border-r border-line bg-paper transition-transform duration-200 ease-in-out motion-reduce:transition-none lg:translate-x-0" aria-label="Điều hướng bảng điều khiển">
         <!-- Brand / Header -->
         <div class="flex h-16 shrink-0 items-center justify-between border-b border-line px-4 bg-paper-light">
             <a href="{{ route('home') }}"
                title="Về trang chủ tin tức NewsHub"
                class="group flex items-center gap-2.5 rounded-none px-1 py-1 transition-colors focus-visible:outline-2 focus-visible:outline-ink">
-                <span class="grid size-8 place-items-center bg-ink text-lime border border-ink font-black text-base transition-transform group-hover:bg-lime group-hover:text-ink">
+                <span class="grid size-8 shrink-0 place-items-center bg-lime text-white font-serif font-black text-base shadow-brutal-sm border border-line-strong select-none">
                     N
                 </span>
-                <span class="min-w-0">
-                    <span class="block truncate text-base font-black tracking-tight text-ink">
-                        News<span class="underline decoration-lime decoration-3">Hub</span>
+                <span class="min-w-0 leading-none">
+                    <span class="block truncate text-base font-serif font-bold tracking-tight text-ink">
+                        NewsHub
                     </span>
-                    <span class="block text-[10px] font-mono font-bold uppercase tracking-wider text-ink-muted flex items-center gap-0.5">
+                    <span class="block text-[9px] font-mono font-bold uppercase tracking-wider text-ink-muted flex items-center gap-0.5 mt-1">
                         <span>&larr; Trang tin tức</span>
                     </span>
                 </span>
@@ -53,9 +53,9 @@
                         $isDashboardActive = request()->routeIs('dashboard', 'admin.dashboard', 'author.dashboard');
                     @endphp
                     <a href="{{ route('dashboard') }}" @class([
-                        'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all border',
-                        'bg-ink text-lime border-ink shadow-brutal-sm' => $isDashboardActive,
-                        'text-ink border-transparent hover:border-line hover:bg-surface' => ! $isDashboardActive,
+                        'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all',
+                        'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isDashboardActive,
+                        'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isDashboardActive,
                     ]) @if ($isDashboardActive) aria-current="page" @endif>
                         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                             <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
@@ -72,17 +72,14 @@
                     @php
                         $isMyPostsActive = request()->routeIs('author.posts.index');
                         $isCreateActive = request()->routeIs('author.posts.create');
-                        $isFavoritesActive = request()->routeIs('favorites.index');
-                        $isReadingHistoryActive = request()->routeIs('reading-history.*');
-                        $isActivityActive = request()->routeIs('profile.activity');
                         $canWritePosts = in_array(auth()->user()->role, [\App\Enums\UserRole::Author, \App\Enums\UserRole::Admin], true);
                     @endphp
 
                     @if (auth()->user()->hasVerifiedEmail() && $canWritePosts)
                         <a href="{{ route('author.posts.index') }}" @class([
-                            'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all border',
-                            'bg-ink text-lime border-ink shadow-brutal-sm' => $isMyPostsActive,
-                            'text-ink border-transparent hover:border-line hover:bg-surface' => ! $isMyPostsActive,
+                            'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all',
+                            'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isMyPostsActive,
+                            'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isMyPostsActive,
                         ]) @if ($isMyPostsActive) aria-current="page" @endif>
                             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                                 <path d="M5 3h11l3 3v15H5z"/><path d="M15 3v4h4M8 11h8M8 15h8"/>
@@ -91,9 +88,9 @@
                         </a>
 
                         <a href="{{ route('author.posts.create') }}" @class([
-                            'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all border',
-                            'bg-ink text-lime border-ink shadow-brutal-sm' => $isCreateActive,
-                            'text-ink border-transparent hover:border-line hover:bg-surface' => ! $isCreateActive,
+                            'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all',
+                            'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isCreateActive,
+                            'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isCreateActive,
                         ]) @if ($isCreateActive) aria-current="page" @endif>
                             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                                 <path d="M12 5v14M5 12h14"/>
@@ -101,39 +98,6 @@
                             <span>Viết bài mới</span>
                         </a>
                     @endif
-
-                    <a href="{{ route('favorites.index') }}" @class([
-                        'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all border',
-                        'bg-ink text-lime border-ink shadow-brutal-sm' => $isFavoritesActive,
-                        'text-ink border-transparent hover:border-line hover:bg-surface' => ! $isFavoritesActive,
-                    ]) @if ($isFavoritesActive) aria-current="page" @endif>
-                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
-                            <path d="M6 3h12v18l-6-4-6 4z"/>
-                        </svg>
-                        <span>Bài viết đã lưu</span>
-                    </a>
-
-                    <a href="{{ route('reading-history.index') }}" @class([
-                        'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all border',
-                        'bg-ink text-lime border-ink shadow-brutal-sm' => $isReadingHistoryActive,
-                        'text-ink border-transparent hover:border-line hover:bg-surface' => ! $isReadingHistoryActive,
-                    ]) @if ($isReadingHistoryActive) aria-current="page" @endif>
-                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
-                            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                        </svg>
-                        <span>Bài viết đã đọc</span>
-                    </a>
-
-                    <a href="{{ route('profile.activity') }}" @class([
-                        'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all border',
-                        'bg-ink text-lime border-ink shadow-brutal-sm' => $isActivityActive,
-                        'text-ink border-transparent hover:border-line hover:bg-surface' => ! $isActivityActive,
-                    ]) @if ($isActivityActive) aria-current="page" @endif>
-                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
-                            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        <span>Lịch sử hoạt động</span>
-                    </a>
                 </div>
             </div>
 
@@ -148,23 +112,19 @@
                             $isPostRequestsActive = request()->routeIs('admin.post-requests.*');
                             $isPostsActive = request()->routeIs('admin.posts.*') && ! $isReviewActive;
                             $isCatActive = request()->routeIs('admin.categories.*');
-                            $isTagsActive = request()->routeIs('admin.tags.*');
                             $isUsersActive = request()->routeIs('admin.users.*');
                             $isCommentsActive = request()->routeIs('admin.comments.*');
-                            $isReportsActive = request()->routeIs('admin.comment-reports.*');
-                            $isLogsActive = request()->routeIs('admin.activity-logs.*');
 
                             $pendingPosts = $pending_posts_count ?? $adminStats['pending_posts'] ?? 0;
-                            $pendingReports = $pending_reports_count ?? $adminStats['pending_reports'] ?? 0;
                             $pendingApplications = $pending_applications_count ?? $adminStats['pending_applications'] ?? 0;
                             $pendingPostRequests = $pending_post_requests_count ?? $adminStats['pending_post_requests'] ?? 0;
                         @endphp
 
                         <!-- Duyệt bài -->
                         <a href="{{ route('admin.post-reviews.index') }}" @class([
-                            'group flex min-h-9 items-center justify-between gap-2.5 px-2.5 py-1.5 font-bold transition-all border',
-                            'bg-ink text-lime border-ink shadow-brutal-sm' => $isReviewActive,
-                            'text-ink border-transparent hover:border-line hover:bg-surface' => ! $isReviewActive,
+                            'group flex min-h-9 items-center justify-between gap-2.5 px-2.5 py-1.5 font-bold transition-all',
+                            'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isReviewActive,
+                            'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isReviewActive,
                         ]) @if ($isReviewActive) aria-current="page" @endif>
                             <span class="flex items-center gap-2.5 min-w-0">
                                 <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
@@ -173,7 +133,11 @@
                                 <span class="truncate">Duyệt bài</span>
                             </span>
                             @if ($pendingPosts > 0)
-                                <span class="border border-line-strong bg-lime px-1.5 py-0.2 text-[10px] font-bold text-ink">
+                                <span @class([
+                                    'px-2 py-0.5 text-[10px] font-bold border transition-colors',
+                                    'bg-lime text-white border-white' => $isReviewActive,
+                                    'bg-surface text-ink border-line-strong group-hover:bg-lime group-hover:text-white group-hover:border-white' => ! $isReviewActive,
+                                ])>
                                     {{ $pendingPosts }}
                                 </span>
                             @endif
@@ -181,9 +145,9 @@
 
                         <!-- Đơn ứng tuyển CTV -->
                         <a href="{{ route('admin.author-applications.index') }}" @class([
-                            'group flex min-h-9 items-center justify-between gap-2.5 px-2.5 py-1.5 font-bold transition-all border',
-                            'bg-ink text-lime border-ink shadow-brutal-sm' => $isAuthorAppsActive,
-                            'text-ink border-transparent hover:border-line hover:bg-surface' => ! $isAuthorAppsActive,
+                            'group flex min-h-9 items-center justify-between gap-2.5 px-2.5 py-1.5 font-bold transition-all',
+                            'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isAuthorAppsActive,
+                            'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isAuthorAppsActive,
                         ]) @if ($isAuthorAppsActive) aria-current="page" @endif>
                             <span class="flex items-center gap-2.5 min-w-0">
                                 <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
@@ -192,7 +156,11 @@
                                 <span class="truncate">Đơn ứng tuyển CTV</span>
                             </span>
                             @if ($pendingApplications > 0)
-                                <span class="border border-line-strong bg-lime px-1.5 py-0.2 text-[10px] font-bold text-ink">
+                                <span @class([
+                                    'px-2 py-0.5 text-[10px] font-bold border transition-colors',
+                                    'bg-lime text-white border-white' => $isAuthorAppsActive,
+                                    'bg-surface text-ink border-line-strong group-hover:bg-lime group-hover:text-white group-hover:border-white' => ! $isAuthorAppsActive,
+                                ])>
                                     {{ $pendingApplications }}
                                 </span>
                             @endif
@@ -200,9 +168,9 @@
 
                         <!-- Yêu cầu gỡ / sửa bài -->
                         <a href="{{ route('admin.post-requests.index') }}" @class([
-                            'group flex min-h-9 items-center justify-between gap-2.5 px-2.5 py-1.5 font-bold transition-all border',
-                            'bg-ink text-lime border-ink shadow-brutal-sm' => $isPostRequestsActive,
-                            'text-ink border-transparent hover:border-line hover:bg-surface' => ! $isPostRequestsActive,
+                            'group flex min-h-9 items-center justify-between gap-2.5 px-2.5 py-1.5 font-bold transition-all',
+                            'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isPostRequestsActive,
+                            'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isPostRequestsActive,
                         ]) @if ($isPostRequestsActive) aria-current="page" @endif>
                             <span class="flex items-center gap-2.5 min-w-0">
                                 <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
@@ -211,7 +179,11 @@
                                 <span class="truncate">Yêu cầu bài viết</span>
                             </span>
                             @if ($pendingPostRequests > 0)
-                                <span class="border border-line-strong bg-pink px-1.5 py-0.2 text-[10px] font-bold text-ink">
+                                <span @class([
+                                    'px-2 py-0.5 text-[10px] font-bold border transition-colors',
+                                    'bg-lime text-white border-white' => $isPostRequestsActive,
+                                    'bg-surface text-ink border-line-strong group-hover:bg-lime group-hover:text-white group-hover:border-white' => ! $isPostRequestsActive,
+                                ])>
                                     {{ $pendingPostRequests }}
                                 </span>
                             @endif
@@ -219,9 +191,9 @@
 
                         <!-- Tất cả bài viết -->
                         <a href="{{ route('admin.posts.index') }}" @class([
-                            'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all border',
-                            'bg-ink text-lime border-ink shadow-brutal-sm' => $isPostsActive,
-                            'text-ink border-transparent hover:border-line hover:bg-surface' => ! $isPostsActive,
+                            'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all',
+                            'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isPostsActive,
+                            'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isPostsActive,
                         ]) @if ($isPostsActive) aria-current="page" @endif>
                             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                                 <path d="M4 6h16M4 12h16M4 18h10"/>
@@ -231,9 +203,9 @@
 
                         <!-- Danh mục -->
                         <a href="{{ route('admin.categories.index') }}" @class([
-                            'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all border',
-                            'bg-ink text-lime border-ink shadow-brutal-sm' => $isCatActive,
-                            'text-ink border-transparent hover:border-line hover:bg-surface' => ! $isCatActive,
+                            'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all',
+                            'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isCatActive,
+                            'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isCatActive,
                         ]) @if ($isCatActive) aria-current="page" @endif>
                             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                                 <path d="M3 7h7l2 2h9v10H3z"/><path d="M3 7V5h7l2 2"/>
@@ -241,23 +213,11 @@
                             <span>Danh mục</span>
                         </a>
 
-                        <!-- Thẻ -->
-                        <a href="{{ route('admin.tags.index') }}" @class([
-                            'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all border',
-                            'bg-ink text-lime border-ink shadow-brutal-sm' => $isTagsActive,
-                            'text-ink border-transparent hover:border-line hover:bg-surface' => ! $isTagsActive,
-                        ]) @if ($isTagsActive) aria-current="page" @endif>
-                            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
-                                <path d="M20 13 11 22l-9-9V4h9z"/><circle cx="7" cy="9" r="1"/>
-                            </svg>
-                            <span>Thẻ</span>
-                        </a>
-
                         <!-- Người dùng -->
                         <a href="{{ route('admin.users.index') }}" @class([
-                            'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all border',
-                            'bg-ink text-lime border-ink shadow-brutal-sm' => $isUsersActive,
-                            'text-ink border-transparent hover:border-line hover:bg-surface' => ! $isUsersActive,
+                            'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all',
+                            'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isUsersActive,
+                            'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isUsersActive,
                         ]) @if ($isUsersActive) aria-current="page" @endif>
                             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
@@ -267,45 +227,14 @@
 
                         <!-- Bình luận -->
                         <a href="{{ route('admin.comments.index') }}" @class([
-                            'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all border',
-                            'bg-ink text-lime border-ink shadow-brutal-sm' => $isCommentsActive,
-                            'text-ink border-transparent hover:border-line hover:bg-surface' => ! $isCommentsActive,
+                            'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all',
+                            'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isCommentsActive,
+                            'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isCommentsActive,
                         ]) @if ($isCommentsActive) aria-current="page" @endif>
                             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                                 <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
                             </svg>
                             <span>Bình luận</span>
-                        </a>
-
-                        <!-- Báo cáo bình luận -->
-                        <a href="{{ route('admin.comment-reports.index') }}" @class([
-                            'group flex min-h-9 items-center justify-between gap-2.5 px-2.5 py-1.5 font-bold transition-all border',
-                            'bg-ink text-lime border-ink shadow-brutal-sm' => $isReportsActive,
-                            'text-ink border-transparent hover:border-line hover:bg-surface' => ! $isReportsActive,
-                        ]) @if ($isReportsActive) aria-current="page" @endif>
-                            <span class="flex items-center gap-2.5 min-w-0">
-                                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
-                                    <path d="M5 21V4m0 0h11l-2 4 2 4H5"/>
-                                </svg>
-                                <span class="truncate">Báo cáo bình luận</span>
-                            </span>
-                            @if ($pendingReports > 0)
-                                <span class="border border-line-strong bg-rose-200 px-1.5 py-0.2 text-[10px] font-bold text-danger">
-                                    {{ $pendingReports }}
-                                </span>
-                            @endif
-                        </a>
-
-                        <!-- Nhật ký hoạt động -->
-                        <a href="{{ route('admin.activity-logs.index') }}" @class([
-                            'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all border',
-                            'bg-ink text-lime border-ink shadow-brutal-sm' => $isLogsActive,
-                            'text-ink border-transparent hover:border-line hover:bg-surface' => ! $isLogsActive,
-                        ]) @if ($isLogsActive) aria-current="page" @endif>
-                            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
-                                <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>
-                            </svg>
-                            <span>Nhật ký hoạt động</span>
                         </a>
                     </div>
                 </div>
@@ -315,18 +244,18 @@
         <!-- Sidebar footer -->
         <div class="shrink-0 border-t border-line p-3 space-y-1 font-mono text-xs">
             <a href="{{ route('profile.edit') }}" @class([
-                'flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all border',
-                'bg-ink text-lime border-ink' => request()->routeIs('profile.*'),
-                'text-ink border-transparent hover:border-line hover:bg-surface' => ! request()->routeIs('profile.*'),
+                'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all',
+                'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => request()->routeIs('profile.*'),
+                'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! request()->routeIs('profile.*'),
             ])>
-                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0 text-ink-muted">
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                     <circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>
                 </svg>
                 <span>Hồ sơ & cài đặt</span>
             </a>
 
-            <a href="{{ route('home') }}" class="flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-semibold text-ink-muted hover:text-ink hover:bg-surface transition-colors border border-transparent hover:border-line">
-                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0 text-ink-muted">
+            <a href="{{ route('home') }}" class="group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold text-ink hover:bg-ink hover:text-white transition-colors border border-transparent hover:border-line-strong">
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                     <path d="M14 3h7v7M10 14 21 3M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/>
                 </svg>
                 <span>Xem trang tin</span>
@@ -347,7 +276,7 @@
     <!-- Main content area -->
     <div class="min-h-dvh lg:pl-64 flex flex-col">
         <!-- Sticky Topbar -->
-        <header class="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between border-b-2 border-line-strong bg-surface/95 px-4 backdrop-blur-md sm:px-6 lg:px-8">
+        <header class="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between border-b border-line bg-surface/95 px-4 backdrop-blur-md sm:px-6 lg:px-8">
             <!-- Left: Mobile toggle + Breadcrumb -->
             <div class="flex min-w-0 items-center gap-3">
                 <button type="button" data-sidebar-open class="grid size-9 shrink-0 cursor-pointer place-items-center border border-line-strong text-ink hover:bg-paper focus-visible:outline-2 focus-visible:outline-ink lg:hidden" aria-controls="dashboard-sidebar" aria-expanded="false" aria-label="Mở menu điều hướng">
@@ -389,97 +318,21 @@
                 <!-- Nút Xem trang tin -->
                 <a href="{{ route('home') }}"
                    title="Xem trang tin tức NewsHub"
-                   class="inline-flex min-h-8 items-center gap-1.5 border border-line-strong bg-surface px-3 py-1.5 text-xs font-bold text-ink shadow-2xs transition-colors hover:bg-paper focus-visible:outline-2 focus-visible:outline-ink font-mono">
-                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-3.5 text-ink">
+                   class="inline-flex min-h-8 items-center gap-1.5 border-2 border-line-strong bg-surface px-3 py-1.5 text-xs font-bold text-ink shadow-brutal-sm transition-colors hover:bg-ink hover:text-white focus-visible:outline-2 focus-visible:outline-ink">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-3.5">
                         <path d="M14 3h7v7M10 14 21 3M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/>
                     </svg>
                     <span class="hidden sm:inline">Trang tin</span>
                 </a>
 
                 @if (auth()->user()->hasVerifiedEmail() && in_array(auth()->user()->role, [\App\Enums\UserRole::Author, \App\Enums\UserRole::Admin], true))
-                    <a href="{{ route('author.posts.create') }}" class="inline-flex min-h-8 items-center gap-1.5 border border-line-strong bg-lime px-3 py-1.5 text-xs font-bold text-ink shadow-brutal-sm transition-colors hover:bg-lime-hover focus-visible:outline-2 focus-visible:outline-ink font-mono">
+                    <a href="{{ route('author.posts.create') }}" class="inline-flex min-h-8 items-center gap-1.5 border-2 border-line-strong bg-lime px-3.5 py-1.5 text-xs font-bold text-white shadow-brutal-sm transition-colors hover:bg-ink hover:text-white focus-visible:outline-2 focus-visible:outline-ink">
                         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="size-3.5">
                             <path d="M12 5v14M5 12h14"/>
                         </svg>
                         <span>Viết bài</span>
                     </a>
                 @endif
-
-                <!-- Notification Bell Dropdown in Dashboard -->
-                @php
-                    $dUnreadCount = auth()->user()->unreadNotifications()->count();
-                    $dRecentNotifs = auth()->user()->notifications()->take(5)->get();
-                @endphp
-                <div class="relative" data-notification-menu>
-                    <button type="button"
-                            data-notification-trigger
-                            aria-expanded="false"
-                            aria-label="Thông báo"
-                            title="Thông báo"
-                            class="relative grid size-8 place-items-center border border-line bg-surface text-ink transition-colors hover:border-line-strong hover:bg-paper focus-visible:outline-2 focus-visible:outline-ink cursor-pointer">
-                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-                        </svg>
-                        @if ($dUnreadCount > 0)
-                            <span class="absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center border border-line-strong bg-lime px-1 text-[9px] font-bold text-ink font-mono shadow-xs">
-                                {{ $dUnreadCount > 9 ? '9+' : $dUnreadCount }}
-                            </span>
-                        @endif
-                    </button>
-
-                    <!-- Floating Notification Panel -->
-                    <div data-notification-panel
-                         class="pointer-events-none opacity-0 invisible translate-y-1 transition-all duration-150 ease-out absolute right-0 top-full pt-2 z-50 w-80 sm:w-96 max-w-[95vw]">
-                        <div class="rounded-none border-2 border-line-strong bg-surface p-3 shadow-brutal divide-y divide-line">
-                            <div class="flex items-center justify-between pb-2 px-1">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-xs font-bold uppercase tracking-wider font-mono text-ink">Thông báo</span>
-                                    @if ($dUnreadCount > 0)
-                                        <span class="border border-line-strong bg-lime px-1.5 py-0.2 text-[10px] font-bold font-mono text-ink">
-                                            {{ $dUnreadCount }} mới
-                                        </span>
-                                    @endif
-                                </div>
-                                @if ($dUnreadCount > 0)
-                                    <form method="POST" action="{{ route('notifications.mark-all-read') }}">
-                                        @csrf
-                                        <button type="submit" class="text-[11px] font-mono text-ink hover:underline cursor-pointer">
-                                            Đọc tất cả
-                                        </button>
-                                    </form>
-                                @endif
-                            </div>
-
-                            <div class="py-1 divide-y divide-line-light max-h-72 overflow-y-auto">
-                                @forelse ($dRecentNotifs as $notif)
-                                    @php
-                                        $nData = $notif->data;
-                                        $isNUnread = is_null($notif->read_at);
-                                    @endphp
-                                    <a href="{{ route('notifications.read', $notif->id) }}"
-                                       class="flex items-start gap-2.5 p-2 transition-colors {{ $isNUnread ? 'bg-lime/10 hover:bg-lime/20' : 'hover:bg-paper' }}">
-                                        <span class="mt-1 size-2 shrink-0 border border-ink {{ $isNUnread ? 'bg-lime' : 'bg-transparent' }}"></span>
-                                        <div class="min-w-0 flex-1 space-y-0.5">
-                                            <p class="text-xs font-bold text-ink truncate">{{ $nData['title'] ?? 'Thông báo' }}</p>
-                                            <p class="text-[11px] text-ink-muted line-clamp-2 leading-relaxed">{{ $nData['message'] ?? '' }}</p>
-                                            <p class="text-[10px] text-ink-light font-mono">{{ $notif->created_at->diffForHumans() }}</p>
-                                        </div>
-                                    </a>
-                                @empty
-                                    <div class="py-6 text-center text-xs font-mono text-ink-muted">
-                                        Không có thông báo mới
-                                    </div>
-                                @endforelse
-                            </div>
-
-                            <div class="pt-2 text-center">
-                                <a href="{{ route('notifications.index') }}" class="block text-xs font-bold font-mono text-ink hover:underline transition-colors">
-                                    Xem toàn bộ thông báo &rarr;
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- User Profile Dropdown Menu in Dashboard -->
                 <div class="relative border-l border-line pl-3" data-user-menu>
@@ -488,13 +341,9 @@
                             aria-expanded="false"
                             aria-label="Menu cá nhân"
                             class="group flex items-center gap-2.5 border border-transparent py-1 pl-1 pr-2 transition-all hover:border-line-strong hover:bg-paper focus-visible:outline-2 focus-visible:outline-ink cursor-pointer">
-                        @if (auth()->user()->avatar)
-                            <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url(auth()->user()->avatar) }}" alt="Avatar của {{ auth()->user()->name }}" class="size-8 shrink-0 rounded-none object-cover border border-line-strong">
-                        @else
-                            <span class="grid size-8 shrink-0 place-items-center bg-ink text-xs font-bold font-mono text-lime border border-ink" aria-hidden="true">
-                                {{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
-                            </span>
-                        @endif
+                        <span class="grid size-8 shrink-0 place-items-center bg-lime text-xs font-bold font-mono text-white border border-line-strong shadow-brutal-sm select-none" aria-hidden="true">
+                            {{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
+                        </span>
                         <div class="hidden min-w-0 text-left sm:block">
                             <p class="max-w-32 truncate text-xs font-bold text-ink leading-tight">{{ auth()->user()->name }}</p>
                             <p class="text-[10px] font-mono font-medium uppercase tracking-wider text-ink-muted">{{ auth()->user()->role->value }}</p>
@@ -515,27 +364,19 @@
 
                             <div class="py-1">
                                 <a href="{{ route('home') }}"
-                                   class="flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
-                                    <svg class="size-4 text-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                   class="flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-bold text-ink hover:bg-ink hover:text-white transition-colors">
+                                    <svg class="size-4 shrink-0 text-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
                                     </svg>
                                     <span>Về trang chủ tin tức</span>
                                 </a>
 
                                 <a href="{{ route('profile.edit') }}"
-                                   class="flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
-                                    <svg class="size-4 text-ink-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                   class="flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-bold text-ink hover:bg-ink hover:text-white transition-colors">
+                                    <svg class="size-4 shrink-0 text-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                         <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
                                     </svg>
                                     <span>Hồ sơ cá nhân & Mật khẩu</span>
-                                </a>
-
-                                <a href="{{ route('favorites.index') }}"
-                                   class="flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
-                                    <svg class="size-4 text-ink-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                                    </svg>
-                                    <span>Bài viết đã lưu</span>
                                 </a>
                             </div>
 
@@ -695,47 +536,6 @@
             }
         });
 
-        // Notification Dropdown Controller
-        document.querySelectorAll('[data-notification-menu]').forEach((menu) => {
-            const trigger = menu.querySelector('[data-notification-trigger]');
-            const panel = menu.querySelector('[data-notification-panel]');
-
-            const openNotif = () => {
-                panel?.classList.remove('pointer-events-none', 'opacity-0', 'invisible', 'translate-y-1');
-                panel?.classList.add('pointer-events-auto', 'opacity-100', 'visible', 'translate-y-0');
-                trigger?.setAttribute('aria-expanded', 'true');
-            };
-
-            const closeNotif = () => {
-                panel?.classList.add('pointer-events-none', 'opacity-0', 'invisible', 'translate-y-1');
-                panel?.classList.remove('pointer-events-auto', 'opacity-100', 'visible', 'translate-y-0');
-                trigger?.setAttribute('aria-expanded', 'false');
-            };
-
-            trigger?.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const isOpen = trigger.getAttribute('aria-expanded') === 'true';
-                if (isOpen) {
-                    closeNotif();
-                } else {
-                    openNotif();
-                }
-            });
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('[data-notification-menu]')) {
-                document.querySelectorAll('[data-notification-menu]').forEach((menu) => {
-                    const panel = menu.querySelector('[data-notification-panel]');
-                    const trigger = menu.querySelector('[data-notification-trigger]');
-                    panel?.classList.add('pointer-events-none', 'opacity-0', 'invisible', 'translate-y-1');
-                    panel?.classList.remove('pointer-events-auto', 'opacity-100', 'visible', 'translate-y-0');
-                    trigger?.setAttribute('aria-expanded', 'false');
-                });
-            }
-        });
-
         // Double submit prevention
         document.addEventListener('submit', (event) => {
             const form = event.target;
@@ -763,8 +563,8 @@
 
         const CONFIRM_THEMES = {
             success: {
-                box: 'bg-lime text-ink border-line-strong',
-                btn: 'border border-line-strong bg-lime text-ink hover:bg-lime-hover',
+                box: 'bg-lime text-white border-line-strong',
+                btn: 'border border-line-strong bg-lime text-white hover:bg-ink hover:text-white',
                 subtext: 'border-line bg-paper text-ink'
             },
             danger: {
@@ -773,13 +573,13 @@
                 subtext: 'border-danger/30 bg-rose-50 text-danger'
             },
             warning: {
-                box: 'bg-amber-100 text-amber-900 border-line-strong',
-                btn: 'border border-line-strong bg-lime text-ink hover:bg-lime-hover',
+                box: 'bg-[#dce6f2] text-ink border-line-strong',
+                btn: 'border border-line-strong bg-lime text-white hover:bg-ink hover:text-white',
                 subtext: 'border-line bg-paper text-ink'
             },
             info: {
-                box: 'bg-lime text-ink border-line-strong',
-                btn: 'border border-line-strong bg-lime text-ink hover:bg-lime-hover',
+                box: 'bg-lime text-white border-line-strong',
+                btn: 'border border-line-strong bg-lime text-white hover:bg-ink hover:text-white',
                 subtext: 'border-line bg-paper text-ink'
             }
         };
@@ -875,16 +675,151 @@
             }
         });
 
-        // Global capture listener for any form with [data-confirm]
+        // Custom Client-Side Inline Form Validation (Prevents ugly browser HTML5 popups)
+        document.addEventListener('invalid', (e) => {
+            e.preventDefault();
+        }, true);
+
+        function getFieldLabelText(field) {
+            if (field.id) {
+                const label = document.querySelector(`label[for="${field.id}"]`);
+                if (label) {
+                    return label.textContent.replace(/[*:\n\r]/g, '').trim();
+                }
+            }
+            const parentLabel = field.closest('label');
+            if (parentLabel) {
+                return parentLabel.textContent.replace(/[*:\n\r]/g, '').trim();
+            }
+            return '';
+        }
+
+        function getSmartFieldErrorMessage(field) {
+            const v = field.validity;
+            const label = getFieldLabelText(field);
+
+            if (v.valueMissing) {
+                if (field.name === 'password_confirmation') {
+                    return 'Vui lòng xác nhận lại mật khẩu.';
+                }
+                if (field.type === 'password' || field.name === 'password') {
+                    return 'Vui lòng nhập mật khẩu.';
+                }
+                if (field.type === 'email' || field.name === 'email') {
+                    return 'Vui lòng nhập địa chỉ email.';
+                }
+                if (field.tagName === 'SELECT') {
+                    return label ? `Vui lòng chọn ${label.toLowerCase()}.` : 'Vui lòng chọn một mục trong danh sách.';
+                }
+                if (field.type === 'checkbox') {
+                    return 'Vui lòng đánh dấu chọn ô này để tiếp tục.';
+                }
+                if (field.tagName === 'TEXTAREA' || field.name === 'content') {
+                    return 'Vui lòng nhập nội dung.';
+                }
+                if (label) {
+                    return `Vui lòng nhập ${label.toLowerCase()}.`;
+                }
+                return 'Vui lòng không để trống trường này.';
+            }
+
+            if (v.typeMismatch) {
+                if (field.type === 'email') {
+                    return 'Địa chỉ email không hợp lệ (ví dụ: name@example.com).';
+                }
+                if (field.type === 'url') {
+                    return 'Vui lòng nhập đúng định dạng liên kết URL.';
+                }
+            }
+
+            if (v.tooShort) {
+                return `Vui lòng nhập tối thiểu ${field.minLength} ký tự (hiện có ${field.value.length} ký tự).`;
+            }
+
+            if (v.tooLong) {
+                return `Vui lòng không nhập quá ${field.maxLength} ký tự.`;
+            }
+
+            if (v.patternMismatch) {
+                return 'Dữ liệu nhập vào chưa đúng định dạng yêu cầu.';
+            }
+
+            return field.validationMessage || 'Dữ liệu không hợp lệ.';
+        }
+
+        function renderFieldInlineError(field) {
+            clearFieldInlineError(field);
+
+            field.classList.add('!border-danger', '!ring-1', '!ring-danger', 'bg-rose-50/20');
+
+            const msg = getSmartFieldErrorMessage(field);
+            const errorP = document.createElement('p');
+            errorP.className = 'custom-field-error mt-1.5 flex items-center gap-1.5 text-xs text-danger font-sans font-medium';
+            errorP.setAttribute('role', 'alert');
+            errorP.innerHTML = `
+                <svg class="size-3.5 shrink-0 text-danger" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                </svg>
+                <span>${msg}</span>
+            `;
+
+            const anchor = field.closest('.relative') || field;
+            anchor.insertAdjacentElement('afterend', errorP);
+
+            const onInputFix = () => {
+                if (field.checkValidity()) {
+                    clearFieldInlineError(field);
+                    field.removeEventListener('input', onInputFix);
+                    field.removeEventListener('change', onInputFix);
+                }
+            };
+            field.addEventListener('input', onInputFix);
+            field.addEventListener('change', onInputFix);
+        }
+
+        function clearFieldInlineError(field) {
+            field.classList.remove('!border-danger', '!ring-1', '!ring-danger', 'bg-rose-50/20');
+            const anchor = field.closest('.relative') || field;
+            const nextEl = anchor.nextElementSibling;
+            if (nextEl && nextEl.classList.contains('custom-field-error')) {
+                nextEl.remove();
+            }
+        }
+
+        // Global capture listener for form submission
         document.addEventListener('submit', (e) => {
             const form = e.target;
             if (!(form instanceof HTMLFormElement)) return;
 
-            if (form.hasAttribute('data-confirm') && !form.dataset.confirmed) {
-                if (typeof form.reportValidity === 'function' && !form.reportValidity()) {
-                    return;
-                }
+            // Validate all fields inline first
+            form.querySelectorAll('.custom-field-error').forEach(el => el.remove());
+            const fields = Array.from(form.querySelectorAll('input, select, textarea'));
+            let firstInvalid = null;
+            let hasError = false;
 
+            for (const field of fields) {
+                if (field.disabled || field.type === 'hidden' || field.type === 'submit' || field.type === 'button') {
+                    continue;
+                }
+                if (!field.checkValidity()) {
+                    hasError = true;
+                    if (!firstInvalid) firstInvalid = field;
+                    renderFieldInlineError(field);
+                }
+            }
+
+            if (hasError) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                if (firstInvalid) {
+                    firstInvalid.focus();
+                    firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return;
+            }
+
+            // [data-confirm] confirmation handler
+            if (form.hasAttribute('data-confirm') && !form.dataset.confirmed) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
 

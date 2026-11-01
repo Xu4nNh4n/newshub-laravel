@@ -44,7 +44,6 @@
     @if ($adminStats ?? null)
         @php
             $maximumMonthlyPosts = max(1, collect($adminStats['posts_by_month'])->max('count'));
-            $maximumDailyViews = max(1, collect($adminStats['views_by_day'])->max('count'));
         @endphp
 
         <!-- System Overview Section -->
@@ -90,18 +89,18 @@
                 </article>
 
                 <!-- Bài chờ duyệt -->
-                <article class="flex flex-col justify-between border-2 border-line-strong bg-lime p-5 shadow-brutal">
+                <article class="flex flex-col justify-between border-2 border-line-strong bg-[#EFF6FF] p-5 shadow-brutal-sm">
                     <div>
-                        <div class="flex items-center justify-between gap-2 border-b border-line-strong pb-2">
-                            <span class="text-xs font-mono font-bold uppercase tracking-wider text-ink">Bài chờ duyệt</span>
-                            <span class="size-7 grid place-items-center border border-line-strong bg-surface text-ink font-mono font-bold text-xs">
+                        <div class="flex items-center justify-between gap-2 border-b border-[#BFDBFE]/60 pb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-[#1D4ED8]">Bài chờ duyệt</span>
+                            <span class="size-7 grid place-items-center bg-white text-[#1D4ED8] font-bold text-xs border border-[#BFDBFE]">
                                 !
                             </span>
                         </div>
-                        <p class="mt-3 text-3xl sm:text-4xl font-mono font-black tabular-nums text-ink">{{ number_format($adminStats['pending_posts']) }}</p>
+                        <p class="mt-3 text-3xl sm:text-4xl font-black tabular-nums text-[#1D4ED8]">{{ number_format($adminStats['pending_posts']) }}</p>
                     </div>
-                    <a href="{{ route('admin.post-reviews.index') }}" class="mt-3 inline-flex items-center gap-1 text-xs font-mono font-black uppercase text-ink hover:underline border-t border-line-strong pt-2">
-                        <span>Mở hàng đợi duyệt &rarr;</span>
+                    <a href="{{ route('admin.post-reviews.index') }}" class="mt-3 inline-flex items-center gap-1 text-xs font-bold text-[#1D4ED8] hover:underline border-t border-[#BFDBFE]/60 pt-2">
+                        <span>Cần duyệt ngay &rarr;</span>
                     </a>
                 </article>
 
@@ -119,22 +118,6 @@
                     <p class="mt-3 text-xs font-mono text-ink-muted border-t border-line pt-2">Có thể đọc trên trang tin</p>
                 </article>
 
-                <!-- Báo cáo chờ xử lý -->
-                <article class="flex flex-col justify-between border-2 border-line-strong bg-surface p-5 shadow-brutal-sm">
-                    <div>
-                        <div class="flex items-center justify-between gap-2 border-b border-line pb-2">
-                            <span class="text-xs font-mono font-bold uppercase tracking-wider text-ink-muted">Báo cáo chờ xử lý</span>
-                            <span class="size-7 grid place-items-center border border-line-strong bg-paper text-danger font-mono font-bold text-xs">
-                                ⚠
-                            </span>
-                        </div>
-                        <p class="mt-3 text-3xl sm:text-4xl font-mono font-black tabular-nums text-ink">{{ number_format($adminStats['pending_reports']) }}</p>
-                    </div>
-                    <a href="{{ route('admin.comment-reports.index') }}" class="mt-3 inline-flex items-center gap-1 text-xs font-mono font-bold uppercase text-ink hover:underline border-t border-line pt-2">
-                        <span>Kiểm tra báo cáo &rarr;</span>
-                    </a>
-                </article>
-
                 <!-- Tài khoản bị khóa -->
                 <article class="flex flex-col justify-between border-2 border-line-strong bg-surface p-5 shadow-brutal-sm">
                     <div>
@@ -150,13 +133,29 @@
                         <span>Quản lý tài khoản &rarr;</span>
                     </a>
                 </article>
+
+                <!-- Đơn ứng tuyển CTV -->
+                <article class="flex flex-col justify-between border-2 border-line-strong bg-surface p-5 shadow-brutal-sm">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 border-b border-line pb-2">
+                            <span class="text-xs font-mono font-bold uppercase tracking-wider text-ink-muted">Đơn ứng tuyển CTV</span>
+                            <span class="size-7 grid place-items-center border border-line-strong bg-paper text-ink font-mono text-xs">
+                                CTV
+                            </span>
+                        </div>
+                        <p class="mt-3 text-3xl sm:text-4xl font-mono font-black tabular-nums text-ink">{{ number_format($adminStats['pending_applications']) }}</p>
+                    </div>
+                    <a href="{{ route('admin.author-applications.index') }}" class="mt-3 inline-flex items-center gap-1 text-xs font-mono font-bold uppercase text-ink hover:underline border-t border-line pt-2">
+                        <span>Xét duyệt đơn &rarr;</span>
+                    </a>
+                </article>
             </div>
         </section>
 
         <!-- Charts & Activity Trends -->
-        <section class="grid gap-6 xl:grid-cols-12" aria-label="Xu hướng nội dung">
-            <!-- Bài tạo theo tháng (7 columns) -->
-            <article class="xl:col-span-7 flex flex-col justify-between border-2 border-line-strong bg-surface p-5 shadow-brutal-sm">
+        <section aria-label="Xu hướng nội dung">
+            <!-- Bài tạo theo tháng (Full width) -->
+            <article class="flex flex-col justify-between border-2 border-line-strong bg-surface p-5 shadow-brutal-sm">
                 <div class="flex items-start justify-between gap-4 border-b border-line pb-3">
                     <div>
                         <h3 class="text-sm font-black uppercase text-ink">Bài tạo theo tháng</h3>
@@ -165,42 +164,18 @@
                     <span class="border border-line bg-paper px-2 py-0.5 text-xs font-mono font-bold text-ink">6 tháng</span>
                 </div>
 
-                <div class="mt-6 flex h-48 items-end gap-2 sm:gap-4 border-b-2 border-line-strong pb-2" role="img" aria-label="Biểu đồ số bài viết được tạo trong 6 tháng gần nhất">
+                <div class="mt-6 flex h-48 items-end gap-2 sm:gap-4 border-b border-line pb-2" role="img" aria-label="Biểu đồ số bài viết được tạo trong 6 tháng gần nhất">
                     @foreach ($adminStats['posts_by_month'] as $item)
                         @php
                             $percentage = $item['count'] > 0 ? max(10, (int) round(($item['count'] / $maximumMonthlyPosts) * 100)) : 4;
+                            $isCurrentMonth = $loop->last;
                         @endphp
                         <div class="group flex h-full flex-1 flex-col items-center justify-end gap-1.5 text-center">
                             <span class="text-xs font-mono font-bold tabular-nums text-ink-muted group-hover:text-ink">{{ $item['count'] }}</span>
-                            <div class="flex h-36 w-full max-w-10 items-end border border-line-strong bg-paper">
-                                <span class="block w-full bg-lime border-t border-line-strong transition-colors group-hover:bg-lime-hover" style="height: {{ $percentage }}%"></span>
+                            <div class="flex h-36 w-full max-w-10 items-end rounded-t-md bg-[#F3F4F6] overflow-hidden">
+                                <span class="block w-full transition-colors rounded-t-md {{ $isCurrentMonth ? 'bg-[#1D4ED8]' : 'bg-[#BFDBFE] group-hover:bg-[#93C5FD]' }}" style="height: {{ $percentage }}%"></span>
                             </div>
                             <span class="mt-1 block truncate text-xs font-mono font-medium text-ink-muted group-hover:text-ink">{{ $item['label'] }}</span>
-                        </div>
-                    @endforeach
-                </div>
-            </article>
-
-            <!-- Lượt xem 7 ngày (5 columns) -->
-            <article class="xl:col-span-5 flex flex-col justify-between border-2 border-line-strong bg-surface p-5 shadow-brutal-sm">
-                <div class="border-b border-line pb-3">
-                    <h3 class="text-sm font-black uppercase text-ink">Lượt xem 7 ngày</h3>
-                    <p class="text-xs font-mono text-ink-muted">Mức quan tâm theo ngày.</p>
-                </div>
-
-                <div class="mt-6 space-y-3" aria-label="Lượt xem từng ngày trong 7 ngày gần nhất">
-                    @foreach ($adminStats['views_by_day'] as $item)
-                        @php
-                            $percentage = $item['count'] > 0 ? max(6, (int) round(($item['count'] / $maximumDailyViews) * 100)) : 1;
-                        @endphp
-                        <div>
-                            <div class="flex items-center justify-between text-xs font-mono">
-                                <span class="font-medium text-ink-muted">{{ $item['label'] }}</span>
-                                <span class="font-bold tabular-nums text-ink">{{ number_format($item['count']) }}</span>
-                            </div>
-                            <div class="mt-1.5 h-2.5 w-full border border-line-strong bg-paper overflow-hidden">
-                                <div class="h-full bg-ink" style="width: {{ $percentage }}%"></div>
-                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -249,7 +224,7 @@
             <article class="xl:col-span-5 flex flex-col border-2 border-line-strong bg-surface shadow-brutal-sm">
                 <div class="border-b-2 border-line-strong px-5 py-3.5 bg-paper">
                     <h3 class="text-sm font-black uppercase text-ink">Chuyên mục nổi bật</h3>
-                    <p class="text-xs font-mono text-ink-muted">Xếp theo tổng lượt xem.</p>
+                    <p class="text-xs font-mono text-ink-muted">Số bài viết đã xuất bản.</p>
                 </div>
 
                 <div class="divide-y border-line">
@@ -259,9 +234,7 @@
                                 <p class="truncate text-xs sm:text-sm font-bold text-ink">{{ $category->name }}</p>
                                 <p class="mt-0.5 text-xs font-mono text-ink-muted">{{ $category->published_posts_count }} bài</p>
                             </div>
-                            <span class="shrink-0 text-xs font-mono font-bold tabular-nums text-ink">
-                                {{ number_format($category->published_views_sum ?? 0) }} xem
-                            </span>
+                            <span class="shrink-0 text-xs font-mono font-bold tabular-nums text-ink">{{ $category->published_posts_count }} bài</span>
                         </div>
                     @empty
                         <div class="p-8 text-center text-xs font-mono text-ink-muted">
@@ -281,7 +254,7 @@
                     <h2 id="author-overview-title" class="text-sm sm:text-base font-black uppercase tracking-tight text-ink">Thống kê bài viết của bạn</h2>
                     <p class="text-xs font-mono text-ink-muted">Theo dõi toàn bộ quy trình từ bản nháp đến xuất bản.</p>
                 </div>
-                <a href="{{ route('author.posts.create') }}" class="inline-flex min-h-9 items-center justify-center gap-1.5 border-2 border-line-strong bg-lime px-4 py-1.5 text-xs font-mono font-bold uppercase tracking-wider text-ink shadow-brutal-sm hover:bg-lime-hover hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
+                <a href="{{ route('author.posts.create') }}" class="inline-flex min-h-9 items-center justify-center gap-1.5 border-2 border-line-strong bg-lime px-4 py-1.5 text-xs font-mono font-bold uppercase tracking-wider text-white shadow-brutal-sm hover:bg-ink hover:text-white hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
                     <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="size-3.5">
                         <path d="M12 5v14M5 12h14"/>
                     </svg>
@@ -401,21 +374,7 @@
                 </a>
             </div>
 
-            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <!-- Bài viết đã lưu -->
-                <a href="{{ route('favorites.index') }}" class="group flex flex-col justify-between border-2 border-line-strong bg-surface p-5 shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
-                    <div>
-                        <div class="flex items-center justify-between gap-2 border-b border-line pb-2">
-                            <span class="text-xs font-mono font-bold uppercase tracking-wider text-ink-muted">Bài viết đã lưu</span>
-                            <span class="size-7 grid place-items-center border border-line-strong bg-paper text-ink font-mono text-xs">
-                                ★
-                            </span>
-                        </div>
-                        <p class="mt-3 text-sm font-bold uppercase text-ink group-hover:underline">Bộ sưu tập bài viết</p>
-                    </div>
-                    <p class="mt-3 text-xs font-mono text-ink-muted border-t border-line pt-2">Đọc lại các bài viết bạn quan tâm &rarr;</p>
-                </a>
-
+            <div class="grid gap-4 sm:grid-cols-2">
                 <!-- Lịch sử bình luận -->
                 <a href="{{ route('profile.comments') }}" class="group flex flex-col justify-between border-2 border-line-strong bg-surface p-5 shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
                     <div>
@@ -441,7 +400,7 @@
                         </div>
                         <p class="mt-3 text-sm font-bold uppercase text-ink group-hover:underline">Hồ sơ cá nhân</p>
                     </div>
-                    <p class="mt-3 text-xs font-mono text-ink-muted border-t border-line pt-2">Cài đặt mật khẩu, avatar tròn &rarr;</p>
+                    <p class="mt-3 text-xs font-mono text-ink-muted border-t border-line pt-2">Cài đặt email và mật khẩu &rarr;</p>
                 </a>
             </div>
         </section>
@@ -490,18 +449,18 @@
                 <article class="border-2 border-line-strong bg-surface p-5 sm:p-6 shadow-brutal space-y-4">
                     <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div class="flex items-start gap-3.5">
-                            <span class="grid size-10 shrink-0 place-items-center border-2 border-line-strong bg-lime text-ink font-mono font-bold text-base shadow-brutal-sm">
+                            <span class="grid size-10 shrink-0 place-items-center border-2 border-line-strong bg-lime text-white font-mono font-bold text-base shadow-brutal-sm">
                                 ⏳
                             </span>
                             <div>
                                 <div class="flex flex-wrap items-center gap-2">
                                     <h3 class="text-base font-black uppercase text-ink">Đơn ứng tuyển của bạn đang được xét duyệt</h3>
-                                    <span class="border border-line-strong bg-lime px-2.5 py-0.5 text-xs font-mono font-bold uppercase text-ink">
+                                    <span class="border border-line-strong bg-lime px-2.5 py-0.5 text-xs font-mono font-bold uppercase text-white">
                                         Chờ duyệt
                                     </span>
                                 </div>
                                 <p class="mt-1 text-xs text-ink-muted leading-relaxed">
-                                    Hồ sơ và bài viết mẫu của bạn đã được chuyển đến Ban biên tập NewsHub. Chúng tôi sẽ thẩm định tiêu chuẩn chất lượng và phản hồi trong thời gian sớm nhất.
+                                    Hồ sơ CV của bạn đã được chuyển đến Ban biên tập NewsHub. Chúng tôi sẽ xem xét và phản hồi trong thời gian sớm nhất.
                                 </p>
                             </div>
                         </div>
@@ -521,18 +480,7 @@
                             <span class="block text-ink-muted uppercase font-bold">Giới thiệu bản thân & kinh nghiệm:</span>
                             <p class="mt-1 text-ink whitespace-pre-line leading-relaxed font-sans">{{ $authorApplication->bio }}</p>
                         </div>
-                        <div class="border-t border-line pt-2.5">
-                            <span class="block text-ink-muted uppercase font-bold">Tiêu đề bài viết mẫu:</span>
-                            <p class="mt-0.5 font-black uppercase text-ink font-sans text-sm">{{ $authorApplication->sample_title }}</p>
-                            <details class="group mt-2">
-                                <summary class="cursor-pointer text-xs font-bold uppercase text-ink hover:underline">
-                                    Xem nội dung bài mẫu đã nộp &darr;
-                                </summary>
-                                <div class="mt-2.5 whitespace-pre-line text-xs leading-relaxed text-ink border-t border-line pt-2 font-sans">
-                                    {{ $authorApplication->sample_content }}
-                                </div>
-                            </details>
-                        </div>
+                        <p class="border-t border-line pt-2.5 text-xs text-ink-muted">Bạn đã gửi CV kèm đơn ứng tuyển.</p>
                     </div>
 
                     <p class="mt-4 text-xs font-mono text-ink-muted flex items-center gap-1.5">
@@ -559,7 +507,7 @@
                                 <p class="mt-1 leading-relaxed whitespace-pre-line font-sans">{{ $authorApplication->rejection_reason }}</p>
                             </div>
                             <p class="mt-3 text-xs text-ink-muted">
-                                Bạn đừng nản lòng! Bạn hoàn toàn có thể hoàn thiện lại bài viết mẫu, bổ sung thêm thông tin giới thiệu và gửi lại đơn ứng tuyển mới bên dưới.
+                                Bạn có thể bổ sung thông tin giới thiệu và gửi lại hồ sơ ứng tuyển mới bên dưới.
                             </p>
                         </div>
                     </div>
@@ -571,7 +519,7 @@
                 <div class="border-2 border-line-strong bg-surface p-5 sm:p-6 shadow-brutal space-y-5">
                     <div class="border-b border-line pb-4">
                         <h3 class="text-base font-black uppercase text-ink">Nộp hồ sơ ứng tuyển Tác giả</h3>
-                        <p class="text-xs font-mono text-ink-muted">Vui lòng điền đầy đủ các thông tin và bài viết mẫu để Ban biên tập đánh giá.</p>
+                        <p class="text-xs font-mono text-ink-muted">Giới thiệu ngắn về bạn và đính kèm CV để Ban biên tập xem xét.</p>
                     </div>
 
                     @unless (auth()->user()->hasVerifiedEmail())
@@ -590,7 +538,7 @@
                             </div>
                         </div>
                     @else
-                        <form method="POST" action="{{ route('author-applications.store') }}" class="space-y-4">
+                        <form method="POST" action="{{ route('author-applications.store') }}" enctype="multipart/form-data" class="space-y-4">
                             @csrf
 
                             <!-- Chuyên mục sở trường -->
@@ -631,48 +579,20 @@
                                 @enderror
                             </div>
 
-                            <!-- Tiêu đề bài viết mẫu -->
                             <div class="space-y-1.5">
-                                <label for="sample_title" class="block text-xs font-mono font-bold uppercase tracking-wider text-ink">
-                                    Tiêu đề bài viết mẫu đề xuất <span class="text-danger">*</span>
+                                <label for="cv" class="block text-xs font-mono font-bold uppercase tracking-wider text-ink">
+                                    Tệp CV (PDF, DOC hoặc DOCX, tối đa 5 MB) <span class="text-danger">*</span>
                                 </label>
-                                <input id="sample_title"
-                                       type="text"
-                                       name="sample_title"
-                                       required
-                                       maxlength="255"
-                                       value="{{ old('sample_title') }}"
-                                       placeholder="Ví dụ: Phân tích xu hướng trí tuệ nhân tạo và tác động thực tế năm 2026..."
-                                       class="w-full border border-line bg-paper px-3 py-2.5 text-xs text-ink placeholder:text-ink-light focus:border-line-strong focus:outline-hidden focus:bg-surface focus:shadow-brutal-sm">
-                                @error('sample_title')
+                                <input id="cv" type="file" name="cv" accept=".pdf,.doc,.docx" required class="w-full border border-line bg-paper px-3 py-2.5 text-xs text-ink">
+                                @error('cv')
                                     <p class="text-xs text-danger font-mono">{{ $message }}</p>
                                 @enderror
-                            </div>
-
-                            <!-- Nội dung bài viết mẫu -->
-                            <div class="space-y-1.5">
-                                <label for="sample_content" class="block text-xs font-mono font-bold uppercase tracking-wider text-ink">
-                                    Nội dung bài viết mẫu <span class="text-danger">*</span>
-                                </label>
-                                <textarea id="sample_content"
-                                          name="sample_content"
-                                          rows="9"
-                                          required
-                                          maxlength="20000"
-                                          placeholder="Soạn thảo bài viết mẫu hoàn chỉnh (hoặc một bài phân tích tiêu biểu) để ban biên tập thẩm định văn phong, tư duy lập luận và độ sâu thông tin..."
-                                          class="w-full border border-line bg-paper p-3 text-xs leading-relaxed text-ink font-mono placeholder:text-ink-light focus:border-line-strong focus:outline-hidden focus:bg-surface focus:shadow-brutal-sm">{{ old('sample_content') }}</textarea>
-                                @error('sample_content')
-                                    <p class="text-xs text-danger font-mono">{{ $message }}</p>
-                                @enderror
-                                <p class="text-[11px] font-mono text-ink-muted">
-                                    Hỗ trợ tối đa 20.000 ký tự. Bài viết mẫu càng chi tiết và mạch lạc thì hồ sơ xét duyệt càng nhanh chóng.
-                                </p>
                             </div>
 
                             <!-- Submit Action -->
                             <div class="pt-3 border-t border-line">
                                 <button type="submit"
-                                        class="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 border-2 border-line-strong bg-lime px-6 py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-ink shadow-brutal hover:bg-lime-hover hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-brutal-sm transition-all active:translate-x-1 active:translate-y-1">
+                                        class="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 border-2 border-line-strong bg-lime px-6 py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-white shadow-brutal hover:bg-ink hover:text-white hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-brutal-sm transition-all active:translate-x-1 active:translate-y-1">
                                     <svg class="size-4" viewBox="0 0 20 20" fill="currentColor">
                                         <path d="M3.105 2.289a.75.75 0 00-.826.95l1.414 4.925A1.5 1.5 0 005.135 9.25h6.115a.75.75 0 010 1.5H5.135a1.5 1.5 0 00-1.442 1.086l-1.414 4.926a.75.75 0 00.826.95 28.896 28.896 0 0015.293-7.154.75.75 0 000-1.115A28.897 28.897 0 003.105 2.289z" />
                                     </svg>

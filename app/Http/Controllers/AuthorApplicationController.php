@@ -14,7 +14,8 @@ class AuthorApplicationController extends Controller
     ): RedirectResponse {
         $applications->submit(
             $request->user(),
-            $request->safe()->only(['category_id', 'bio', 'sample_title', 'sample_content']),
+            $request->safe()->only(['category_id', 'bio']),
+            $request->file('cv'),
         );
 
         return redirect()->route('dashboard')->with('status', 'Đã gửi đơn ứng tuyển tác giả.');

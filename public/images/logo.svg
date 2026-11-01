@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 52" fill="none">
+    <!-- Icon -->
+    <rect x="2" y="4" width="44" height="44" rx="10" fill="#1D4ED8"/>
+    <text x="24" y="29" text-anchor="middle" dominant-baseline="central" fill="#FFFFFF" font-family="Georgia, 'Times New Roman', serif" font-size="28" font-weight="bold">N</text>
+    
+    <!-- Wordmark -->
+    <text x="56" y="27" fill="#1D4ED8" font-family="Georgia, 'Times New Roman', serif" font-size="24" font-weight="bold" letter-spacing="-0.3">NewsHub</text>
+    <text x="57" y="42" fill="#6B7280" font-family="'Instrument Sans', ui-sans-serif, system-ui, sans-serif" font-size="9" font-weight="700" letter-spacing="1.5">EDITORIAL NEWSROOM</text>
+</svg>

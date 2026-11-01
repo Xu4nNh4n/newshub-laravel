@@ -4,23 +4,30 @@ namespace App\Services;
 
 use App\Enums\AuthorApplicationStatus;
 use App\Enums\UserRole;
-use App\Models\ActivityLog;
 use App\Models\AuthorApplication;
 use App\Models\User;
-use App\Notifications\AuthorApplicationStatusNotification;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class AuthorApplicationService
 {
     /**
-     * @param  array{category_id:int, bio:string, sample_title:string, sample_content:string}  $attributes
+     * @param  array{category_id:int, bio:string}  $attributes
      */
-    public function submit(User $user, array $attributes): AuthorApplication
+    public function submit(User $user, array $attributes, UploadedFile $cv): AuthorApplication
     {
+        $cvPath = $cv->store('author-applications', 'local');
+
+        if ($cvPath === false) {
+            throw ValidationException::withMessages(['cv' => 'Không thể lưu tệp CV. Vui lòng thử lại.']);
+        }
+
         try {
-            return DB::transaction(function () use ($user, $attributes): AuthorApplication {
+            return DB::transaction(function () use ($user, $attributes, $cvPath): AuthorApplication {
                 $lockedUser = User::query()->lockForUpdate()->findOrFail($user->id);
 
                 if ($lockedUser->role !== UserRole::User) {
@@ -37,26 +44,25 @@ class AuthorApplicationService
 
                 $application = $lockedUser->authorApplications()->create([
                     ...$attributes,
+                    'cv_path' => $cvPath,
                     'pending_user_id' => $lockedUser->id,
                     'status' => AuthorApplicationStatus::Pending,
-                ]);
-
-                ActivityLog::query()->create([
-                    'user_id' => $lockedUser->id,
-                    'action' => 'application.submitted',
-                    'subject_type' => AuthorApplication::class,
-                    'subject_id' => $application->id,
-                    'description' => 'Nộp đơn ứng tuyển làm Tác giả / Cộng tác viên tòa soạn.',
                 ]);
 
                 return $application;
             });
         } catch (QueryException $exception) {
+            Storage::disk('local')->delete($cvPath);
+
             if ($user->authorApplications()->where('status', AuthorApplicationStatus::Pending)->exists()) {
                 throw ValidationException::withMessages([
                     'application' => 'Bạn đang có một đơn ứng tuyển chờ duyệt.',
                 ]);
             }
+
+            throw $exception;
+        } catch (Throwable $exception) {
+            Storage::disk('local')->delete($cvPath);
 
             throw $exception;
         }
@@ -99,22 +105,6 @@ class AuthorApplicationService
             if ($status === AuthorApplicationStatus::Approved && $lockedUser->role === UserRole::User) {
                 $lockedUser->update(['role' => UserRole::Author]);
             }
-
-            ActivityLog::query()->create([
-                'user_id' => $admin->id,
-                'action' => 'author_application.'.$status->value,
-                'subject_type' => AuthorApplication::class,
-                'subject_id' => $lockedApplication->id,
-                'description' => $status === AuthorApplicationStatus::Approved
-                    ? 'Đơn ứng tuyển tác giả đã được phê duyệt.'
-                    : $rejectionReason,
-            ]);
-
-            $lockedUser->notify(new AuthorApplicationStatusNotification(
-                $lockedApplication,
-                $status->value,
-                $rejectionReason,
-            ));
 
             return $lockedApplication->refresh();
         });

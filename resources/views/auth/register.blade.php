@@ -2,14 +2,18 @@
 
 @section('content')
 <div class="mx-auto max-w-md py-6 sm:py-12">
-    <section class="border-2 border-line-strong bg-surface p-6 sm:p-8 shadow-brutal space-y-6">
+    <section class="border border-line bg-surface p-6 sm:p-8 shadow-brutal space-y-6">
         <!-- Logo & Header -->
         <div class="text-center space-y-2 border-b border-line pb-5">
-            <span class="mx-auto grid size-12 place-items-center border-2 border-line-strong bg-lime text-ink font-mono font-black text-xl shadow-brutal-sm">
+            <span class="mx-auto grid size-12 place-items-center bg-lime text-white border border-line-strong font-serif font-black text-2xl shadow-brutal-sm select-none">
                 N
             </span>
-            <h1 class="text-xl sm:text-2xl font-black uppercase tracking-tight text-ink">Tạo tài khoản độc giả</h1>
-            <p class="text-xs font-mono text-ink-muted">Tham gia bình luận, lưu trữ bài viết và đăng ký làm tác giả.</p>
+            <div class="leading-tight">
+                <span class="block text-2xl font-serif font-bold tracking-tight text-[#1D4ED8]">NewsHub</span>
+                <span class="block text-[10px] font-sans font-bold uppercase tracking-widest text-[#1D4ED8] mt-1">TÒA SOẠN ĐIỆN TỬ & DIỄN ĐÀN ĐỘC GIẢ ĐA CHIỀU</span>
+            </div>
+            <h1 class="text-xl sm:text-2xl font-black uppercase tracking-tight text-ink pt-2">Tạo tài khoản độc giả</h1>
+            <p class="text-xs text-ink-muted">Tham gia bình luận, lưu trữ bài viết và đăng ký làm tác giả.</p>
         </div>
 
         <form method="POST" action="{{ route('register.store') }}" class="space-y-4">
@@ -109,7 +113,7 @@
 
             <!-- Submit -->
             <button type="submit"
-                    class="w-full min-h-11 cursor-pointer border-2 border-line-strong bg-lime py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-ink shadow-brutal hover:bg-lime-hover hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-brutal-sm transition-all active:translate-x-1 active:translate-y-1">
+                    class="w-full min-h-11 cursor-pointer border-2 border-line-strong bg-lime py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-white shadow-brutal hover:bg-ink hover:text-white hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-brutal-sm transition-all active:translate-x-1 active:translate-y-1">
                 Đăng ký tài khoản
             </button>
         </form>

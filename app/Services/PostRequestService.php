@@ -6,11 +6,9 @@ use App\Enums\PostRequestStatus;
 use App\Enums\PostRequestType;
 use App\Enums\PostStatus;
 use App\Enums\UserRole;
-use App\Models\ActivityLog;
 use App\Models\Post;
 use App\Models\PostRequest;
 use App\Models\User;
-use App\Notifications\PostRequestHandledNotification;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -18,7 +16,7 @@ use Illuminate\Validation\ValidationException;
 class PostRequestService
 {
     /**
-     * @param  array{type:string, priority:string, reason:string, notes?:string|null}  $attributes
+     * @param  array{type:string, reason:string, notes?:string|null}  $attributes
      */
     public function submit(Post $post, User $author, array $attributes): PostRequest
     {
@@ -49,13 +47,6 @@ class PostRequestService
                     'notes' => (string) ($attributes['notes'] ?? ''),
                     'status' => PostRequestStatus::Pending,
                 ]);
-
-                $this->log(
-                    $author,
-                    $postRequest,
-                    'post_request.created',
-                    'Tác giả đã gửi yêu cầu '.$postRequest->type->value.' cho bài viết.',
-                );
 
                 return $postRequest;
             });
@@ -91,13 +82,11 @@ class PostRequestService
                 $lockedPost->update($lockedRequest->type === PostRequestType::Removal
                     ? [
                         'status' => PostStatus::Hidden,
-                        'is_featured' => false,
                     ]
                     : [
                         'status' => PostStatus::Draft,
                         'published_at' => null,
                         'rejection_reason' => null,
-                        'is_featured' => false,
                     ]);
             }
 
@@ -108,21 +97,6 @@ class PostRequestService
                 'handled_by' => $admin->id,
                 'handled_at' => now(),
             ]);
-
-            $this->log(
-                $admin,
-                $lockedRequest,
-                'post_request.'.$status->value,
-                $adminNotes ?: ($status === PostRequestStatus::Approved
-                    ? 'Ban biên tập đã phê duyệt yêu cầu bài viết.'
-                    : 'Ban biên tập đã từ chối yêu cầu bài viết.'),
-            );
-
-            $lockedRequest->author?->notify(new PostRequestHandledNotification(
-                $lockedRequest,
-                $status,
-                $adminNotes,
-            ));
 
             return $lockedRequest->refresh();
         });
@@ -145,25 +119,7 @@ class PostRequestService
                 'handled_at' => now(),
             ]);
 
-            $this->log(
-                $author,
-                $lockedRequest,
-                'post_request.cancelled',
-                'Tác giả đã hủy yêu cầu '.$lockedRequest->type->value.' cho bài viết.',
-            );
-
             return $lockedRequest->refresh();
         });
-    }
-
-    private function log(User $actor, PostRequest $postRequest, string $action, string $description): void
-    {
-        ActivityLog::query()->create([
-            'user_id' => $actor->id,
-            'action' => $action,
-            'subject_type' => PostRequest::class,
-            'subject_id' => $postRequest->id,
-            'description' => $description,
-        ]);
     }
 }

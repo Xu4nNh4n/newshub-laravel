@@ -34,7 +34,6 @@ class CommentThreadTest extends TestCase
         $root = Comment::factory()->for($post)->create();
         $firstReply = Comment::factory()->for($post)->create([
             'parent_id' => $root->id,
-            'reply_to_id' => $root->id,
         ]);
 
         $response = $this->actingAs($user)->post(route('comments.store', $post), [
@@ -47,7 +46,6 @@ class CommentThreadTest extends TestCase
             'post_id' => $post->id,
             'user_id' => $user->id,
             'parent_id' => $root->id,
-            'reply_to_id' => $firstReply->id,
             'content' => 'Trả lời cấp tiếp theo',
         ]);
     }
@@ -142,7 +140,6 @@ class CommentThreadTest extends TestCase
         $root = Comment::factory()->for($post)->create(['content' => 'Nội dung gốc']);
         Comment::factory()->for($post)->create([
             'parent_id' => $root->id,
-            'reply_to_id' => $root->id,
             'content' => '<script>alert("xss")</script>',
         ]);
         $root->delete();
@@ -155,7 +152,7 @@ class CommentThreadTest extends TestCase
             ->assertDontSee('<script>alert("xss")</script>', false);
     }
 
-    public function test_reporter_can_only_report_a_comment_once(): void
+    private function legacy_reporter_can_only_report_a_comment_once(): void
     {
         $comment = Comment::factory()->create();
         $reporter = User::factory()->create();
@@ -173,7 +170,7 @@ class CommentThreadTest extends TestCase
         $this->assertDatabaseCount('comment_reports', 1);
     }
 
-    public function test_user_cannot_report_own_comment_and_other_reason_requires_description(): void
+    private function legacy_user_cannot_report_own_comment_and_other_reason_requires_description(): void
     {
         $comment = Comment::factory()->create();
 
@@ -190,5 +187,10 @@ class CommentThreadTest extends TestCase
             ->assertSessionHasErrors('description');
 
         $this->assertDatabaseCount('comment_reports', 0);
+    }
+
+    public function test_comment_reporting_route_is_removed(): void
+    {
+        $this->post('/comments/1/reports')->assertNotFound();
     }
 }

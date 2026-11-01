@@ -129,15 +129,12 @@
         @if($pendingRequest)
             <div class="border-2 border-line-strong bg-paper p-4 text-xs text-ink flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-brutal-sm">
                 <div class="flex items-start gap-3 min-w-0 flex-1">
-                    <span class="mt-0.5 grid size-5 shrink-0 place-items-center bg-lime text-ink border border-line-strong font-mono font-bold text-xs">
+                    <span class="mt-0.5 grid size-5 shrink-0 place-items-center bg-lime text-white border border-line-strong font-mono font-bold text-xs">
                         !
                     </span>
                     <div class="min-w-0 flex-1">
                         <div class="flex flex-wrap items-center gap-2">
                             <strong class="font-black text-ink uppercase tracking-tight">Bài viết có yêu cầu {{ $pendingRequest->type === \App\Enums\PostRequestType::Removal ? 'Gỡ bài' : 'Đính chính / Sửa lỗi' }} chờ Ban biên tập</strong>
-                            <span class="border border-line-strong px-2 py-0.5 text-[10px] font-mono font-bold uppercase {{ $pendingRequest->priority === \App\Enums\PostRequestPriority::Urgent ? 'bg-danger text-paper' : 'bg-lime text-ink' }}">
-                                {{ $pendingRequest->priority === \App\Enums\PostRequestPriority::Urgent ? 'Khẩn cấp' : 'Bình thường' }}
-                            </span>
                             <span class="font-mono text-[11px] text-ink-muted">· Gửi {{ $pendingRequest->created_at->format('d/m/Y H:i') }}</span>
                         </div>
                         <p class="mt-1 text-xs text-ink"><strong class="font-bold">Lý do:</strong> {{ $pendingRequest->reason }}</p>
@@ -186,14 +183,7 @@
             <input id="title" name="title" required value="{{ old('title', $post->title ?? '') }}" placeholder="Nhập tiêu đề ấn tượng cho bài viết..." class="mt-1.5 w-full border-2 border-line bg-paper px-3.5 py-2.5 text-sm font-medium text-ink outline-none focus:border-ink transition-colors">
         </div>
 
-        <div class="grid gap-4 sm:grid-cols-2">
-            <div>
-                <label for="meta_title" class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">
-                    SEO title (tối đa 60 ký tự)
-                </label>
-                <input id="meta_title" name="meta_title" maxlength="60" value="{{ old('meta_title', $post->meta_title ?? '') }}" placeholder="Tiêu đề chuẩn tìm kiếm Google..." class="mt-1.5 w-full border-2 border-line bg-paper px-3.5 py-2.5 text-xs text-ink outline-none focus:border-ink transition-colors">
-            </div>
-
+        <div>
             <div>
                 <label for="slug" class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">
                     Slug (để trống sẽ tự sinh từ tiêu đề)
@@ -259,24 +249,12 @@
         </div>
 
         <div>
-            <label for="meta_description" class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">
-                SEO description (tối đa 160 ký tự)
-            </label>
-            <textarea id="meta_description" name="meta_description" maxlength="160" rows="2" class="mt-1.5 w-full border-2 border-line bg-paper px-3.5 py-2.5 text-xs text-ink outline-none focus:border-ink transition-colors">{{ old('meta_description', $post->meta_description ?? '') }}</textarea>
-        </div>
-
-        <div>
             <label for="thumbnail" class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">
                 Ảnh đại diện (JPG, PNG, WEBP; tối đa 4 MB)
             </label>
             <input id="thumbnail" type="file" name="thumbnail" accept="image/jpeg,image/png,image/webp" class="mt-1.5 w-full border-2 border-line bg-paper px-3.5 py-2 text-xs text-ink file:mr-3 file:border-2 file:border-line-strong file:bg-surface file:px-3 file:py-1 file:font-mono file:text-xs file:font-bold file:uppercase file:text-ink hover:file:bg-lime">
             
             <div class="mt-2.5 flex flex-wrap items-center gap-4">
-                <label class="inline-flex items-center gap-2 font-mono text-xs text-ink cursor-pointer select-none">
-                    <input type="hidden" name="show_thumbnail_in_post" value="0">
-                    <input type="checkbox" name="show_thumbnail_in_post" value="1" @checked(old('show_thumbnail_in_post', $post->show_thumbnail_in_post ?? true)) class="border-2 border-line text-ink focus:ring-0">
-                    <span>Hiển thị ảnh đại diện ở đầu bài viết (Bỏ chọn nếu bạn muốn đặt ảnh ở vị trí khác)</span>
-                </label>
                 @if(isset($post) && $post->thumbnail)
                     <label class="inline-flex items-center gap-2 font-mono text-xs text-danger font-bold cursor-pointer select-none">
                         <input type="checkbox" name="remove_thumbnail" value="1" class="border-2 border-line text-danger focus:ring-0">
@@ -311,88 +289,6 @@
             <div class="mt-2 flex flex-wrap items-center justify-between gap-2 font-mono text-[11px] text-ink-muted">
                 <span>Mẹo: Nhấn nút <strong>Ảnh</strong> để chèn ảnh vào thân bài, hoặc nút <strong>Video</strong> để dán link YouTube.</span>
                 <span>Hỗ trợ trích dẫn, tiêu đề H2/H3</span>
-            </div>
-        </div>
-
-        <!-- Interactive Tag Manager Component -->
-        <div class="border-t-2 border-line-strong pt-5 space-y-3" id="tag-manager"
-             data-existing-tags='@json($tags->map(fn($t) => ['id' => $t->id, 'name' => $t->name, 'slug' => $t->slug]))'>
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                <div>
-                    <label class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">
-                        Thẻ bài viết (Tags)
-                    </label>
-                    <p class="font-mono text-[11px] text-ink-muted mt-0.5">
-                        Gõ từ khóa rồi nhấn <strong>Enter</strong> hoặc dấu phẩy (<strong>,</strong>), hoặc chọn nhanh bên dưới.
-                    </p>
-                </div>
-                <span class="font-mono text-[11px] text-ink-muted shrink-0">
-                    Đã chọn <strong class="text-ink font-bold" id="selected-tags-count">0</strong> thẻ
-                </span>
-            </div>
-
-            <!-- Tag Input & Selected Chips Box -->
-            <div class="min-h-12 w-full border-2 border-line bg-paper p-2.5 text-xs transition-colors focus-within:border-ink">
-                <div class="flex flex-wrap items-center gap-2" id="tags-chips-wrapper">
-                    <!-- Selected Chips Container -->
-                    <div id="selected-tags-container" class="contents"></div>
-
-                    <!-- Text Input for new/searched tag -->
-                    <div class="flex-1 min-w-[200px] flex items-center gap-2 py-0.5">
-                        <input type="text"
-                               id="tag-text-input"
-                               placeholder="Nhập tên thẻ mới hoặc từ khóa..."
-                               autocomplete="off"
-                               class="w-full bg-transparent text-xs text-ink placeholder-ink-muted outline-none">
-                        <button type="button"
-                                id="btn-add-tag"
-                                class="shrink-0 inline-flex items-center gap-1 border-2 border-line-strong bg-surface hover:bg-lime px-2.5 py-1 font-mono text-[11px] font-bold text-ink transition-colors cursor-pointer shadow-brutal-sm">
-                            + Thêm
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Suggestions Cloud -->
-            <div class="space-y-1.5 pt-1">
-                <div class="flex items-center justify-between font-mono text-[11px] text-ink-muted">
-                    <span>Gợi ý thẻ phổ biến trong hệ thống:</span>
-                    <span>Bấm để thêm hoặc gỡ</span>
-                </div>
-                <div class="flex flex-wrap gap-1.5" id="suggested-tags-cloud">
-                    @foreach($tags as $tag)
-                        @php
-                            $isSelected = in_array($tag->id, old('tag_ids', isset($post) ? $post->tags->pluck('id')->all() : []));
-                        @endphp
-                        <button type="button"
-                                data-tag-suggestion="{{ $tag->id }}"
-                                data-tag-name="{{ $tag->name }}"
-                                @class([
-                                    'inline-flex items-center gap-1 border px-2.5 py-1 font-mono text-xs transition-all cursor-pointer',
-                                    'border-line-strong bg-ink text-paper font-bold' => $isSelected,
-                                    'border-line bg-surface text-ink hover:border-line-strong hover:bg-paper' => !$isSelected,
-                                ])>
-                            <span>#{{ $tag->name }}</span>
-                            <span class="text-[10px] {{ $isSelected ? 'text-lime' : 'text-ink-muted' }}">
-                                {{ $isSelected ? '✓' : '+' }}
-                            </span>
-                        </button>
-                    @endforeach
-                </div>
-            </div>
-
-            <!-- Hidden container for initial server-side rendering / non-JS support -->
-            <div id="hidden-tags-inputs" class="hidden">
-                @foreach($tags as $tag)
-                    @if(in_array($tag->id, old('tag_ids', isset($post) ? $post->tags->pluck('id')->all() : [])))
-                        <input type="checkbox" name="tag_ids[]" value="{{ $tag->id }}" checked data-fallback-id="{{ $tag->id }}">
-                    @endif
-                @endforeach
-                @if(old('tag_names'))
-                    @foreach(old('tag_names') as $name)
-                        <input type="hidden" name="tag_names[]" value="{{ $name }}" data-fallback-name="{{ $name }}">
-                    @endforeach
-                @endif
             </div>
         </div>
 
@@ -530,19 +426,11 @@
                     </figcaption>
                 </figure>
             </div>
-            <div id="preview-thumbnail-hidden-note" class="hidden border border-line bg-paper p-3 font-mono text-xs text-ink-muted italic text-center">
-                (Ảnh đại diện đã được ẩn ở đầu bài theo tùy chọn, chỉ hiển thị ngoài danh sách bài viết)
-            </div>
 
             <!-- Article Body Content (Rendered from Quill) -->
             <div id="preview-content" class="text-base sm:text-lg text-ink leading-relaxed sm:leading-8 space-y-4 pt-2">
             </div>
 
-            <!-- Tags -->
-            <div id="preview-tags-wrapper" class="hidden border-t-2 border-line-strong pt-5 space-y-2">
-                <p class="font-mono text-xs font-bold uppercase tracking-wider text-ink-muted">Từ khóa liên quan:</p>
-                <div id="preview-tags-container" class="flex flex-wrap gap-2"></div>
-            </div>
         </div>
 
         <!-- Preview Footer -->
@@ -606,7 +494,7 @@
                 <div class="relative w-full max-w-lg border-2 border-line-strong bg-surface shadow-brutal transition-all overflow-hidden">
                     <div class="flex items-center justify-between border-b-2 border-line-strong bg-paper px-6 py-4">
                         <div class="flex items-center gap-2.5">
-                            <span class="grid size-7 place-items-center border border-line-strong bg-lime text-ink font-mono font-bold text-xs">
+                            <span class="grid size-7 place-items-center border border-line-strong bg-lime text-white font-mono font-bold text-xs">
                                 ✉
                             </span>
                             <div>
@@ -614,7 +502,7 @@
                                 <p class="font-mono text-[11px] text-ink-muted">Gửi trực tiếp đến Ban biên tập để xử lý.</p>
                             </div>
                         </div>
-                        <button type="button" id="btn-close-request" class="border border-line-strong bg-surface p-1 text-ink hover:bg-lime transition-colors cursor-pointer" title="Đóng (ESC)">
+                        <button type="button" id="btn-close-request" class="border border-line-strong bg-surface p-1 text-ink hover:bg-ink hover:text-white transition-colors cursor-pointer" title="Đóng (ESC)">
                             <svg class="size-4" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                             </svg>
@@ -637,13 +525,6 @@
                                 </select>
                             </div>
 
-                            <div>
-                                <label for="request_priority" class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">Mức độ ưu tiên</label>
-                                <select id="request_priority" name="priority" class="mt-1.5 w-full border-2 border-line bg-paper px-3 py-2 text-xs text-ink outline-none focus:border-ink">
-                                    <option value="normal">Bình thường</option>
-                                    <option value="urgent">Khẩn cấp (Sai số liệu/Bản quyền)</option>
-                                </select>
-                            </div>
                         </div>
 
                         <div>
@@ -660,7 +541,7 @@
                             <button type="button" id="btn-cancel-request" class="border-2 border-line bg-surface px-4 py-2 font-mono text-xs font-bold uppercase text-ink hover:border-line-strong transition-colors cursor-pointer">
                                 Đóng
                             </button>
-                            <button type="submit" class="border-2 border-line-strong bg-lime px-4 py-2 font-mono text-xs font-bold uppercase text-ink shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
+                            <button type="submit" class="border-2 border-line-strong bg-lime px-4 py-2 font-mono text-xs font-bold uppercase text-white shadow-brutal-sm hover:bg-ink hover:text-white transition-all cursor-pointer">
                                 <span>Gửi tới Ban biên tập</span>
                             </button>
                         </div>
@@ -783,175 +664,7 @@
         }
 
         /* ==========================================================================
-           2. Interactive Tag Manager
-           ========================================================================== */
-        const manager = document.getElementById('tag-manager');
-        let existingTags = [];
-        if (manager) {
-            try {
-                existingTags = JSON.parse(manager.dataset.existingTags || '[]');
-            } catch (e) {
-                existingTags = [];
-            }
-        }
-
-        const container = document.getElementById('selected-tags-container');
-        const input = document.getElementById('tag-text-input');
-        const btnAdd = document.getElementById('btn-add-tag');
-        const cloud = document.getElementById('suggested-tags-cloud');
-        const countEl = document.getElementById('selected-tags-count');
-        const hiddenFallback = document.getElementById('hidden-tags-inputs');
-
-        const selectedExisting = new Map();
-        const selectedNew = new Set();
-
-        if (hiddenFallback) {
-            hiddenFallback.querySelectorAll('input[data-fallback-id]').forEach(cb => {
-                const id = parseInt(cb.value, 10);
-                const found = existingTags.find(t => t.id === id);
-                if (found) {
-                    selectedExisting.set(id, found.name);
-                }
-            });
-
-            hiddenFallback.querySelectorAll('input[data-fallback-name]').forEach(inp => {
-                const val = (inp.value || '').trim();
-                if (val) {
-                    selectedNew.add(val);
-                }
-            });
-
-            hiddenFallback.innerHTML = '';
-        }
-
-        const updateUI = () => {
-            if (!container) return;
-            container.innerHTML = '';
-
-            selectedExisting.forEach((name, id) => {
-                const chip = document.createElement('span');
-                chip.className = 'inline-flex items-center gap-1.5 border border-line-strong bg-surface px-2.5 py-1 font-mono text-xs font-bold text-ink shadow-brutal-sm';
-                chip.innerHTML = `
-                    <span>#${name}</span>
-                    <button type="button" class="text-ink hover:text-danger cursor-pointer text-sm font-bold leading-none" title="Gỡ thẻ">&times;</button>
-                    <input type="hidden" name="tag_ids[]" value="${id}">
-                `;
-                chip.querySelector('button').addEventListener('click', () => {
-                    selectedExisting.delete(id);
-                    updateUI();
-                });
-                container.appendChild(chip);
-            });
-
-            selectedNew.forEach(name => {
-                const chip = document.createElement('span');
-                chip.className = 'inline-flex items-center gap-1.5 border border-line-strong bg-lime px-2.5 py-1 font-mono text-xs font-bold text-ink shadow-brutal-sm';
-                chip.innerHTML = `
-                    <span>#${name}</span>
-                    <span class="bg-ink text-paper px-1 py-0.2 text-[9px] font-bold">mới</span>
-                    <button type="button" class="text-ink hover:text-danger cursor-pointer text-sm font-bold leading-none" title="Gỡ thẻ">&times;</button>
-                    <input type="hidden" name="tag_names[]" value="${name}">
-                `;
-                chip.querySelector('button').addEventListener('click', () => {
-                    selectedNew.delete(name);
-                    updateUI();
-                });
-                container.appendChild(chip);
-            });
-
-            if (cloud) {
-                cloud.querySelectorAll('[data-tag-suggestion]').forEach(btn => {
-                    const id = parseInt(btn.dataset.tagSuggestion, 10);
-                    const isSel = selectedExisting.has(id);
-                    if (isSel) {
-                        btn.className = 'inline-flex items-center gap-1 border border-line-strong bg-ink text-paper font-bold px-2.5 py-1 font-mono text-xs transition-all cursor-pointer';
-                        btn.querySelector('span:last-child').textContent = '✓';
-                        btn.querySelector('span:last-child').className = 'text-[10px] text-lime';
-                    } else {
-                        btn.className = 'inline-flex items-center gap-1 border border-line bg-surface text-ink hover:border-line-strong hover:bg-paper px-2.5 py-1 font-mono text-xs transition-all cursor-pointer';
-                        btn.querySelector('span:last-child').textContent = '+';
-                        btn.querySelector('span:last-child').className = 'text-[10px] text-ink-muted';
-                    }
-                });
-            }
-
-            if (countEl) {
-                countEl.textContent = selectedExisting.size + selectedNew.size;
-            }
-        };
-
-        const addTag = (raw) => {
-            let val = (raw || '').trim().replace(/^#+/, '').trim();
-            if (!val) return;
-
-            const match = existingTags.find(t => t.name.toLowerCase() === val.toLowerCase() || (t.slug && t.slug.toLowerCase() === val.toLowerCase()));
-            if (match) {
-                selectedExisting.set(match.id, match.name);
-            } else {
-                let existsInNew = false;
-                for (const n of selectedNew) {
-                    if (n.toLowerCase() === val.toLowerCase()) {
-                        existsInNew = true;
-                        break;
-                    }
-                }
-                if (!existsInNew) {
-                    selectedNew.add(val);
-                }
-            }
-
-            if (input) {
-                input.value = '';
-                input.focus();
-            }
-            updateUI();
-        };
-
-        input?.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ',') {
-                e.preventDefault();
-                e.stopPropagation();
-                addTag(input.value);
-            } else if (e.key === 'Backspace' && input.value === '') {
-                if (selectedNew.size > 0) {
-                    const arr = Array.from(selectedNew);
-                    selectedNew.delete(arr[arr.length - 1]);
-                    updateUI();
-                } else if (selectedExisting.size > 0) {
-                    const keys = Array.from(selectedExisting.keys());
-                    selectedExisting.delete(keys[keys.length - 1]);
-                    updateUI();
-                }
-            }
-        });
-
-        btnAdd?.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (input) {
-                addTag(input.value);
-            }
-        });
-
-        if (cloud) {
-            cloud.querySelectorAll('[data-tag-suggestion]').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const id = parseInt(btn.dataset.tagSuggestion, 10);
-                    const name = btn.dataset.tagName;
-                    if (selectedExisting.has(id)) {
-                        selectedExisting.delete(id);
-                    } else {
-                        selectedExisting.set(id, name);
-                    }
-                    updateUI();
-                });
-            });
-        }
-
-        updateUI();
-
-        /* ==========================================================================
-           3. Live Article Preview Modal Logic
+           2. Live Article Preview Modal Logic
            ========================================================================== */
         const modal = document.getElementById('preview-modal');
         const btnOpen = document.getElementById('btn-open-preview');
@@ -982,12 +695,9 @@
             }
 
             // Thumbnail display
-            const showThumbCheckbox = document.querySelector('input[type="checkbox"][name="show_thumbnail_in_post"]');
-            const isThumbEnabled = showThumbCheckbox ? showThumbCheckbox.checked : true;
             const thumbInput = document.getElementById('thumbnail');
             const thumbWrapper = document.getElementById('preview-thumbnail-wrapper');
             const thumbImg = document.getElementById('preview-thumbnail-img');
-            const thumbHiddenNote = document.getElementById('preview-thumbnail-hidden-note');
 
             let thumbSrc = null;
             if (thumbInput?.files && thumbInput.files[0]) {
@@ -998,43 +708,17 @@
                 @endif
             }
 
-            if (isThumbEnabled && thumbSrc) {
+            if (thumbSrc) {
                 thumbImg.src = thumbSrc;
                 thumbWrapper.classList.remove('hidden');
-                thumbHiddenNote.classList.add('hidden');
-            } else if (!isThumbEnabled && thumbSrc) {
-                thumbWrapper.classList.add('hidden');
-                thumbHiddenNote.classList.remove('hidden');
             } else {
                 thumbWrapper.classList.add('hidden');
-                thumbHiddenNote.classList.add('hidden');
             }
 
             // Body Content
             const contentEl = document.getElementById('preview-content');
             const html = quill ? quill.root.innerHTML : document.getElementById('content')?.value || '';
             contentEl.innerHTML = html || '<p class="text-ink-muted italic">Chưa có nội dung bài viết...</p>';
-
-            // Tags
-            const tagsWrapper = document.getElementById('preview-tags-wrapper');
-            const tagsContainer = document.getElementById('preview-tags-container');
-            tagsContainer.innerHTML = '';
-
-            const allTags = [];
-            selectedExisting.forEach(name => allTags.push(name));
-            selectedNew.forEach(name => allTags.push(name));
-
-            if (allTags.length > 0) {
-                allTags.forEach(name => {
-                    const span = document.createElement('span');
-                    span.className = 'inline-flex items-center border border-line-strong bg-paper px-2.5 py-1 font-mono text-xs font-bold text-ink';
-                    span.textContent = '#' + name;
-                    tagsContainer.appendChild(span);
-                });
-                tagsWrapper.classList.remove('hidden');
-            } else {
-                tagsWrapper.classList.add('hidden');
-            }
 
             // Open modal
             modal.classList.remove('hidden');

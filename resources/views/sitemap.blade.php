@@ -14,10 +14,4 @@
             <lastmod>{{ $category->updated_at->toAtomString() }}</lastmod>
         </url>
     @endforeach
-    @foreach ($tags as $tag)
-        <url>
-            <loc>{{ route('news.index', ['tag' => $tag->slug]) }}</loc>
-            <lastmod>{{ $tag->updated_at->toAtomString() }}</lastmod>
-        </url>
-    @endforeach
 </urlset>

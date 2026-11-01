@@ -28,14 +28,14 @@ class UserController extends Controller
 
         return view('admin.users.index', [
             'users' => User::query()
-                ->where('role', '!=', UserRole::Admin)
+                ->whereHas('userRole', fn (Builder $query): Builder => $query->where('code', '!=', UserRole::Admin->value))
                 ->when($filters['q'] ?? null, function (Builder $query, string $keyword): void {
                     $query->where(function (Builder $query) use ($keyword): void {
                         $query->where('name', 'like', "%{$keyword}%")
                             ->orWhere('email', 'like', "%{$keyword}%");
                     });
                 })
-                ->when($filters['role'] ?? null, fn (Builder $query, string $role): Builder => $query->where('role', $role))
+                ->when($filters['role'] ?? null, fn (Builder $query, string $role): Builder => $query->whereHas('userRole', fn (Builder $query): Builder => $query->where('code', $role)))
                 ->when($filters['status'] ?? null, fn (Builder $query, string $status): Builder => $query->where('status', $status))
                 ->withCount(['posts', 'comments'])
                 ->latest('created_at')

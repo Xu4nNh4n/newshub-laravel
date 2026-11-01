@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Contracts\Cache\Repository;
-use Illuminate\Support\Facades\DB;
 
 class PostViewRecorder
 {
@@ -33,16 +32,7 @@ class PostViewRecorder
             return false;
         }
 
-        DB::transaction(function () use ($post, $viewer, $sessionId, $ipHash): void {
-            $post->views()->create([
-                'user_id' => $viewer?->getKey(),
-                'session_id' => $sessionId,
-                'ip_hash' => $ipHash,
-                'viewed_at' => now(),
-            ]);
-
-            $post->increment('view_count');
-        });
+        $post->increment('view_count');
 
         return true;
     }

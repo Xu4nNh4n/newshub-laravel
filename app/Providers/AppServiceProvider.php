@@ -37,7 +37,5 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('comments', fn (Request $request): Limit => Limit::perMinute(5)
             ->by(($request->user()?->getKey() ?? 'guest').'|'.$request->ip()));
 
-        RateLimiter::for('comment-reports', fn (Request $request): Limit => Limit::perHour(10)
-            ->by(($request->user()?->getKey() ?? 'guest').'|'.$request->ip()));
     }
 }

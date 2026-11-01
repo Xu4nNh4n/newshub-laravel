@@ -32,10 +32,11 @@ class AuthenticationTest extends TestCase
         $this->assertAuthenticated();
         $this->assertDatabaseHas('users', [
             'email' => 'reader@example.com',
-            'role' => UserRole::User->value,
             'status' => UserStatus::Active->value,
         ]);
-        Notification::assertSentTo(User::whereEmail('reader@example.com')->firstOrFail(), VerifyEmailNotification::class);
+        $registeredUser = User::whereEmail('reader@example.com')->firstOrFail();
+        $this->assertSame(UserRole::User, $registeredUser->role);
+        Notification::assertSentTo($registeredUser, VerifyEmailNotification::class);
     }
 
     public function test_registration_rejects_duplicate_email_and_unconfirmed_password(): void

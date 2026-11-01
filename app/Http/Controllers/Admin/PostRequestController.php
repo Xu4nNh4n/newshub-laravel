@@ -32,7 +32,6 @@ class PostRequestController extends Controller
                     'author:id,name,email',
                     'handler:id,name',
                 ])
-                ->orderByDesc('priority')
                 ->latest('created_at')
                 ->latest('id')
                 ->paginate(20)

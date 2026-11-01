@@ -1,9 +1,9 @@
 @props(['post'])
 
-<article {{ $attributes->merge(['class' => 'group flex flex-col justify-between border-2 border-line-strong bg-surface transition-all duration-150 hover:shadow-brutal']) }}>
+<article {{ $attributes->merge(['class' => 'group flex flex-col justify-between border border-line bg-surface transition-all duration-150 hover:border-line-strong hover:shadow-brutal-sm']) }}>
     <div>
         <!-- Card Thumbnail -->
-        <a href="{{ route('news.show', $post->slug) }}" class="relative block aspect-video w-full overflow-hidden border-b border-line-strong bg-paper">
+        <a href="{{ route('news.show', $post->slug) }}" class="relative block aspect-video w-full overflow-hidden border-b border-line bg-paper">
             @if ($post->thumbnail)
                 <img src="{{ asset('storage/' . $post->thumbnail) }}"
                      alt="{{ $post->title }}"
@@ -17,9 +17,9 @@
                 </div>
             @endif
 
-            <!-- Category Badge (Mono / Neo-Brutalist) -->
+            <!-- Category Badge (Kept with crisp border) -->
             @if ($post->category)
-                <span class="absolute left-2.5 top-2.5 border border-line-strong bg-paper px-2 py-0.5 text-[10px] font-bold font-mono uppercase tracking-wider text-ink shadow-2xs group-hover:bg-lime transition-colors">
+                <span class="absolute left-2.5 top-2.5 border border-line-strong bg-paper px-2.5 py-0.5 text-[10px] font-bold font-mono uppercase tracking-wider text-ink shadow-2xs group-hover:bg-lime group-hover:text-white transition-colors">
                     {{ $post->category->name }}
                 </span>
             @endif
@@ -46,7 +46,7 @@
         <div class="flex items-center gap-2 min-w-0">
             @if ($post->author)
                 <a href="{{ route('authors.show', $post->author) }}" class="flex items-center gap-1.5 hover:text-ink hover:underline transition-colors truncate">
-                    <span class="grid size-4 shrink-0 place-items-center bg-ink text-[9px] font-bold font-mono text-lime">
+                    <span class="grid size-4 shrink-0 place-items-center bg-lime text-[9px] font-bold font-mono text-white border border-line-strong">
                         {{ mb_strtoupper(mb_substr($post->author->name, 0, 1)) }}
                     </span>
                     <span class="truncate font-semibold">{{ $post->author->name }}</span>
@@ -59,7 +59,7 @@
         </div>
 
         <span class="shrink-0 tabular-nums flex items-center gap-1 text-ink-muted">
-            <svg class="size-3 text-ink-muted" viewBox="0 0 20 20" fill="currentColor">
+            <svg class="size-3 text-ink-muted" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
                 <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
             </svg>

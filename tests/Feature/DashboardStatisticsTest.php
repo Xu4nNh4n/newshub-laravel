@@ -2,14 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\Enums\CommentReportStatus;
 use App\Enums\UserRole;
 use App\Models\AuthorApplication;
 use App\Models\Category;
-use App\Models\CommentReport;
 use App\Models\Post;
 use App\Models\PostRequest;
-use App\Models\PostView;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
@@ -26,11 +23,9 @@ class DashboardStatisticsTest extends TestCase
         User::factory()->create(['role' => UserRole::Author]);
         User::factory()->create(['status' => 'blocked']);
         $popularPost = Post::factory()->published()->create(['view_count' => 42]);
-        PostView::query()->create(['post_id' => $popularPost->id, 'session_id' => 'dashboard-test', 'viewed_at' => now()]);
         Post::factory()->pendingReview()->create();
         Post::factory()->create();
         PostRequest::factory()->pending()->create();
-        CommentReport::factory()->create(['status' => CommentReportStatus::Pending]);
 
         $response = $this->actingAs($admin)->get(route('dashboard'));
 
@@ -41,7 +36,6 @@ class DashboardStatisticsTest extends TestCase
             ->assertSee('42 lượt xem')
             ->assertSee('Đang hiển thị')
             ->assertSee('Bài tạo theo tháng')
-            ->assertSee('Lượt xem 7 ngày')
             ->assertSee('Chuyên mục nổi bật')
             ->assertSee('09/2026')
             ->assertSee('27/09');

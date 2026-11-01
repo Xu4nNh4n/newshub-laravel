@@ -68,11 +68,6 @@
                             <span class="inline-flex items-center gap-1 border border-line-strong bg-paper px-2 py-0.5 font-mono text-[11px] font-bold text-ink uppercase">
                                 {{ $post->status->value }}
                             </span>
-                            @if($post->is_featured)
-                                <span class="ml-1.5 border border-line-strong bg-lime px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase text-ink">
-                                    Nổi bật
-                                </span>
-                            @endif
                         </td>
                         <td class="px-5 py-4 whitespace-nowrap font-mono text-xs text-ink-muted">
                             {{ $post->published_at?->format('d/m/Y H:i') ?? '—' }}
@@ -86,13 +81,6 @@
                                     Sửa
                                 </a>
                                 @if ($post->status === \App\Enums\PostStatus::Published)
-                                    <form method="POST" action="{{ route('admin.posts.update', $post) }}" class="inline">
-                                        @csrf @method('PATCH')
-                                        <input type="hidden" name="action" value="{{ $post->is_featured ? 'unfeature' : 'feature' }}">
-                                        <button class="inline-flex min-h-7 cursor-pointer items-center border border-line-strong bg-paper px-2.5 py-1 font-mono text-[11px] font-bold text-ink shadow-brutal-sm hover:bg-lime transition-all">
-                                            {{ $post->is_featured ? 'Bỏ nổi bật' : 'Nổi bật' }}
-                                        </button>
-                                    </form>
                                     <form method="POST" action="{{ route('admin.posts.update', $post) }}" class="inline">
                                         @csrf @method('PATCH')
                                         <input type="hidden" name="action" value="hide">

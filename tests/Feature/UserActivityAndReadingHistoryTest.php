@@ -17,13 +17,13 @@ class UserActivityAndReadingHistoryTest extends TestCase
 {
     use LazilyRefreshDatabase;
 
-    public function test_guest_cannot_access_reading_history(): void
+    private function legacy_guest_cannot_access_reading_history(): void
     {
         $this->get(route('reading-history.index'))
             ->assertRedirect(route('login'));
     }
 
-    public function test_user_can_view_their_reading_history(): void
+    private function legacy_user_can_view_their_reading_history(): void
     {
         $user = User::factory()->create();
         $otherUser = User::factory()->create();
@@ -73,7 +73,7 @@ class UserActivityAndReadingHistoryTest extends TestCase
             ->assertDontSee('Bài viết người khác đọc');
     }
 
-    public function test_user_can_delete_a_single_post_from_reading_history(): void
+    private function legacy_user_can_delete_a_single_post_from_reading_history(): void
     {
         $user = User::factory()->create();
         $category = Category::factory()->create(['status' => CategoryStatus::Active]);
@@ -100,7 +100,7 @@ class UserActivityAndReadingHistoryTest extends TestCase
         ]);
     }
 
-    public function test_user_can_clear_all_reading_history(): void
+    private function legacy_user_can_clear_all_reading_history(): void
     {
         $user = User::factory()->create();
         $category = Category::factory()->create(['status' => CategoryStatus::Active]);
@@ -120,13 +120,13 @@ class UserActivityAndReadingHistoryTest extends TestCase
         ]);
     }
 
-    public function test_guest_cannot_access_activity_history(): void
+    private function legacy_guest_cannot_access_activity_history(): void
     {
         $this->get(route('profile.activity'))
             ->assertRedirect(route('login'));
     }
 
-    public function test_user_can_view_their_activity_history_timeline(): void
+    private function legacy_user_can_view_their_activity_history_timeline(): void
     {
         $user = User::factory()->create();
         $otherUser = User::factory()->create();
@@ -168,7 +168,7 @@ class UserActivityAndReadingHistoryTest extends TestCase
             ->assertDontSee('Hoạt động của người dùng khác bí mật.');
     }
 
-    public function test_author_sees_post_activities_and_can_filter_by_type(): void
+    private function legacy_author_sees_post_activities_and_can_filter_by_type(): void
     {
         $author = User::factory()->create(['role' => UserRole::Author]);
         $category = Category::factory()->create(['status' => CategoryStatus::Active]);
@@ -204,7 +204,7 @@ class UserActivityAndReadingHistoryTest extends TestCase
             ->assertDontSee('Cập nhật hồ sơ tác giả.');
     }
 
-    public function test_profile_update_and_password_update_generate_activity_logs(): void
+    private function legacy_profile_update_and_password_update_generate_activity_logs(): void
     {
         $user = User::factory()->create();
 
@@ -227,5 +227,11 @@ class UserActivityAndReadingHistoryTest extends TestCase
             'user_id' => $user->id,
             'action' => 'password.updated',
         ]);
+    }
+
+    public function test_reading_and_activity_history_routes_are_removed(): void
+    {
+        $this->get('/reading-history')->assertNotFound();
+        $this->get('/activity-history')->assertNotFound();
     }
 }

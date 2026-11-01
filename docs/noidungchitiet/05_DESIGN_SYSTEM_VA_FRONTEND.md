@@ -7,11 +7,11 @@
 Giao diện của **NewsHub** được xây dựng dựa trên triết lý **Editorial Modernism kết hợp Neo-Brutalist nhẹ nhàng**, lấy cảm hứng từ visual language của các tạp chí báo chí đương đại:
 
 ### Các đặc điểm nhận diện chính:
-- **Nền giấy báo ấm áp (Warm Newsprint Paper):** Thay vì sử dụng nền trắng toát gây chói mắt hoặc nền tối đơn điệu, hệ thống sử dụng tone nền ngả vàng nhạt (`#F7F6F0`) như một trang báo giấy thực thụ.
-- **Mực in sắc sảo (Deep Ink):** Màu chữ chính là màu mực đen sâu (`#171715`), mang lại độ tương phản tuyệt hảo và trải nghiệm đọc báo dễ chịu.
-- **Đường kẻ phân cách rõ ràng (Crisp Structural Borders):** Bố cục được phân tách mạch lạc bằng các đường kẻ viền dứt khoát (`border-line`, `border-line-strong`), gợi nhớ đến cách dàn trang báo in truyền thống.
-- **Đổ bóng thô không nhòe (Solid Brutalist Shadows):** Sử dụng bóng đổ cứng dạng hình học (`4px 4px 0px #171715` và `2px 2px 0px #171715`) thay vì bóng đổ mờ (blur shadow), tạo cảm giác chắc chắn, xúc giác và hiện đại.
-- **Màu nhấn bút dạ quang (Highlighter Lime Accent):** Điểm xuyết tinh tế màu xanh chanh (`#D4FF3F`) cho các nút bấm hành động chính, huy hiệu chuyên mục và các bài viết tiêu điểm.
+- **Nền trắng tinh khôi chuẩn báo chí hiện đại (Pure Editorial White):** Giao diện sử dụng nền trắng sáng sạch sẽ (`#FFFFFF`), kết hợp các dải phụ màu xám băng thanh nhã (`#F8FAFC`), giúp không gian đọc thoáng đãng và tập trung vào nội dung.
+- **Mực in sắc sảo (Deep Ink):** Màu chữ chính là màu mực than đen sâu (`#0F172A`), mang lại độ tương phản tuyệt hảo và trải nghiệm đọc báo dễ chịu.
+- **Đường kẻ phân cách rõ ràng (Crisp Structural Borders):** Bố cục được phân tách mạch lạc bằng các đường kẻ viền dứt khoát (`border-line: #E2E8F0`, `border-line-strong: #0F172A`), gợi nhớ đến cách dàn trang báo in truyền thống.
+- **Đổ bóng thô không nhòe (Solid Brutalist Shadows):** Sử dụng bóng đổ cứng dạng hình học (`4px 4px 0px #0F172A` và `2px 2px 0px #0F172A`) thay vì bóng đổ mờ (blur shadow), tạo cảm giác chắc chắn, xúc giác và hiện đại.
+- **Màu nhấn xanh thép thanh lịch (Steel Blue Accent):** Điểm xuyết tinh tế màu xanh `#7296c4` (và sắc tố dịu `#dce6f2`) cho các nút bấm hành động chính, huy hiệu chuyên mục và các bài viết tiêu điểm.
 - **Ít bo góc (Low Border-Radius):** Các khối hộp, nút bấm và ảnh đại diện sử dụng góc vuông hoặc bo cực nhẹ (`rounded-none` hoặc `rounded-sm`), tránh phong cách bong bóng bo tròn của các giao diện mạng xã hội thông thường.
 
 ---
@@ -22,15 +22,16 @@ Giao diện của **NewsHub** được xây dựng dựa trên triết lý **Edi
 
 | Tên biến CSS | Mã màu Hex | Tên màu | Mục đích sử dụng |
 | :--- | :--- | :--- | :--- |
-| `--color-bg` | `#F7F6F0` | **Warm Paper** | Nền chính của toàn bộ trang web và email |
-| `--color-surface` | `#FFFEFA` | **Clean Surface** | Nền của thẻ bài viết, ô nhập form, bảng biểu |
-| `--color-text` | `#171715` | **Deep Ink** | Màu chữ tiêu đề, thân bài và viền đậm |
-| `--color-muted` | `#66645E` | **Muted Slate** | Chữ mô tả phụ, ngày giờ, số liệu thống kê |
-| `--color-border` | `#C7C5BB` | **Fine Border** | Viền mỏng phân chia giữa các khối nội dung |
-| `--color-border-strong` | `#171715` | **Solid Border** | Viền khung bên ngoài, viền bảng, viền nút bấm |
-| `--color-accent` | `#D4FF3F` | **Lime Accent** | Màu nút bấm chính, nhãn tiêu điểm, điểm nhấn |
-| `--color-accent-pink` | `#EE5BA6` | **Editorial Pink** | Nhãn khẩn cấp, huy hiệu phụ nổi bật |
-| `--color-danger` | `#B42318` | **Crimson Danger** | Nút xóa, từ chối, cảnh báo lỗi nguy hiểm |
+| `--color-paper` | `#FFFFFF` | **Pure White** | Nền chính của toàn bộ trang web và email (chuẩn báo điện tử hiện đại) |
+| `--color-paper-light` | `#F8FAFC` | **Light Slate** | Nền phụ của masthead bar, dải chuyên mục, footer, bảng quản trị |
+| `--color-surface` | `#FFFFFF` | **Clean Surface** | Nền của thẻ bài viết, ô nhập form, bảng biểu, hộp thoại modal |
+| `--color-ink` | `#0F172A` | **Deep Slate Ink** | Màu chữ tiêu đề, thân bài và viền đậm (độ tương phản cao) |
+| `--color-ink-muted` | `#475569` | **Muted Slate** | Chữ mô tả phụ, ngày giờ, số liệu thống kê |
+| `--color-line` | `#E2E8F0` | **Fine Border** | Viền mỏng phân chia giữa các khối nội dung |
+| `--color-line-strong` | `#0F172A` | **Solid Border** | Viền khung bên ngoài, viền bảng, viền nút bấm |
+| `--color-lime` | `#7296c4` | **Steel Blue Accent** | Màu nút bấm chính, nhãn tiêu điểm, điểm nhấn thương hiệu (xanh dịu trang nhã) |
+| `--color-pink` | `#dce6f2` | **Soft Ice Blue** | Nhãn phụ, huy hiệu xếp hạng, sắc thái xanh lạnh nhẹ nhàng |
+| `--color-danger` | `#DC2626` | **Crimson Danger** | Nút xóa, từ chối, cảnh báo lỗi nguy hiểm |
 
 ---
 

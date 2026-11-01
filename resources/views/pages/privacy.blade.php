@@ -45,7 +45,7 @@
             <div class="border-2 border-line-strong bg-surface p-5 shadow-brutal-sm space-y-4">
                 <h2 class="text-xs font-mono font-black uppercase tracking-wider text-ink flex items-center justify-between pb-3 border-b border-line">
                     <span>Mục Lục Văn Bản</span>
-                    <span class="bg-lime text-ink px-1.5 py-0.5 text-[10px] font-bold border border-ink">TOC</span>
+                    <span class="bg-lime text-white px-1.5 py-0.5 text-[10px] font-bold border border-line-strong">TOC</span>
                 </h2>
                 <nav class="space-y-1.5 text-xs font-medium">
                     <a href="#dieu-1" class="block py-1.5 px-2 border-l-2 border-transparent text-ink-muted hover:border-line-strong hover:bg-paper hover:text-ink transition-colors">1. Căn cứ pháp lý & phạm vi áp dụng</a>

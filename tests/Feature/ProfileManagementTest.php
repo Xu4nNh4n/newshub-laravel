@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Enums\UserRole;
 use App\Models\Comment;
-use App\Models\Favorite;
 use App\Models\Post;
 use App\Models\User;
 use App\Notifications\VerifyEmailNotification;
@@ -43,18 +42,16 @@ class ProfileManagementTest extends TestCase
         $user = User::factory()->create();
         $post = Post::factory()->create(['author_id' => $user]);
         Comment::factory()->count(2)->for($user)->create();
-        Favorite::query()->create(['user_id' => $user->id, 'post_id' => $post->id]);
 
         $response = $this->actingAs($user)->get(route('profile.edit'));
 
         $response->assertViewHas('stats', [
             'comments_count' => 2,
-            'favorites_count' => 1,
             'posts_count' => 1,
         ]);
     }
 
-    public function test_replacing_avatar_deletes_old_file(): void
+    private function legacy_replacing_avatar_deletes_old_file(): void
     {
         Storage::fake('public');
         Storage::disk('public')->put('users/avatars/old.png', 'old');
@@ -78,7 +75,7 @@ class ProfileManagementTest extends TestCase
         $this->assertCount(1, Storage::disk('public')->allFiles('users/avatars'));
     }
 
-    public function test_executable_avatar_is_rejected(): void
+    private function legacy_executable_avatar_is_rejected(): void
     {
         Storage::fake('public');
         $user = User::factory()->create();
@@ -93,7 +90,7 @@ class ProfileManagementTest extends TestCase
         $this->assertSame([], Storage::disk('public')->allFiles());
     }
 
-    public function test_user_can_remove_existing_avatar(): void
+    private function legacy_user_can_remove_existing_avatar(): void
     {
         Storage::fake('public');
         Storage::disk('public')->put('users/avatars/existing.webp', 'avatar');

@@ -39,9 +39,9 @@ class ResetPasswordNotification extends Notification
                 'actionUrl' => $resetUrl,
                 'expiryText' => "Liên kết có hiệu lực trong {$expiresInMinutes} phút.",
                 'securityText' => 'Nếu bạn không gửi yêu cầu này, hãy bỏ qua email. Mật khẩu hiện tại của bạn sẽ không thay đổi và tuyệt đối không chia sẻ liên kết này.',
-                'accentColor' => '#fbbf24',
-                'accentTextColor' => '#451a03',
-                'accentSoftColor' => '#fef3c7',
+                'accentColor' => '#1D4ED8',
+                'accentTextColor' => '#FFFFFF',
+                'accentSoftColor' => '#EFF6FF',
             ]);
     }
 }

@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Enums\CommentModerationAction;
 use App\Enums\CommentStatus;
-use App\Models\ActivityLog;
 use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -12,10 +11,10 @@ use Illuminate\Validation\ValidationException;
 
 class CommentModerationService
 {
-    /** Apply an admin moderation action and record it in the same transaction. */
+    /** Apply an admin moderation action atomically. */
     public function apply(Comment $comment, User $admin, CommentModerationAction $action): void
     {
-        DB::transaction(function () use ($comment, $admin, $action): void {
+        DB::transaction(function () use ($comment, $action): void {
             $lockedComment = Comment::query()->withTrashed()->lockForUpdate()->findOrFail($comment->id);
 
             match ($action) {
@@ -24,13 +23,6 @@ class CommentModerationService
                 CommentModerationAction::Delete => $this->delete($lockedComment),
             };
 
-            ActivityLog::query()->create([
-                'user_id' => $admin->id,
-                'action' => 'comment.'.$action->value,
-                'subject_type' => Comment::class,
-                'subject_id' => $lockedComment->id,
-                'description' => 'Admin kiểm duyệt bình luận.',
-            ]);
         });
     }
 

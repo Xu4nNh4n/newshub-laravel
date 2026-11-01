@@ -1,4 +1,4 @@
-@props(['comment', 'post', 'reportReasons', 'isReply' => false])
+@props(['comment', 'post', 'isReply' => false])
 
 <article {{ $attributes->merge(['class' => ($isReply ?? false)
     ? 'border-l-2 border-line-strong bg-surface p-3 transition-colors hover:border-ink'
@@ -13,7 +13,7 @@
     @else
         <div class="flex items-start gap-2.5 sm:gap-3">
             <!-- User Avatar -->
-            <span class="grid {{ ($isReply ?? false) ? 'size-6 text-[10px]' : 'size-7 sm:size-8 text-[11px]' }} shrink-0 place-items-center bg-ink font-bold font-mono text-lime border border-ink">
+            <span class="grid {{ ($isReply ?? false) ? 'size-6 text-[10px]' : 'size-7 sm:size-8 text-[11px]' }} shrink-0 place-items-center bg-[#1D4ED8] font-bold font-mono text-white rounded-full">
                 {{ mb_strtoupper(mb_substr($comment->user->name, 0, 1)) }}
             </span>
 
@@ -24,15 +24,8 @@
                     <span class="text-xs sm:text-[13px] font-bold text-ink">{{ $comment->user->name }}</span>
 
                     @if ($comment->user->id === $post->author_id)
-                        <span class="border border-line-strong bg-lime px-1.5 py-0.2 text-[9px] font-bold font-mono uppercase tracking-wider text-ink shadow-2xs">
+                        <span class="border border-line-strong bg-lime px-1.5 py-0.2 text-[9px] font-bold font-mono uppercase tracking-wider text-white shadow-2xs">
                             Tác giả
-                        </span>
-                    @endif
-
-                    @if ($comment->replyTo?->user)
-                        <span class="inline-flex items-center gap-1 text-[11px] font-medium text-ink-muted font-mono">
-                            <span>&hookleftarrow; trả lời</span>
-                            <strong class="font-bold text-ink">{{ $comment->replyTo->user->name }}</strong>
                         </span>
                     @endif
 
@@ -61,7 +54,7 @@
                                     @csrf
                                     <input type="hidden" name="reply_to_id" value="{{ $comment->id }}">
                                     <input name="content" required maxlength="2000" placeholder="Trả lời {{ $comment->user->name }}..." class="min-w-0 flex-1 border border-line bg-paper px-2.5 py-1 text-xs text-ink outline-none focus:border-line-strong focus:shadow-brutal-sm">
-                                    <button type="submit" class="inline-flex min-h-7 cursor-pointer items-center justify-center border border-line-strong bg-lime px-3 py-1 text-xs font-bold text-ink shadow-brutal-sm hover:bg-lime-hover active:scale-[0.98]">
+                                    <button type="submit" class="inline-flex min-h-7 cursor-pointer items-center justify-center border border-line-strong bg-lime px-3 py-1 text-xs font-bold text-white shadow-brutal-sm hover:bg-ink hover:text-white transition-colors active:scale-[0.98]">
                                         Gửi
                                     </button>
                                 </form>
@@ -80,7 +73,7 @@
                                     @csrf
                                     @method('PUT')
                                     <input name="content" value="{{ $comment->content }}" required maxlength="2000" class="min-w-0 flex-1 border border-line bg-paper px-2.5 py-1 text-xs text-ink outline-none focus:border-line-strong focus:shadow-brutal-sm">
-                                    <button type="submit" class="inline-flex min-h-7 cursor-pointer items-center justify-center border border-line-strong bg-lime px-3 py-1 text-xs font-bold text-ink shadow-brutal-sm hover:bg-lime-hover active:scale-[0.98]">
+                                    <button type="submit" class="inline-flex min-h-7 cursor-pointer items-center justify-center border border-line-strong bg-lime px-3 py-1 text-xs font-bold text-white shadow-brutal-sm hover:bg-ink hover:text-white transition-colors active:scale-[0.98]">
                                         Lưu
                                     </button>
                                 </form>
@@ -105,29 +98,6 @@
                             </form>
                         @endcan
 
-                        @can('report', $comment)
-                            <details class="group/report">
-                                <summary class="inline-flex cursor-pointer items-center gap-1 hover:text-ink select-none transition-colors">
-                                    <svg class="size-3" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd" />
-                                    </svg>
-                                    <span>Báo cáo</span>
-                                </summary>
-                                <form method="POST" action="{{ route('comment-reports.store', $comment) }}" class="mt-2 grid min-w-60 max-w-sm gap-2 border-2 border-line-strong bg-surface p-3 shadow-brutal font-sans">
-                                    @csrf
-                                    <label class="text-[10px] font-bold font-mono uppercase tracking-wider text-ink">Lý do báo cáo:</label>
-                                    <select name="reason" required class="border border-line bg-paper px-2 py-1 text-xs text-ink outline-none focus:border-line-strong">
-                                        @foreach ($reportReasons as $reason)
-                                            <option value="{{ $reason->value }}">{{ $reason->label() }}</option>
-                                        @endforeach
-                                    </select>
-                                    <textarea name="description" maxlength="1000" rows="2" placeholder="Mô tả cụ thể vi phạm (tùy chọn)..." class="border border-line bg-paper p-2 text-xs text-ink placeholder:text-ink-muted outline-none focus:border-line-strong"></textarea>
-                                    <button type="submit" class="inline-flex min-h-7 cursor-pointer items-center justify-center border border-line-strong bg-ink px-3 py-1 text-xs font-bold text-lime shadow-brutal-sm hover:bg-lime hover:text-ink active:scale-[0.98] transition-colors">
-                                        Gửi báo cáo
-                                    </button>
-                                </form>
-                            </details>
-                        @endcan
                     </div>
                 @endauth
             </div>

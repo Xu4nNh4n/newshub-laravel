@@ -57,18 +57,6 @@
                                 </span>
                             @endif
 
-                            <!-- Priority Badge -->
-                            @if ($requestItem->priority === \App\Enums\PostRequestPriority::Urgent)
-                                <span class="inline-flex items-center gap-1 border border-line-strong bg-danger px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-paper">
-                                    <span class="size-1.5 bg-paper"></span>
-                                    <span>Khẩn cấp</span>
-                                </span>
-                            @else
-                                <span class="border border-line bg-paper px-2 py-0.5 font-mono text-[10px] text-ink-muted uppercase">
-                                    Bình thường
-                                </span>
-                            @endif
-
                             <span class="font-mono text-xs text-ink-muted">· {{ $requestItem->created_at->format('d/m/Y H:i') }}</span>
                         </div>
 
@@ -99,7 +87,7 @@
                     <span @class([
                         'inline-flex shrink-0 items-center gap-1 border-2 border-line-strong px-3 py-1 font-mono text-xs font-bold uppercase',
                         'bg-paper text-ink shadow-brutal-sm' => $requestItem->status === \App\Enums\PostRequestStatus::Pending,
-                        'bg-lime text-ink shadow-brutal-sm' => $requestItem->status === \App\Enums\PostRequestStatus::Approved,
+                        'bg-lime text-white shadow-brutal-sm' => $requestItem->status === \App\Enums\PostRequestStatus::Approved,
                         'bg-danger text-paper shadow-brutal-sm' => $requestItem->status === \App\Enums\PostRequestStatus::Rejected,
                         'bg-surface text-ink-muted shadow-brutal-sm' => $requestItem->status === \App\Enums\PostRequestStatus::Cancelled,
                     ])>

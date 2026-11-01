@@ -17,7 +17,7 @@ class PostPreviewController extends Controller
     public function __invoke(Request $request, Post $post, PostContentSanitizer $contentSanitizer): View
     {
         Gate::authorize('view', $post);
-        $post->load(['author:id,name', 'category:id,name,slug', 'tags:id,name,slug']);
+        $post->load(['author:id,name', 'category:id,name,slug']);
 
         return view('news.preview', [
             'post' => $post,

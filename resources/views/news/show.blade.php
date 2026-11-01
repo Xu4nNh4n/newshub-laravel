@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => $post->meta_title ?: $post->title, 'metaDescription' => $metaDescription, 'ogImage' => $openGraphImageUrl])
+@extends('layouts.app', ['title' => $post->title, 'metaDescription' => $metaDescription, 'ogImage' => $openGraphImageUrl])
 
 @push('head')
 <!-- JSON-LD NewsArticle Structured Data for SEO -->
@@ -107,7 +107,7 @@
 @endphp
 
 @section('content')
-<div class="mx-auto max-w-4xl space-y-8 bg-surface border-x-2 border-line-strong p-4 sm:p-8 shadow-brutal">
+<div class="mx-auto max-w-4xl space-y-8 bg-surface border border-line p-4 sm:p-8 shadow-brutal-sm">
     <!-- Print Only Header -->
     <div class="print-only-header font-mono">
         <h2 style="font-size: 22pt; font-weight: bold; margin-bottom: 6px;">NewsHub - Báo điện tử đa phương tiện</h2>
@@ -137,7 +137,7 @@
         <!-- Category & Title -->
         <div class="space-y-3">
             <a href="{{ route('news.index', ['category' => $post->category->slug]) }}"
-               class="inline-flex items-center border border-line-strong bg-paper px-3 py-1 text-xs font-bold font-mono uppercase tracking-wider text-ink shadow-2xs hover:bg-lime transition-colors">
+               class="inline-flex items-center border border-line-strong bg-paper px-3 py-1 text-xs font-bold font-mono uppercase tracking-wider text-ink shadow-2xs hover:bg-lime hover:text-white transition-colors">
                 {{ $post->category->name }}
             </a>
 
@@ -151,13 +151,9 @@
             <!-- Author & Time -->
             <div class="flex items-center gap-3">
                 <a href="{{ route('authors.show', $post->author) }}" class="group flex items-center gap-2.5">
-                    @if ($post->author->avatar)
-                        <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($post->author->avatar) }}" alt="Avatar" class="size-8 rounded-none object-cover border border-line-strong">
-                    @else
-                        <span class="grid size-8 place-items-center bg-ink text-xs font-bold font-mono text-lime border border-ink">
-                            {{ mb_strtoupper(mb_substr($post->author->name, 0, 1)) }}
-                        </span>
-                    @endif
+                    <span class="grid size-8 place-items-center bg-[#1D4ED8] text-xs font-bold font-mono text-white rounded-full select-none" aria-hidden="true">
+                        {{ mb_strtoupper(mb_substr($post->author->name, 0, 1)) }}
+                    </span>
                     <div>
                         <p class="font-bold text-ink group-hover:underline transition-colors">{{ $post->author->name }}</p>
                         <p class="text-[10px] text-ink-muted font-sans">Tác giả bài viết</p>
@@ -169,7 +165,7 @@
                 <div class="text-[11px] space-y-0.5">
                     <p class="text-ink font-bold">{{ $post->published_at->format('d/m/Y H:i') }}</p>
                     <p class="text-ink-muted tabular-nums flex items-center gap-1.5">
-                        <span>{{ number_format($post->view_count) }} xem</span>
+                        <span>{{ number_format($post->view_count) }} lượt xem</span>
                         <span>&bull;</span>
                         <span class="inline-flex items-center gap-1 font-bold text-ink">
                             <svg class="size-3 text-ink" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -182,35 +178,17 @@
                 </div>
             </div>
 
-            <!-- Action Buttons: Bookmark -->
-            <div id="meta-action-buttons" class="flex items-center gap-2">
-                @auth
-                    @if (auth()->user()->hasVerifiedEmail())
-                        <form method="POST" action="{{ $isFavorited ? route('favorites.destroy', $post) : route('favorites.store', $post) }}" class="inline">
-                            @csrf
-                            @if ($isFavorited) @method('DELETE') @endif
-                            <button type="submit"
-                                    class="inline-flex min-h-8 cursor-pointer items-center gap-1.5 border border-line-strong px-3 py-1.5 text-xs font-bold shadow-2xs transition-all active:scale-[0.98] {{ $isFavorited ? 'bg-lime text-ink shadow-brutal-sm' : 'bg-surface text-ink hover:bg-paper' }}">
-                                <svg class="size-3.5 {{ $isFavorited ? 'text-ink fill-current' : 'text-ink-muted' }}" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-                                </svg>
-                                <span>{{ $isFavorited ? 'Bỏ lưu bài viết' : 'Lưu bài viết' }}</span>
-                            </button>
-                        </form>
-                    @endif
-                @endauth
-            </div>
         </div>
 
         <!-- Reader Utilities Bar (TTS, Font Resizer, Print, Social Share) -->
-        <div id="reader-utilities-bar" class="flex flex-wrap items-center justify-between gap-3 border-2 border-line-strong bg-paper p-3 shadow-brutal-sm">
+        <div id="reader-utilities-bar" class="flex flex-wrap items-center justify-between gap-3 border border-line bg-paper p-3 shadow-brutal-sm">
             <!-- Left: TTS & Font Resizer -->
             <div class="flex flex-wrap items-center gap-2.5">
                 <!-- Text-to-Speech (Demo) -->
                 <button type="button"
                         id="btn-tts"
-                        class="inline-flex min-h-8 cursor-pointer items-center gap-1.5 border border-line-strong bg-surface px-3 py-1.5 text-xs font-bold font-mono text-ink shadow-2xs transition-all hover:bg-lime active:scale-[0.98]">
-                    <svg id="tts-icon-play" class="size-3.5 text-ink" viewBox="0 0 20 20" fill="currentColor">
+                        class="inline-flex min-h-8 cursor-pointer items-center gap-1.5 border border-line-strong bg-surface px-3 py-1.5 text-xs font-bold font-mono text-ink shadow-2xs transition-all hover:bg-lime hover:text-white active:scale-[0.98]">
+                    <svg id="tts-icon-play" class="size-3.5 text-current" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
                     </svg>
                     <svg id="tts-icon-stop" class="size-3.5 text-danger hidden animate-pulse" viewBox="0 0 20 20" fill="currentColor">
@@ -277,9 +255,9 @@
                 <!-- Copy Link Button with Toast Feedback -->
                 <button type="button"
                         id="btn-copy-article-link"
-                        class="inline-flex min-h-8 cursor-pointer items-center gap-1.5 border border-line-strong bg-lime px-3 py-1.5 text-xs font-bold text-ink shadow-brutal-sm transition-all hover:bg-lime-hover active:scale-[0.98]"
+                        class="inline-flex min-h-8 cursor-pointer items-center gap-1.5 border border-line-strong bg-lime px-3 py-1.5 text-xs font-bold text-white shadow-brutal-sm transition-all hover:bg-ink hover:text-white active:scale-[0.98]"
                         title="Sao chép liên kết bài viết">
-                    <svg class="size-3.5 text-ink" viewBox="0 0 20 20" fill="currentColor">
+                    <svg class="size-3.5 text-white" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.667l3-3z" />
                         <path d="M11.603 7.963a.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.667l-3 3a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 105.656 5.656l3-3a4 4 0 00-.225-5.865z" />
                     </svg>
@@ -296,8 +274,8 @@
         @endif
 
         <!-- Featured Image with Caption -->
-        @if ($thumbnailUrl && ($post->show_thumbnail_in_post ?? true))
-            <figure class="overflow-hidden border-2 border-line-strong bg-paper">
+        @if ($thumbnailUrl)
+            <figure class="overflow-hidden border border-line bg-paper">
                 <img src="{{ $thumbnailUrl }}"
                      alt="{{ $post->title }}"
                      class="aspect-video w-full object-cover"
@@ -313,36 +291,17 @@
             {!! $safeContent !!}
         </div>
 
-        <!-- Tags List -->
-        @if ($post->tags->isNotEmpty())
-            <div class="border-t-2 border-line-strong pt-5 space-y-2 font-mono">
-                <p class="text-xs font-bold uppercase tracking-wider text-ink">Từ khóa liên quan:</p>
-                <div class="flex flex-wrap gap-2">
-                    @foreach ($post->tags as $tag)
-                        <a href="{{ route('news.index', ['tag' => $tag->slug]) }}"
-                           class="inline-flex items-center gap-1 border border-line bg-paper px-3 py-1 text-xs text-ink transition-colors hover:border-line-strong hover:bg-lime font-bold">
-                            <span>#{{ $tag->name }}</span>
-                        </a>
-                    @endforeach
-                </div>
-            </div>
-        @endif
-
         <!-- Author Profile Box Card -->
-        <div id="author-box" class="border-2 border-line-strong bg-paper p-5 shadow-brutal-sm">
+        <div id="author-box" class="border border-line bg-paper p-5 shadow-brutal-sm">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div class="flex items-center gap-3.5">
-                    @if ($post->author->avatar)
-                        <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($post->author->avatar) }}" alt="{{ $post->author->name }}" class="size-12 rounded-none object-cover border-2 border-line-strong">
-                    @else
-                        <span class="grid size-12 place-items-center bg-ink text-base font-bold font-mono text-lime border-2 border-ink">
-                            {{ mb_strtoupper(mb_substr($post->author->name, 0, 1)) }}
-                        </span>
-                    @endif
+                    <span class="grid size-12 place-items-center bg-[#1D4ED8] text-base font-bold font-mono text-white rounded-full select-none" aria-hidden="true">
+                        {{ mb_strtoupper(mb_substr($post->author->name, 0, 1)) }}
+                    </span>
                     <div>
                         <div class="flex items-center gap-2">
                             <h3 class="text-sm font-black text-ink">{{ $post->author->name }}</h3>
-                            <span class="border border-line-strong bg-lime px-2 py-0.5 text-[10px] font-bold font-mono uppercase tracking-wider text-ink shadow-2xs">
+                            <span class="border border-line-strong bg-lime px-2 py-0.5 text-[10px] font-bold font-mono uppercase tracking-wider text-white shadow-2xs">
                                 {{ $post->author->role?->value ?? 'Tác giả' }}
                             </span>
                         </div>
@@ -376,16 +335,12 @@
         <!-- Add Comment Form -->
         @auth
             @if (auth()->user()->hasVerifiedEmail())
-                <form action="{{ route('comments.store', $post) }}" method="POST" class="border-2 border-line-strong bg-surface p-4 shadow-brutal-sm font-sans">
+                <form action="{{ route('comments.store', $post) }}" method="POST" class="border border-line bg-surface p-4 shadow-brutal-sm font-sans">
                     @csrf
                     <div class="flex items-start gap-3">
-                        @if (auth()->user()->avatar)
-                            <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url(auth()->user()->avatar) }}" alt="Avatar" class="size-8 rounded-none object-cover border border-line-strong shrink-0">
-                        @else
-                            <span class="grid size-8 shrink-0 place-items-center bg-ink text-xs font-bold font-mono text-lime border border-ink">
-                                {{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
-                            </span>
-                        @endif
+                        <span class="grid size-8 shrink-0 place-items-center bg-[#1D4ED8] text-xs font-bold font-mono text-white rounded-full select-none" aria-hidden="true">
+                            {{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
+                        </span>
 
                         <div class="flex-1 space-y-2.5">
                             <textarea name="content"
@@ -398,7 +353,7 @@
                             <div class="flex items-center justify-between text-xs text-ink-muted font-mono">
                                 <span class="text-[11px]">Tối đa 1000 ký tự. Vui lòng tuân thủ quy chế kiểm duyệt.</span>
                                 <button type="submit"
-                                        class="inline-flex cursor-pointer items-center gap-1.5 border border-line-strong bg-lime px-4 py-2 text-xs font-bold text-ink shadow-brutal-sm transition-colors hover:bg-lime-hover active:scale-[0.98]">
+                                        class="inline-flex cursor-pointer items-center gap-1.5 border border-line-strong bg-lime px-4 py-2 text-xs font-bold text-white shadow-brutal-sm transition-colors hover:bg-ink hover:text-white active:scale-[0.98]">
                                     <span>Gửi bình luận</span>
                                 </button>
                             </div>
@@ -406,9 +361,9 @@
                     </div>
                 </form>
             @else
-                <div class="border-2 border-line-strong bg-amber-50 px-4 py-3 text-xs text-amber-900 flex items-center justify-between gap-3 shadow-2xs">
+                <div class="border-2 border-line-strong bg-[#dce6f2] px-4 py-3 text-xs text-ink flex items-center justify-between gap-3 shadow-2xs">
                     <p>Bạn cần hoàn tất xác minh email tài khoản để tham gia gửi bình luận.</p>
-                    <a href="{{ route('verification.notice') }}" class="shrink-0 font-bold underline hover:text-ink">Xác minh ngay</a>
+                    <a href="{{ route('verification.notice') }}" class="shrink-0 font-bold underline hover:text-[#587dae]">Xác minh ngay</a>
                 </div>
             @endif
         @else
@@ -421,11 +376,11 @@
         <div class="space-y-3">
             @forelse ($comments as $comment)
                 <div class="space-y-2">
-                    <x-comment-item :comment="$comment" :post="$post" :report-reasons="$reportReasons" />
+                    <x-comment-item :comment="$comment" :post="$post" />
                     @if ($comment->replies->isNotEmpty())
                         <div class="ml-3 sm:ml-6 space-y-2 border-l-2 border-line pl-2.5 sm:pl-3.5">
                             @foreach ($comment->replies as $reply)
-                                <x-comment-item :comment="$reply" :post="$post" :report-reasons="$reportReasons" :is-reply="true" />
+                                <x-comment-item :comment="$reply" :post="$post" :is-reply="true" />
                             @endforeach
                         </div>
                     @endif

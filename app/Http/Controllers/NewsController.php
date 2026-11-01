@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\CommentReportReason;
+use App\Enums\CategoryStatus;
 use App\Enums\CommentStatus;
 use App\Models\Category;
 use App\Models\Comment;
-use App\Models\Favorite;
 use App\Models\Post;
 use App\Services\PostContentSanitizer;
 use App\Services\PostViewRecorder;
@@ -24,17 +23,27 @@ class NewsController extends Controller
         $filters = $request->validate([
             'q' => ['nullable', 'string', 'max:100'],
             'category' => ['nullable', 'string', 'max:255', Rule::exists('categories', 'slug')->whereNull('deleted_at')],
-            'tag' => ['nullable', 'string', 'max:255', Rule::exists('tags', 'slug')],
             'sort' => ['nullable', Rule::in(['latest', 'popular'])],
         ]);
 
         $selectedCategory = isset($filters['category'])
             ? Category::query()
                 ->where('slug', $filters['category'])
-                ->with('children:id,parent_id')
+                ->with([
+                    'children' => fn ($q) => $q->where('status', CategoryStatus::Active)->orderBy('name'),
+                    'parent:id,name,slug',
+                    'parent.children' => fn ($q) => $q->where('status', CategoryStatus::Active)->orderBy('name'),
+                ])
                 ->first()
             : null;
         $categoryIds = $selectedCategory?->selfAndChildIds();
+
+        $parentCategories = Category::query()
+            ->where('status', CategoryStatus::Active)
+            ->whereNull('parent_id')
+            ->with(['children' => fn ($q) => $q->where('status', CategoryStatus::Active)->orderBy('name')])
+            ->orderBy('name')
+            ->get();
 
         $posts = Post::query()
             ->publiclyVisible()
@@ -47,11 +56,10 @@ class NewsController extends Controller
                 });
             })
             ->when($categoryIds !== null, fn (Builder $query): Builder => $query->whereIn('category_id', $categoryIds))
-            ->when($filters['tag'] ?? null, fn ($query, string $slug) => $query->whereHas('tags', fn ($query) => $query->where('slug', $slug)))
             ->when(
                 ($filters['sort'] ?? 'latest') === 'popular',
-                fn ($query) => $query->orderByDesc('view_count')->orderByDesc('id'),
-                fn ($query) => $query->orderByDesc('published_at')->orderByDesc('id'),
+                fn (Builder $query): Builder => $query->orderByDesc('view_count')->orderByDesc('id'),
+                fn (Builder $query): Builder => $query->orderByDesc('published_at')->orderByDesc('id'),
             )
             ->paginate(12)
             ->withQueryString();
@@ -60,10 +68,11 @@ class NewsController extends Controller
             'posts' => $posts,
             'filters' => $filters,
             'selectedCategory' => $selectedCategory,
+            'parentCategories' => $parentCategories,
         ]);
     }
 
-    /** Show only currently public posts, record a deduplicated view, and load related articles. */
+    /** Show only currently public posts and load related articles. */
     public function show(
         Request $request,
         string $slug,
@@ -73,7 +82,7 @@ class NewsController extends Controller
         $post = Post::query()
             ->publiclyVisible()
             ->where('slug', $slug)
-            ->with(['author:id,name,avatar', 'category:id,name,slug', 'tags:id,name,slug'])
+            ->with(['author:id,name', 'category:id,name,slug'])
             ->firstOrFail();
 
         $ipHash = $request->ip() === null ? null : hash_hmac('sha256', $request->ip(), config('app.key'));
@@ -86,21 +95,11 @@ class NewsController extends Controller
 
         $views->record($post, $request->user(), $sessionIdentity, $ipHash);
 
-        $tagIds = $post->tags->modelKeys();
         $relatedPosts = Post::query()
             ->publiclyVisible()
             ->whereKeyNot($post->id)
-            ->where(function (Builder $query) use ($post, $tagIds): void {
-                $query->where('category_id', $post->category_id)
-                    ->when($tagIds !== [], fn (Builder $query): Builder => $query->orWhereHas(
-                        'tags',
-                        fn (Builder $query): Builder => $query->whereKey($tagIds),
-                    ));
-            })
-            ->withCount(['tags as matching_tags_count' => fn (Builder $query): Builder => $query->whereKey($tagIds)])
+            ->where('category_id', $post->category_id)
             ->with(['author:id,name', 'category:id,name,slug'])
-            ->orderByDesc('matching_tags_count')
-            ->orderByRaw('CASE WHEN category_id = ? THEN 0 ELSE 1 END', [$post->category_id])
             ->latest('published_at')
             ->limit(4)
             ->get();
@@ -123,7 +122,7 @@ class NewsController extends Controller
                         $query->where('status', CommentStatus::Visible)
                             ->orWhereNotNull('deleted_at');
                     })
-                    ->with(['user:id,name', 'replyTo.user:id,name'])
+                    ->with('user:id,name')
                     ->oldest('created_at')
                     ->oldest('id'),
             ])
@@ -135,12 +134,9 @@ class NewsController extends Controller
             'post' => $post,
             'relatedPosts' => $relatedPosts,
             'comments' => $comments,
-            'reportReasons' => CommentReportReason::cases(),
-            'isFavorited' => $request->user()?->hasVerifiedEmail()
-                && Favorite::query()->whereBelongsTo($request->user())->whereBelongsTo($post)->exists(),
             'thumbnailUrl' => $post->thumbnail === null ? null : Storage::disk('public')->url($post->thumbnail),
             'openGraphImageUrl' => $post->thumbnail === null ? null : url(Storage::disk('public')->url($post->thumbnail)),
-            'metaDescription' => $post->meta_description ?: Str::limit((string) $post->summary, 160, ''),
+            'metaDescription' => Str::limit((string) $post->summary, 160, ''),
             'safeContent' => $contentSanitizer->sanitize($post->content),
         ]);
     }

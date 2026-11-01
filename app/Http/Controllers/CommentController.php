@@ -6,10 +6,8 @@ use App\Enums\CommentModerationAction;
 use App\Enums\UserRole;
 use App\Http\Requests\Comment\StoreCommentRequest;
 use App\Http\Requests\Comment\UpdateCommentRequest;
-use App\Models\ActivityLog;
 use App\Models\Comment;
 use App\Models\Post;
-use App\Notifications\CommentRepliedNotification;
 use App\Services\CommentModerationService;
 use App\Services\CommentThreadService;
 use Illuminate\Http\RedirectResponse;
@@ -26,18 +24,6 @@ class CommentController extends Controller
             : null;
 
         $comment = $threads->create($post, $request->user(), $request->string('content')->toString(), $replyTo);
-
-        ActivityLog::query()->create([
-            'user_id' => $request->user()->id,
-            'action' => 'comment.created',
-            'subject_type' => Post::class,
-            'subject_id' => $post->id,
-            'description' => 'Đăng bình luận tại bài viết: '.$post->title,
-        ]);
-
-        if ($replyTo !== null && $replyTo->user_id !== $request->user()->id) {
-            $replyTo->user?->notify(new CommentRepliedNotification($comment, $post, $request->user()));
-        }
 
         return back()->with('status', 'Đã đăng bình luận.');
     }

@@ -15,7 +15,7 @@ class Comment extends Model
     /** @use HasFactory<CommentFactory> */
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['post_id', 'user_id', 'parent_id', 'reply_to_id', 'content', 'status'];
+    protected $fillable = ['post_id', 'user_id', 'parent_id', 'content', 'status'];
 
     protected function casts(): array
     {
@@ -37,18 +37,8 @@ class Comment extends Model
         return $this->belongsTo(Comment::class, 'parent_id')->withTrashed();
     }
 
-    public function replyTo(): BelongsTo
-    {
-        return $this->belongsTo(Comment::class, 'reply_to_id')->withTrashed();
-    }
-
     public function replies(): HasMany
     {
         return $this->hasMany(Comment::class, 'parent_id');
-    }
-
-    public function reports(): HasMany
-    {
-        return $this->hasMany(CommentReport::class);
     }
 }

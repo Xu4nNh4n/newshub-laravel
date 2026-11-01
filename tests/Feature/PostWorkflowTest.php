@@ -6,7 +6,6 @@ use App\Enums\PostStatus;
 use App\Enums\UserRole;
 use App\Models\Category;
 use App\Models\Post;
-use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
@@ -15,11 +14,10 @@ class PostWorkflowTest extends TestCase
 {
     use LazilyRefreshDatabase;
 
-    public function test_verified_author_can_create_draft_with_tags(): void
+    public function test_verified_author_can_create_a_draft(): void
     {
         $user = User::factory()->create(['role' => UserRole::Author]);
         $category = Category::factory()->create();
-        $tag = Tag::factory()->create();
 
         $response = $this->actingAs($user)->post(route('author.posts.store'), [
             'title' => 'Bài viết thử nghiệm',
@@ -27,7 +25,6 @@ class PostWorkflowTest extends TestCase
             'summary' => 'Tóm tắt',
             'content' => 'Nội dung đầy đủ',
             'category_id' => $category->id,
-            'tag_ids' => [$tag->id],
         ]);
 
         $post = Post::query()->firstOrFail();
@@ -35,41 +32,29 @@ class PostWorkflowTest extends TestCase
         $this->assertSame($user->id, $post->author_id);
         $this->assertSame(PostStatus::Draft, $post->status);
         $this->assertSame('bai-viet-thu-nghiem', $post->slug);
-        $this->assertDatabaseHas('post_tag', ['post_id' => $post->id, 'tag_id' => $tag->id]);
     }
 
-    public function test_author_can_create_post_with_normalized_dynamic_tags(): void
+    public function test_author_can_create_a_post_without_tags(): void
     {
         $author = User::factory()->create(['role' => UserRole::Author]);
         $category = Category::factory()->create();
-        $existingTag = Tag::factory()->create();
 
         $response = $this->actingAs($author)->post(route('author.posts.store'), [
-            'title' => 'Bài viết có thẻ động',
+            'title' => 'Bài viết không cần thẻ',
             'slug' => '',
             'content' => '<p>Nội dung bài viết.</p>',
             'category_id' => $category->id,
-            'tag_ids' => [$existingTag->id],
-            'tag_names' => [' OpenAI o3 ', '<b>Triển lãm CES 2026</b>', 'OpenAI o3'],
         ]);
 
-        $post = Post::query()->where('title', 'Bài viết có thẻ động')->firstOrFail();
+        $post = Post::query()->where('title', 'Bài viết không cần thẻ')->firstOrFail();
         $response->assertRedirect(route('author.posts.edit', $post));
-        $this->assertDatabaseHas('tags', ['name' => 'OpenAI o3', 'slug' => 'openai-o3']);
-        $this->assertDatabaseHas('tags', ['name' => 'Triển lãm CES 2026', 'slug' => 'trien-lam-ces-2026']);
-        $this->assertSame(
-            [$existingTag->id, ...Tag::query()->whereIn('slug', ['openai-o3', 'trien-lam-ces-2026'])->pluck('id')->all()],
-            $post->tags()->orderBy('tags.id')->pluck('tags.id')->all(),
-        );
-        $this->assertSame(3, $post->tags()->count());
     }
 
-    public function test_author_can_add_a_dynamic_tag_when_updating_a_post(): void
+    public function test_author_can_update_post_without_a_tag_manager(): void
     {
         $author = User::factory()->create(['role' => UserRole::Author]);
         $post = Post::factory()->create([
             'author_id' => $author,
-            'show_thumbnail_in_post' => false,
         ]);
 
         $response = $this->actingAs($author)->put(route('author.posts.update', $post), [
@@ -77,16 +62,12 @@ class PostWorkflowTest extends TestCase
             'slug' => $post->slug,
             'content' => '<p>Nội dung cập nhật.</p>',
             'category_id' => $post->category_id,
-            'tag_names' => ['Tin nóng 2026'],
         ]);
 
-        $tag = Tag::query()->where('slug', 'tin-nong-2026')->firstOrFail();
         $response->assertRedirect();
-        $this->assertDatabaseHas('post_tag', ['post_id' => $post->id, 'tag_id' => $tag->id]);
-        $this->assertFalse($post->refresh()->show_thumbnail_in_post);
     }
 
-    public function test_post_persists_thumbnail_visibility_choice_and_sanitized_content(): void
+    public function test_post_persists_sanitized_content(): void
     {
         $author = User::factory()->create(['role' => UserRole::Author]);
         $category = Category::factory()->create();
@@ -96,11 +77,9 @@ class PostWorkflowTest extends TestCase
             'slug' => '',
             'content' => '<h2 onclick="alert(1)">Tiêu đề</h2><script>alert(2)</script>',
             'category_id' => $category->id,
-            'show_thumbnail_in_post' => '0',
         ])->assertRedirect();
 
         $post = Post::query()->where('title', 'Bài viết HTML an toàn')->firstOrFail();
-        $this->assertFalse($post->show_thumbnail_in_post);
         $this->assertSame('<h2>Tiêu đề</h2>', $post->content);
     }
 
@@ -121,7 +100,6 @@ class PostWorkflowTest extends TestCase
 
         $response->assertRedirect(route('author.posts.index'));
         $this->assertSame(PostStatus::PendingReview, $post->refresh()->status);
-        $this->assertDatabaseHas('activity_logs', ['action' => 'post.submitted', 'subject_id' => $post->id]);
     }
 
     public function test_author_can_filter_own_posts_by_workflow_status(): void
@@ -157,7 +135,6 @@ class PostWorkflowTest extends TestCase
         $response->assertRedirect();
         $this->assertSame(PostStatus::Rejected, $post->refresh()->status);
         $this->assertSame('Cần bổ sung nguồn tin.', $post->rejection_reason);
-        $this->assertDatabaseHas('activity_logs', ['action' => 'post.rejected', 'subject_id' => $post->id]);
     }
 
     public function test_admin_can_schedule_approved_post_without_publishing_it_early(): void
@@ -173,7 +150,6 @@ class PostWorkflowTest extends TestCase
         $response->assertRedirect();
         $this->assertSame(PostStatus::Published, $post->refresh()->status);
         $this->assertFalse(Post::publiclyVisible()->whereKey($post)->exists());
-        $this->assertDatabaseHas('activity_logs', ['action' => 'post.approved', 'subject_id' => $post->id]);
     }
 
     public function test_admin_can_publish_a_new_post_directly(): void
@@ -195,10 +171,6 @@ class PostWorkflowTest extends TestCase
             ->assertSessionHas('status', 'Đã xuất bản bài viết thành công.');
         $this->assertSame(PostStatus::Published, $post->status);
         $this->assertSame('2026-10-04 09:00:00', $post->published_at?->format('Y-m-d H:i:s'));
-        $this->assertDatabaseHas('activity_logs', [
-            'action' => 'post.published',
-            'subject_id' => $post->id,
-        ]);
     }
 
     public function test_author_publish_action_is_saved_as_a_draft(): void
@@ -218,10 +190,6 @@ class PostWorkflowTest extends TestCase
         $response->assertRedirect(route('author.posts.edit', $post));
         $this->assertSame(PostStatus::Draft, $post->status);
         $this->assertNull($post->published_at);
-        $this->assertDatabaseMissing('activity_logs', [
-            'action' => 'post.published',
-            'subject_id' => $post->id,
-        ]);
     }
 
     public function test_admin_can_quick_publish_only_their_own_draft(): void

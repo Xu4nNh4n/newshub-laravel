@@ -9,6 +9,9 @@
     <meta property="og:title" content="{{ $title ?? 'NewsHub - Tin tức mới nhất' }}">
     <meta property="og:description" content="{{ $metaDescription ?? 'Tin tức mới nhất, chính xác và đáng tin cậy.' }}">
     @isset($ogImage)<meta property="og:image" content="{{ $ogImage }}">@endisset
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
     @vite('resources/css/app.css')
     @stack('head')
 </head>
@@ -36,7 +39,7 @@
                 </a>
                 @auth
                     @if(auth()->user()->role === \App\Enums\UserRole::User)
-                        <a href="{{ route('dashboard') }}" class="hidden sm:inline font-bold text-ink hover:text-pink transition-colors">
+                        <a href="{{ route('dashboard') }}" class="hidden sm:inline font-bold text-ink hover:text-[#587dae] transition-colors">
                             Ứng tuyển Tác giả &rarr;
                         </a>
                     @endif
@@ -64,14 +67,14 @@
                 </button>
 
                 <a href="{{ route('home') }}" class="group flex items-center gap-2.5">
-                    <span class="grid size-9 place-items-center bg-ink text-lime border border-ink font-black text-lg transition-transform group-hover:bg-lime group-hover:text-ink">
+                    <span class="grid size-9 shrink-0 place-items-center bg-lime text-white border border-line-strong font-serif font-black text-lg shadow-brutal-sm transition-transform group-hover:scale-105 select-none">
                         N
                     </span>
-                    <div>
-                        <span class="block text-xl font-black tracking-tight text-ink">
-                            News<span class="underline decoration-lime decoration-4 underline-offset-4">Hub</span>
+                    <div class="leading-none">
+                        <span class="block text-xl font-serif font-bold tracking-tight text-[#1D4ED8]">
+                            NewsHub
                         </span>
-                        <span class="hidden sm:block text-[9px] font-mono font-bold uppercase tracking-widest text-ink-muted">
+                        <span class="hidden sm:block text-[9px] font-sans font-bold uppercase tracking-widest text-[#6B7280] mt-1">
                             Editorial Newsroom
                         </span>
                     </div>
@@ -93,95 +96,10 @@
             <!-- User / Auth Actions -->
             <div class="flex items-center gap-2 sm:gap-3">
                 @auth
-                    <!-- Saved posts quick button -->
-                    <a href="{{ route('favorites.index') }}"
-                       title="Bài viết đã lưu"
-                       class="grid size-9 place-items-center rounded-none border border-line bg-surface text-ink transition-all hover:border-line-strong hover:bg-paper hover:shadow-brutal-sm focus-visible:outline-2 focus-visible:outline-ink">
-                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path d="M6 3h12v18l-6-4-6 4z"/>
-                        </svg>
-                    </a>
-
-                    <!-- Notification Bell Dropdown -->
-                    @php
-                        $unreadNotificationsCount = auth()->user()->unreadNotifications()->count();
-                        $recentNotifications = auth()->user()->notifications()->take(5)->get();
-                    @endphp
-                    <div class="relative" data-notification-menu>
-                        <button type="button"
-                                data-notification-trigger
-                                aria-expanded="false"
-                                aria-label="Thông báo"
-                                title="Thông báo"
-                                class="relative grid size-9 place-items-center rounded-none border border-line bg-surface text-ink transition-all hover:border-line-strong hover:bg-paper hover:shadow-brutal-sm focus-visible:outline-2 focus-visible:outline-ink cursor-pointer">
-                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-                            </svg>
-                            @if ($unreadNotificationsCount > 0)
-                                <span class="absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center border border-line-strong bg-lime px-1 text-[9px] font-bold text-ink font-mono shadow-xs">
-                                    {{ $unreadNotificationsCount > 9 ? '9+' : $unreadNotificationsCount }}
-                                </span>
-                            @endif
-                        </button>
-
-                        <!-- Floating Notification Panel -->
-                        <div data-notification-panel
-                             class="pointer-events-none opacity-0 invisible translate-y-1 transition-all duration-150 ease-out absolute right-0 top-full pt-2 z-50 w-80 sm:w-96 max-w-[95vw]">
-                            <div class="rounded-none border-2 border-line-strong bg-surface p-3 shadow-brutal divide-y divide-line">
-                                <div class="flex items-center justify-between pb-2 px-1">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-xs font-bold uppercase tracking-wider font-mono text-ink">Thông báo</span>
-                                        @if ($unreadNotificationsCount > 0)
-                                            <span class="border border-line-strong bg-lime px-1.5 py-0.2 text-[10px] font-bold font-mono text-ink">
-                                                {{ $unreadNotificationsCount }} mới
-                                            </span>
-                                        @endif
-                                    </div>
-                                    @if ($unreadNotificationsCount > 0)
-                                        <form method="POST" action="{{ route('notifications.mark-all-read') }}">
-                                            @csrf
-                                            <button type="submit" class="text-[11px] font-mono text-ink hover:underline cursor-pointer">
-                                                Đọc tất cả
-                                            </button>
-                                        </form>
-                                    @endif
-                                </div>
-
-                                <div class="py-1 divide-y divide-line-light max-h-72 overflow-y-auto">
-                                    @forelse ($recentNotifications as $notif)
-                                        @php
-                                            $nData = $notif->data;
-                                            $isNUnread = is_null($notif->read_at);
-                                        @endphp
-                                        <a href="{{ route('notifications.read', $notif->id) }}"
-                                           class="flex items-start gap-2.5 p-2 transition-colors {{ $isNUnread ? 'bg-lime/10 hover:bg-lime/20' : 'hover:bg-paper' }}">
-                                            <span class="mt-1 size-2 shrink-0 border border-ink {{ $isNUnread ? 'bg-lime' : 'bg-transparent' }}"></span>
-                                            <div class="min-w-0 flex-1 space-y-0.5">
-                                                <p class="text-xs font-bold text-ink truncate">{{ $nData['title'] ?? 'Thông báo' }}</p>
-                                                <p class="text-[11px] text-ink-muted line-clamp-2 leading-relaxed">{{ $nData['message'] ?? '' }}</p>
-                                                <p class="text-[10px] text-ink-light font-mono">{{ $notif->created_at->diffForHumans() }}</p>
-                                            </div>
-                                        </a>
-                                    @empty
-                                        <div class="py-6 text-center text-xs font-mono text-ink-muted">
-                                            Không có thông báo mới
-                                        </div>
-                                    @endforelse
-                                </div>
-
-                                <div class="pt-2 text-center">
-                                    <a href="{{ route('notifications.index') }}" class="block text-xs font-bold font-mono text-ink hover:underline transition-colors">
-                                        Xem toàn bộ thông báo &rarr;
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     @if(auth()->user()->hasVerifiedEmail() && in_array(auth()->user()->role, [\App\Enums\UserRole::Author, \App\Enums\UserRole::Admin], true))
                         <!-- Quick Post Creation for Authors/Admins -->
                         <a href="{{ route('author.posts.create') }}"
-                           class="hidden sm:inline-flex min-h-9 items-center gap-1.5 rounded-none bg-lime border border-line-strong px-3 py-1.5 text-xs font-bold text-ink shadow-brutal-sm hover:bg-lime-hover transition-colors">
+                           class="hidden sm:inline-flex min-h-9 items-center gap-1.5 rounded-none bg-lime border border-line-strong px-3 py-1.5 text-xs font-bold text-white shadow-brutal-sm hover:bg-ink hover:text-white transition-colors">
                             <svg class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
                             </svg>
@@ -196,13 +114,9 @@
                                 aria-expanded="false"
                                 aria-label="Mở menu người dùng"
                                 class="group flex items-center gap-2 rounded-none border border-line bg-surface py-1 pl-1 pr-2.5 text-xs text-ink transition-all hover:border-line-strong hover:bg-paper hover:shadow-brutal-sm focus-visible:outline-2 focus-visible:outline-ink cursor-pointer">
-                            @if (auth()->user()->avatar)
-                                <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url(auth()->user()->avatar) }}" alt="Avatar" class="size-7 rounded-none object-cover border border-line-strong">
-                            @else
-                                <span class="grid size-7 place-items-center rounded-none bg-ink text-xs font-bold font-mono text-lime border border-ink">
-                                    {{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
-                                </span>
-                            @endif
+                            <span class="grid size-7 place-items-center rounded-full bg-[#1D4ED8] text-xs font-bold font-mono text-white select-none">
+                                {{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
+                            </span>
                             <span class="hidden md:inline-block max-w-[120px] truncate font-bold text-ink">
                                 {{ auth()->user()->name }}
                             </span>
@@ -218,13 +132,9 @@
                                 <!-- User Header Identity -->
                                 <div class="px-2.5 py-2">
                                     <div class="flex items-center gap-2.5">
-                                        @if (auth()->user()->avatar)
-                                            <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url(auth()->user()->avatar) }}" alt="Avatar" class="size-9 rounded-none object-cover border border-line-strong">
-                                        @else
-                                            <span class="grid size-9 place-items-center rounded-none bg-ink text-xs font-bold font-mono text-lime border border-ink">
-                                                {{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
-                                            </span>
-                                        @endif
+                                        <span class="grid size-9 place-items-center rounded-full bg-[#1D4ED8] text-xs font-bold font-mono text-white select-none">
+                                            {{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
+                                        </span>
                                         <div class="min-w-0 flex-1">
                                             <p class="truncate text-xs font-bold text-ink">{{ auth()->user()->name }}</p>
                                             <p class="truncate text-[11px] font-mono text-ink-muted">{{ auth()->user()->email }}</p>
@@ -309,30 +219,6 @@
                                         <span>Hồ sơ & Mật khẩu</span>
                                     </a>
 
-                                    <a href="{{ route('favorites.index') }}"
-                                       class="flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
-                                        <svg class="size-4 text-ink-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                                        </svg>
-                                        <span>Bài viết đã lưu</span>
-                                    </a>
-
-                                    <a href="{{ route('reading-history.index') }}"
-                                       class="flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
-                                        <svg class="size-4 text-ink-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                                            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                                        </svg>
-                                        <span>Bài viết đã đọc</span>
-                                    </a>
-
-                                    <a href="{{ route('profile.activity') }}"
-                                       class="flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
-                                        <svg class="size-4 text-ink-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                                            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0 1 18 0z"/>
-                                        </svg>
-                                        <span>Lịch sử hoạt động</span>
-                                    </a>
-
                                     <a href="{{ route('profile.comments') }}"
                                        class="flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
                                         <svg class="size-4 text-ink-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -359,10 +245,10 @@
                         </div>
                     </div>
                 @else
-                    <a href="{{ route('login') }}" class="inline-flex min-h-9 items-center justify-center border border-line-strong bg-surface px-3.5 py-1.5 text-xs font-bold text-ink transition-all hover:bg-paper hover:shadow-brutal-sm focus-visible:outline-2 focus-visible:outline-ink">
+                    <a href="{{ route('login') }}" class="inline-flex min-h-9 items-center justify-center border-2 border-line-strong bg-surface px-3.5 py-1.5 text-xs font-bold text-ink shadow-brutal-sm transition-all hover:bg-ink hover:text-white focus-visible:outline-2 focus-visible:outline-ink">
                         Đăng nhập
                     </a>
-                    <a href="{{ route('register') }}" class="inline-flex min-h-9 items-center justify-center border border-line-strong bg-lime px-4 py-1.5 text-xs font-bold text-ink shadow-brutal-sm transition-all hover:bg-lime-hover focus-visible:outline-2 focus-visible:outline-ink">
+                    <a href="{{ route('register') }}" class="inline-flex min-h-9 items-center justify-center border-2 border-line-strong bg-lime px-4 py-1.5 text-xs font-bold text-white shadow-brutal-sm transition-all hover:bg-ink hover:text-white focus-visible:outline-2 focus-visible:outline-ink">
                         Đăng ký
                     </a>
                 @endauth
@@ -439,11 +325,11 @@
         <nav class="border-t border-line bg-paper relative z-30" aria-label="Chuyên mục tin tức">
             <div class="mx-auto flex max-w-7xl items-center justify-between gap-1 px-4 py-1 sm:px-6 lg:px-8 text-xs font-mono font-medium">
                 <!-- Left Nav Items -->
-                <div class="flex items-center gap-0.5 py-0.5 overflow-x-auto scrollbar-none">
+                <div class="flex items-center gap-1 sm:gap-2 py-0.5 overflow-x-auto sm:overflow-visible scrollbar-none">
                     <a href="{{ route('home') }}" @class([
-                        'flex items-center gap-1.5 px-3 py-1.5 transition-colors shrink-0 uppercase tracking-wider',
-                        'bg-ink text-lime font-bold shadow-xs' => request()->routeIs('home'),
-                        'text-ink hover:bg-surface hover:text-ink font-semibold' => ! request()->routeIs('home'),
+                        'flex items-center gap-1.5 px-3 py-1.5 transition-colors shrink-0 uppercase tracking-wider pb-1.5 -mb-px border-b-2',
+                        'border-lime text-lime font-bold' => request()->routeIs('home'),
+                        'border-transparent text-ink-muted hover:text-lime font-semibold' => ! request()->routeIs('home'),
                     ])>
                         <svg class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z" clip-rule="evenodd" />
@@ -452,9 +338,9 @@
                     </a>
 
                     <a href="{{ route('news.index', ['sort' => 'latest']) }}" @class([
-                        'px-3 py-1.5 transition-colors shrink-0 uppercase tracking-wider',
-                        'bg-ink text-lime font-bold shadow-xs' => request()->fullUrl() === route('news.index', ['sort' => 'latest']),
-                        'text-ink hover:bg-surface hover:text-ink font-semibold' => request()->fullUrl() !== route('news.index', ['sort' => 'latest']),
+                        'px-3 py-1.5 transition-colors shrink-0 uppercase tracking-wider pb-1.5 -mb-px border-b-2',
+                        'border-lime text-lime font-bold' => request()->fullUrl() === route('news.index', ['sort' => 'latest']),
+                        'border-transparent text-ink-muted hover:text-lime font-semibold' => request()->fullUrl() !== route('news.index', ['sort' => 'latest']),
                     ])>
                         Mới nhất
                     </a>
@@ -470,24 +356,24 @@
                         @if ($hasChildren)
                             <!-- Dropdown Parent Item -->
                             <div class="relative group/nav shrink-0" data-nav-dropdown>
-                                <a href="{{ route('news.index', ['category' => $item['slug']]) }}"
-                                   data-dropdown-trigger
-                                   aria-expanded="false"
-                                   aria-haspopup="true"
-                                   aria-label="Chuyên mục {{ $item['name'] }} và danh mục con"
-                                   @class([
-                                       'flex items-center gap-1 px-3 py-1.5 transition-colors cursor-pointer select-none uppercase tracking-wider',
-                                       'bg-ink text-lime font-bold' => $isParentActive,
-                                       'text-ink hover:bg-surface font-semibold' => ! $isParentActive,
-                                   ])>
+                                <button type="button"
+                                        data-dropdown-trigger
+                                        aria-expanded="false"
+                                        aria-haspopup="true"
+                                        aria-label="Chuyên mục {{ $item['name'] }} và danh mục con"
+                                        @class([
+                                            'flex items-center gap-1.5 px-3 py-1.5 transition-colors cursor-pointer select-none uppercase tracking-wider pb-1.5 -mb-px border-b-2 font-mono',
+                                            'border-lime text-lime font-bold' => $isParentActive,
+                                            'border-transparent text-ink-muted hover:text-lime font-semibold' => ! $isParentActive,
+                                        ])>
                                     <span>{{ $item['name'] }}</span>
                                     @if ($isChildSelected)
-                                        <span class="size-1.5 bg-lime border border-ink"></span>
+                                        <span class="size-1.5 bg-lime rounded-full"></span>
                                     @endif
-                                    <svg class="size-3 transition-transform duration-200 group-hover/nav:rotate-180" data-dropdown-chevron viewBox="0 0 20 20" fill="currentColor">
+                                    <svg class="size-3 text-ink-muted transition-transform duration-200 group-hover/nav:text-lime" data-dropdown-chevron viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
                                     </svg>
-                                </a>
+                                </button>
 
                                 <!-- Floating Dropdown Panel -->
                                 <div data-dropdown-panel
@@ -501,7 +387,7 @@
                                                 </span>
                                             </div>
                                             <a href="{{ route('news.index', ['category' => $item['slug']]) }}"
-                                               class="text-[11px] font-bold text-ink hover:underline flex items-center gap-1 font-mono">
+                                               class="text-[11px] font-bold text-lime hover:underline flex items-center gap-1 font-mono">
                                                 <span>Xem tất cả tin</span>
                                                 <span>&rarr;</span>
                                             </a>
@@ -519,11 +405,11 @@
                                                 <a href="{{ route('news.index', ['category' => $child['slug']]) }}"
                                                    @class([
                                                        'flex items-center justify-between border px-2.5 py-1.5 text-xs transition-all font-sans',
-                                                       'border-line-strong bg-lime text-ink font-bold shadow-2xs' => $isChildActive,
-                                                       'border-line-light text-ink hover:border-line-strong hover:bg-paper' => ! $isChildActive,
+                                                       'border-line-strong bg-lime text-white font-bold shadow-2xs' => $isChildActive,
+                                                       'border-line-light text-ink hover:border-line-strong hover:bg-lime hover:text-white' => ! $isChildActive,
                                                    ])>
                                                     <span class="truncate">{{ $child['name'] }}</span>
-                                                    <span class="text-ink-muted text-[10px] shrink-0 ml-1 font-mono">&rsaquo;</span>
+                                                    <span class="text-[10px] shrink-0 ml-1 font-mono">&rsaquo;</span>
                                                 </a>
                                             @endforeach
                                         </div>
@@ -533,9 +419,9 @@
                         @else
                             <a href="{{ route('news.index', ['category' => $item['slug']]) }}"
                                @class([
-                                   'px-3 py-1.5 transition-colors shrink-0 uppercase tracking-wider',
-                                   'bg-ink text-lime font-bold shadow-xs' => $isParentActive,
-                                   'text-ink hover:bg-surface font-semibold' => ! $isParentActive,
+                                   'px-3 py-1.5 transition-colors shrink-0 uppercase tracking-wider pb-1.5 -mb-px border-b-2 font-mono',
+                                   'border-lime text-lime font-bold' => $isParentActive,
+                                   'border-transparent text-ink-muted hover:text-lime font-semibold' => ! $isParentActive,
                                ])>
                                 {{ $item['name'] }}
                             </a>
@@ -548,8 +434,8 @@
                     <button type="button"
                             data-mega-trigger
                             aria-expanded="false"
-                            class="flex items-center gap-1.5 rounded-none border border-line-strong bg-surface px-2.5 py-1 text-xs font-bold font-mono uppercase tracking-wider text-ink hover:bg-lime transition-colors cursor-pointer select-none">
-                        <svg class="size-3.5 text-ink" viewBox="0 0 20 20" fill="currentColor">
+                            class="flex items-center gap-1.5 rounded-none border border-line-strong bg-surface px-2.5 py-1 text-xs font-bold font-mono uppercase tracking-wider text-ink hover:bg-ink hover:text-white transition-colors cursor-pointer select-none">
+                        <svg class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M3 4.25A2.25 2.25 0 015.25 2h1.5A2.25 2.25 0 019 4.25v1.5A2.25 2.25 0 016.75 8h-1.5A2.25 2.25 0 013 5.75v-1.5zm0 8.5A2.25 2.25 0 015.25 10.5h1.5A2.25 2.25 0 019 12.75v1.5A2.25 2.25 0 016.75 16.5h-1.5A2.25 2.25 0 013 14.25v-1.5zm8.5-8.5A2.25 2.25 0 0113.75 2h1.5A2.25 2.25 0 0117.5 4.25v1.5A2.25 2.25 0 0115.25 8h-1.5A2.25 2.25 0 0111.5 5.75v-1.5zm0 8.5a2.25 2.25 0 012.25-2.25h1.5a2.25 2.25 0 012.25 2.25v1.5a2.25 2.25 0 01-2.25 2.25h-1.5a2.25 2.25 0 01-2.25-2.25v-1.5z" clip-rule="evenodd" />
                         </svg>
                         <span>Sơ đồ chuyên mục</span>
@@ -604,7 +490,7 @@
 
     <!-- Mobile Navigation Drawer -->
     <div id="mobile-menu-overlay" class="fixed inset-0 z-50 hidden bg-ink/70 backdrop-blur-xs transition-opacity lg:hidden" aria-hidden="true"></div>
-    <div id="mobile-menu-drawer" class="fixed inset-y-0 left-0 z-50 w-72 -translate-x-full border-r-2 border-line-strong bg-paper p-5 transition-transform duration-200 ease-in-out lg:hidden flex flex-col justify-between">
+    <div id="mobile-menu-drawer" class="fixed inset-y-0 left-0 z-50 w-72 -translate-x-full border-r-2 border-line-strong bg-paper p-5 transition-transform duration-200 ease-in-out lg:hidden flex flex-col justify-between overflow-y-auto">
         <div class="space-y-5">
             <div class="flex items-center justify-between border-b border-line pb-4">
                 <span class="text-lg font-black tracking-tight text-ink">
@@ -650,13 +536,13 @@
                         <div class="space-y-0.5" data-mobile-accordion>
                             <div @class([
                                 'flex items-center justify-between px-2.5 py-1.5 text-xs font-medium transition-colors border',
-                                'border-line-strong bg-lime text-ink font-bold shadow-2xs' => $isParentActive,
+                                'border-line-strong bg-lime text-white font-bold shadow-2xs' => $isParentActive,
                                 'border-transparent text-ink hover:bg-surface' => ! $isParentActive,
                             ])>
                                 <a href="{{ route('news.index', ['category' => $parentItem['slug']]) }}" class="flex-1 flex items-center gap-1.5">
                                     <span>{{ $parentItem['name'] }}</span>
                                     @if ($isChildSelected)
-                                        <span class="size-1.5 bg-ink"></span>
+                                        <span class="size-1.5 bg-white"></span>
                                     @endif
                                 </a>
 
@@ -710,13 +596,9 @@
         <div class="border-t border-line pt-4 space-y-2">
             @auth
                 <div class="flex items-center gap-3 px-1 pb-3 border-b border-line mb-2">
-                    @if (auth()->user()->avatar)
-                        <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url(auth()->user()->avatar) }}" alt="Avatar" class="size-9 rounded-none object-cover border border-line-strong">
-                    @else
-                        <span class="grid size-9 place-items-center rounded-none bg-ink text-xs font-bold font-mono text-lime border border-ink">
-                            {{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
-                        </span>
-                    @endif
+                    <span class="grid size-9 place-items-center rounded-full bg-[#1D4ED8] text-xs font-bold font-mono text-white select-none">
+                        {{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
+                    </span>
                     <div class="min-w-0 flex-1">
                         <p class="truncate text-xs font-bold text-ink">{{ auth()->user()->name }}</p>
                         <p class="truncate text-[11px] font-mono text-ink-muted">{{ auth()->user()->email }}</p>
@@ -738,14 +620,8 @@
                 <a href="{{ route('profile.edit') }}" class="flex w-full items-center justify-center gap-2 border border-line bg-surface py-2 text-xs font-medium text-ink hover:bg-paper">
                     Hồ sơ cá nhân & Mật khẩu
                 </a>
-                <a href="{{ route('favorites.index') }}" class="flex w-full items-center justify-center gap-2 border border-line bg-surface py-2 text-xs font-medium text-ink hover:bg-paper">
-                    Bài viết đã lưu
-                </a>
-                <a href="{{ route('reading-history.index') }}" class="flex w-full items-center justify-center gap-2 border border-line bg-surface py-2 text-xs font-medium text-ink hover:bg-paper">
-                    Bài viết đã đọc
-                </a>
-                <a href="{{ route('profile.activity') }}" class="flex w-full items-center justify-center gap-2 border border-line bg-surface py-2 text-xs font-medium text-ink hover:bg-paper">
-                    Lịch sử hoạt động
+                <a href="{{ route('profile.comments') }}" class="flex w-full items-center justify-center gap-2 border border-line bg-surface py-2 text-xs font-medium text-ink hover:bg-paper">
+                    Bình luận của tôi
                 </a>
                 <form method="POST" action="{{ route('logout') }}" class="w-full pt-1">
                     @csrf
@@ -797,18 +673,23 @@
     </main>
 
     <!-- Professional Editorial News Portal Footer -->
-    <footer class="mt-auto border-t-2 border-line-strong bg-paper-light text-ink-muted text-xs">
+    <footer class="mt-auto border-t border-line bg-paper-light text-ink-muted text-xs">
         <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
             <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
                 <!-- Col 1: Editorial Info & Masthead -->
                 <div class="space-y-3">
-                    <div class="flex items-center gap-2">
-                        <span class="grid size-7 place-items-center bg-ink text-lime font-black text-sm border border-ink">
+                    <div class="flex items-center gap-2.5">
+                        <span class="grid size-8 shrink-0 place-items-center bg-lime text-white border border-line-strong font-serif font-black text-base shadow-brutal-sm select-none">
                             N
                         </span>
-                        <span class="text-base font-black tracking-tight text-ink">
-                            News<span class="underline decoration-lime decoration-3">Hub</span>
-                        </span>
+                        <div class="leading-none">
+                            <span class="block text-base font-serif font-bold tracking-tight text-[#1D4ED8]">
+                                NewsHub
+                            </span>
+                            <span class="block text-[8px] font-sans font-bold uppercase tracking-widest text-[#6B7280] mt-0.5">
+                                Editorial Newsroom
+                            </span>
+                        </div>
                     </div>
                     <p class="text-xs text-ink-muted leading-relaxed">
                         Báo điện tử đa phương tiện cung cấp thông tin thời sự, công nghệ, kinh tế và đời sống chính xác, nhanh chóng và khách quan.
@@ -838,9 +719,6 @@
                 <div class="space-y-3">
                     <h3 class="text-xs font-bold uppercase tracking-wider font-mono text-ink">Độc giả & Tác giả</h3>
                     <ul class="space-y-2 text-xs">
-                        <li><a href="{{ route('favorites.index') }}" class="hover:text-ink hover:underline transition-colors">Bài viết đã lưu</a></li>
-                        <li><a href="{{ route('reading-history.index') }}" class="hover:text-ink hover:underline transition-colors">Bài viết đã đọc</a></li>
-                        <li><a href="{{ route('profile.activity') }}" class="hover:text-ink hover:underline transition-colors">Lịch sử hoạt động</a></li>
                         <li><a href="{{ route('profile.comments') }}" class="hover:text-ink hover:underline transition-colors">Lịch sử bình luận</a></li>
                         <li><a href="{{ route('dashboard') }}" class="hover:text-ink hover:underline transition-colors">Đăng ký làm Tác giả / CTV</a></li>
                         <li><a href="{{ route('profile.edit') }}" class="hover:text-ink hover:underline transition-colors">Tài khoản & Thiết lập</a></li>
@@ -884,7 +762,7 @@
     <div id="universal-confirm-modal" class="fixed inset-0 z-50 hidden bg-ink/60 backdrop-blur-xs flex items-center justify-center p-4" aria-modal="true" role="dialog" aria-labelledby="confirm-modal-title">
         <div class="w-full max-w-md border-2 border-line-strong bg-surface p-6 shadow-brutal-lg animate-in fade-in zoom-in-95 duration-150">
             <div class="flex items-start gap-3">
-                <div id="confirm-modal-icon-container" class="grid size-10 shrink-0 place-items-center border-2 border-line-strong bg-lime text-ink">
+                <div id="confirm-modal-icon-container" class="grid size-10 shrink-0 place-items-center border-2 border-line-strong bg-lime text-white">
                     <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                         <path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
                     </svg>
@@ -898,7 +776,7 @@
                 <button type="button" id="confirm-modal-cancel-btn" class="border border-line-strong bg-surface px-4 py-2 text-xs font-bold text-ink hover:bg-paper cursor-pointer transition-colors">
                     Hủy bỏ
                 </button>
-                <button type="button" id="confirm-modal-confirm-btn" class="border border-line-strong bg-lime px-4 py-2 text-xs font-bold text-ink shadow-brutal-sm hover:bg-lime-hover cursor-pointer transition-colors">
+                <button type="button" id="confirm-modal-confirm-btn" class="border border-line-strong bg-lime px-4 py-2 text-xs font-bold text-white shadow-brutal-sm hover:bg-ink hover:text-white cursor-pointer transition-colors">
                     Đồng ý
                 </button>
             </div>
@@ -931,8 +809,8 @@
                     confirmBtn.className = 'border border-line-strong bg-danger text-white px-4 py-2 text-xs font-bold shadow-brutal-sm hover:opacity-90 cursor-pointer transition-colors';
                     iconContainer.className = 'grid size-10 shrink-0 place-items-center border-2 border-line-strong bg-rose-100 text-danger';
                 } else {
-                    confirmBtn.className = 'border border-line-strong bg-lime text-ink px-4 py-2 text-xs font-bold shadow-brutal-sm hover:bg-lime-hover cursor-pointer transition-colors';
-                    iconContainer.className = 'grid size-10 shrink-0 place-items-center border-2 border-line-strong bg-lime text-ink';
+                    confirmBtn.className = 'border border-line-strong bg-lime text-white px-4 py-2 text-xs font-bold shadow-brutal-sm hover:bg-ink hover:text-white cursor-pointer transition-colors';
+                    iconContainer.className = 'grid size-10 shrink-0 place-items-center border-2 border-line-strong bg-lime text-white';
                 }
 
                 modal.classList.remove('hidden');
@@ -1022,6 +900,28 @@
                 trigger?.setAttribute('aria-expanded', 'false');
                 chevron?.classList.remove('rotate-180');
             };
+
+            trigger?.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+                document.querySelectorAll('[data-nav-dropdown]').forEach(other => {
+                    if (other !== dropdown) {
+                        const oPanel = other.querySelector('[data-dropdown-panel]');
+                        const oTrigger = other.querySelector('[data-dropdown-trigger]');
+                        const oChevron = other.querySelector('[data-dropdown-chevron]');
+                        oPanel?.classList.add('pointer-events-none', 'opacity-0', 'invisible', '-translate-y-1');
+                        oPanel?.classList.remove('pointer-events-auto', 'opacity-100', 'visible', 'translate-y-0');
+                        oTrigger?.setAttribute('aria-expanded', 'false');
+                        oChevron?.classList.remove('rotate-180');
+                    }
+                });
+                if (isOpen) {
+                    closeDropdown();
+                } else {
+                    openDropdown();
+                }
+            });
 
             dropdown.addEventListener('mouseenter', openDropdown);
             dropdown.addEventListener('mouseleave', closeDropdown);
@@ -1137,53 +1037,192 @@
             }
         });
 
-        // Notification Dropdown Controller
-        document.querySelectorAll('[data-notification-menu]').forEach((menu) => {
-            const trigger = menu.querySelector('[data-notification-trigger]');
-            const panel = menu.querySelector('[data-notification-panel]');
+        // Custom Client-Side Inline Form Validation (Prevents ugly browser HTML5 popups)
+        document.addEventListener('invalid', (e) => {
+            // Prevent default browser tooltip bubble ("Please fill out this field")
+            e.preventDefault();
+            renderFieldInlineError(e.target);
+        }, true);
 
-            const openNotif = () => {
-                panel?.classList.remove('pointer-events-none', 'opacity-0', 'invisible', 'translate-y-1');
-                panel?.classList.add('pointer-events-auto', 'opacity-100', 'visible', 'translate-y-0');
-                trigger?.setAttribute('aria-expanded', 'true');
-            };
-
-            const closeNotif = () => {
-                panel?.classList.add('pointer-events-none', 'opacity-0', 'invisible', 'translate-y-1');
-                panel?.classList.remove('pointer-events-auto', 'opacity-100', 'visible', 'translate-y-0');
-                trigger?.setAttribute('aria-expanded', 'false');
-            };
-
-            trigger?.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const isOpen = trigger.getAttribute('aria-expanded') === 'true';
-                if (isOpen) {
-                    closeNotif();
-                } else {
-                    openNotif();
+        function getFieldLabelText(field) {
+            if (field.id) {
+                const label = document.querySelector(`label[for="${field.id}"]`);
+                if (label) {
+                    return label.textContent.replace(/[*:\n\r]/g, '').trim();
                 }
-            });
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('[data-notification-menu]')) {
-                document.querySelectorAll('[data-notification-menu]').forEach((menu) => {
-                    const panel = menu.querySelector('[data-notification-panel]');
-                    const trigger = menu.querySelector('[data-notification-trigger]');
-                    panel?.classList.add('pointer-events-none', 'opacity-0', 'invisible', 'translate-y-1');
-                    panel?.classList.remove('pointer-events-auto', 'opacity-100', 'visible', 'translate-y-0');
-                    trigger?.setAttribute('aria-expanded', 'false');
-                });
             }
-        });
+            const parentLabel = field.closest('label');
+            if (parentLabel) {
+                return parentLabel.textContent.replace(/[*:\n\r]/g, '').trim();
+            }
+            return '';
+        }
 
-        // Double submit prevention
+        function getSmartFieldErrorMessage(field) {
+            const v = field.validity;
+            const label = getFieldLabelText(field);
+
+            if (v.valueMissing) {
+                if (field.name === 'password_confirmation') {
+                    return 'Vui lòng xác nhận lại mật khẩu.';
+                }
+                if (field.type === 'password' || field.name === 'password') {
+                    return 'Vui lòng nhập mật khẩu.';
+                }
+                if (field.type === 'email' || field.name === 'email') {
+                    return 'Vui lòng nhập địa chỉ email.';
+                }
+                if (field.tagName === 'SELECT') {
+                    return label ? `Vui lòng chọn ${label.toLowerCase()}.` : 'Vui lòng chọn một mục trong danh sách.';
+                }
+                if (field.type === 'checkbox') {
+                    return 'Vui lòng đánh dấu chọn ô này để tiếp tục.';
+                }
+                if (field.tagName === 'TEXTAREA' || field.name === 'content') {
+                    return 'Vui lòng nhập nội dung.';
+                }
+                if (label) {
+                    return `Vui lòng nhập ${label.toLowerCase()}.`;
+                }
+                return 'Vui lòng không để trống trường này.';
+            }
+
+            if (v.typeMismatch) {
+                if (field.type === 'email') {
+                    return 'Địa chỉ email không hợp lệ (ví dụ: name@example.com).';
+                }
+                if (field.type === 'url') {
+                    return 'Vui lòng nhập đúng định dạng liên kết URL (ví dụ: https://example.com).';
+                }
+            }
+
+            if (v.tooShort) {
+                return `Vui lòng nhập tối thiểu ${field.minLength} ký tự (hiện có ${field.value.length} ký tự).`;
+            }
+
+            if (v.tooLong) {
+                return `Vui lòng không nhập quá ${field.maxLength} ký tự.`;
+            }
+
+            if (v.patternMismatch) {
+                return 'Dữ liệu nhập vào chưa đúng định dạng yêu cầu.';
+            }
+
+            return field.validationMessage || 'Dữ liệu không hợp lệ.';
+        }
+
+        function renderFieldInlineError(field) {
+            clearFieldInlineError(field);
+
+            field.classList.add('!border-danger', '!ring-1', '!ring-danger', 'bg-rose-50/20');
+
+            const msg = getSmartFieldErrorMessage(field);
+            const errorP = document.createElement('p');
+            errorP.className = 'custom-field-error mt-1.5 flex items-center gap-1.5 text-xs text-danger font-sans font-medium';
+            errorP.setAttribute('role', 'alert');
+            errorP.innerHTML = `
+                <svg class="size-3.5 shrink-0 text-danger" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                </svg>
+                <span>${msg}</span>
+            `;
+
+            // Insert after input wrapper (e.g., .relative with icon) or the field itself
+            const anchor = field.closest('.relative') || field;
+            anchor.insertAdjacentElement('afterend', errorP);
+
+            const onInputFix = () => {
+                if (field.checkValidity()) {
+                    clearFieldInlineError(field);
+                    field.removeEventListener('input', onInputFix);
+                    field.removeEventListener('change', onInputFix);
+                }
+            };
+            field.addEventListener('input', onInputFix);
+            field.addEventListener('change', onInputFix);
+        }
+
+        function clearFieldInlineError(field) {
+            field.classList.remove('!border-danger', '!ring-1', '!ring-danger', 'bg-rose-50/20');
+            const anchor = field.closest('.relative') || field;
+            const nextEl = anchor.nextElementSibling;
+            if (nextEl && nextEl.classList.contains('custom-field-error')) {
+                nextEl.remove();
+            }
+        }
+
+        // Intercept submit clicks to show custom inline validation before native bubbles
+        document.addEventListener('click', (event) => {
+            const submitBtn = event.target.closest('button[type="submit"], input[type="submit"]');
+            if (!submitBtn) return;
+            const form = submitBtn.form;
+            if (!form) return;
+
+            const fields = Array.from(form.querySelectorAll('input, select, textarea'));
+            let firstInvalid = null;
+            let hasError = false;
+
+            form.querySelectorAll('.custom-field-error').forEach(el => el.remove());
+            fields.forEach(field => clearFieldInlineError(field));
+
+            for (const field of fields) {
+                if (field.disabled || field.type === 'hidden' || field.type === 'submit' || field.type === 'button') {
+                    continue;
+                }
+                if (!field.checkValidity()) {
+                    hasError = true;
+                    if (!firstInvalid) {
+                        firstInvalid = field;
+                    }
+                    renderFieldInlineError(field);
+                }
+            }
+
+            if (hasError) {
+                event.preventDefault();
+                event.stopPropagation();
+                if (firstInvalid) {
+                    firstInvalid.focus();
+                    firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }, true);
+
+        // Form Submit & Double-Submit Guard
         document.addEventListener('submit', (event) => {
             const form = event.target;
-            if (!(form instanceof HTMLFormElement) || !form.checkValidity()) {
+            if (!(form instanceof HTMLFormElement)) {
                 return;
             }
+
+            const fields = Array.from(form.querySelectorAll('input, select, textarea'));
+            let firstInvalid = null;
+            let hasError = false;
+
+            for (const field of fields) {
+                if (field.disabled || field.type === 'hidden' || field.type === 'submit' || field.type === 'button') {
+                    continue;
+                }
+                if (!field.checkValidity()) {
+                    hasError = true;
+                    if (!firstInvalid) {
+                        firstInvalid = field;
+                    }
+                    renderFieldInlineError(field);
+                }
+            }
+
+            if (hasError) {
+                event.preventDefault();
+                event.stopPropagation();
+                if (firstInvalid) {
+                    firstInvalid.focus();
+                    firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return;
+            }
+
+            // Double submit prevention when all fields are valid
             if (form.dataset.submitting === 'true') {
                 event.preventDefault();
                 return;

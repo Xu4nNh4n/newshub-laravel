@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Enums\PostRequestPriority;
 use App\Enums\PostRequestStatus;
 use App\Enums\PostRequestType;
 use App\Models\Post;
@@ -26,7 +25,6 @@ class PostRequestFactory extends Factory
             'post_id' => Post::factory()->published(),
             'author_id' => User::factory(),
             'type' => PostRequestType::Correction,
-            'priority' => PostRequestPriority::Normal,
             'reason' => fake()->sentence(),
             'notes' => fake()->paragraph(),
             'status' => PostRequestStatus::Pending,

@@ -107,23 +107,21 @@ class PublicNewsTest extends TestCase
         $response->assertDontSee('alert("xss")', false);
     }
 
-    public function test_article_can_hide_its_thumbnail_at_the_start_of_content(): void
+    public function test_article_always_shows_its_thumbnail(): void
     {
         $post = Post::factory()->published()->create([
             'thumbnail' => 'posts/thumbnails/hidden-cover.webp',
-            'show_thumbnail_in_post' => false,
         ]);
 
         $this->get(route('news.show', $post->slug))
             ->assertOk()
-            ->assertDontSee('Hình ảnh minh họa cho bài viết');
+            ->assertSee('hidden-cover.webp');
     }
 
     public function test_article_seo_description_fallback_is_limited_to_160_characters(): void
     {
         $post = Post::factory()->published()->create([
             'summary' => str_repeat('a', 200),
-            'meta_description' => null,
         ]);
 
         $this->get(route('news.show', $post->slug))
@@ -139,6 +137,5 @@ class PublicNewsTest extends TestCase
         $this->get(route('news.show', $post->slug))->assertOk();
 
         $this->assertSame(1, $post->refresh()->view_count);
-        $this->assertDatabaseCount('post_views', 1);
     }
 }

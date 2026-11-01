@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\PostRequestPriority;
 use App\Enums\PostRequestStatus;
 use App\Enums\PostRequestType;
 use Database\Factories\PostRequestFactory;
@@ -20,7 +19,6 @@ class PostRequest extends Model
         'pending_post_id',
         'author_id',
         'type',
-        'priority',
         'reason',
         'notes',
         'status',
@@ -33,7 +31,6 @@ class PostRequest extends Model
     {
         return [
             'type' => PostRequestType::class,
-            'priority' => PostRequestPriority::class,
             'status' => PostRequestStatus::class,
             'handled_at' => 'datetime',
         ];

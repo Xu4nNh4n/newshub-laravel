@@ -25,31 +25,26 @@ class DashboardSidebarComposer
 
         if (
             array_key_exists('pending_posts', $adminStats)
-            && array_key_exists('pending_reports', $adminStats)
             && array_key_exists('pending_applications', $adminStats)
             && array_key_exists('pending_post_requests', $adminStats)
         ) {
             $pendingPostsCount = (int) $adminStats['pending_posts'];
-            $pendingReportsCount = (int) $adminStats['pending_reports'];
             $pendingApplicationsCount = (int) $adminStats['pending_applications'];
             $pendingPostRequestsCount = (int) $adminStats['pending_post_requests'];
         } else {
             $counts = $this->dashboardStats->pendingModerationCounts();
             $pendingPostsCount = $counts['pending_posts_count'];
-            $pendingReportsCount = $counts['pending_reports_count'];
             $pendingApplicationsCount = $counts['pending_applications_count'];
             $pendingPostRequestsCount = $counts['pending_post_requests_count'];
         }
 
         $view->with([
             'pending_posts_count' => $pendingPostsCount,
-            'pending_reports_count' => $pendingReportsCount,
             'pending_applications_count' => $pendingApplicationsCount,
             'pending_post_requests_count' => $pendingPostRequestsCount,
             'adminStats' => [
                 ...$adminStats,
                 'pending_posts' => $pendingPostsCount,
-                'pending_reports' => $pendingReportsCount,
                 'pending_applications' => $pendingApplicationsCount,
                 'pending_post_requests' => $pendingPostRequestsCount,
             ],

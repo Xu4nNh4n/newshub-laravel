@@ -56,7 +56,7 @@
                     <span @class([
                         'inline-flex shrink-0 items-center gap-1 border-2 border-line-strong px-3 py-1 font-mono text-xs font-bold uppercase',
                         'bg-paper text-ink shadow-brutal-sm' => $application->status === \App\Enums\AuthorApplicationStatus::Pending,
-                        'bg-lime text-ink shadow-brutal-sm' => $application->status === \App\Enums\AuthorApplicationStatus::Approved,
+                        'bg-lime text-white shadow-brutal-sm' => $application->status === \App\Enums\AuthorApplicationStatus::Approved,
                         'bg-danger text-paper shadow-brutal-sm' => $application->status === \App\Enums\AuthorApplicationStatus::Rejected,
                     ])>
                         {{ match ($application->status->value) {
@@ -76,20 +76,13 @@
                     </p>
                 </div>
 
-                <!-- Sample Article -->
                 <div class="mt-3 border border-line bg-paper p-4">
-                    <h3 class="font-mono text-xs font-bold uppercase tracking-wider text-ink">Bài viết mẫu đề xuất:</h3>
-                    <p class="mt-1 font-heading text-sm font-black uppercase text-ink">
-                        {{ $application->sample_title }}
-                    </p>
-                    <details class="group mt-2">
-                        <summary class="cursor-pointer font-mono text-xs font-bold uppercase tracking-wider text-ink-muted hover:text-ink select-none">
-                            Xem nội dung chi tiết bài mẫu &darr;
-                        </summary>
-                        <div class="mt-2.5 whitespace-pre-line text-xs leading-relaxed text-ink border-t border-line pt-2.5">
-                            {{ $application->sample_content }}
-                        </div>
-                    </details>
+                    <h3 class="font-mono text-xs font-bold uppercase tracking-wider text-ink">CV ứng viên:</h3>
+                    @if ($application->cv_path)
+                        <a href="{{ route('admin.author-applications.cv', $application) }}" class="mt-2 inline-flex min-h-10 items-center border border-line-strong bg-surface px-3 text-xs font-bold text-ink hover:bg-lime">Tải CV xuống</a>
+                    @else
+                        <p class="mt-1 text-xs text-ink-muted">Đơn cũ chưa có CV đính kèm.</p>
+                    @endif
                 </div>
 
                 <!-- Reviewer Notes if Approved or Rejected -->

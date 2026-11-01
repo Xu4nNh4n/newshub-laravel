@@ -1,6 +1,7 @@
 -- ============================================================================
 -- NewsHub - CSDL MySQL Chuẩn Cho Dự Án Website Tin Tức & Đồ Án
 -- Tương thích: MySQL 8.x / MariaDB 10.x / Laragon / XAMPP / phpMyAdmin
+-- Dump nay giu schema truoc khi rut gon. Sau khi import, chay mot lan database/reduce_optional_engagement_tables.mysql.sql.
 -- Ngày tạo: 2026-10-04 15:19:57
 -- Charset: utf8mb4 | Collation: utf8mb4_unicode_ci
 -- ============================================================================
@@ -238,15 +239,6 @@ alter table `post_views` add index `post_views_ip_hash_index`(`ip_hash`);
 -- Migration: 2026_09_27_000000_create_news_schema.php
 alter table `post_views` add index `post_views_viewed_at_index`(`viewed_at`);
 
--- Migration: 2026_09_27_000000_create_news_schema.php
-create table `activity_logs` (`id` bigint unsigned not null auto_increment primary key, `user_id` bigint unsigned null, `action` varchar(255) not null, `subject_type` varchar(255) null, `subject_id` bigint unsigned null, `description` text null, `created_at` timestamp not null default CURRENT_TIMESTAMP) default character set utf8mb4 collate 'utf8mb4_unicode_ci';
-
--- Migration: 2026_09_27_000000_create_news_schema.php
-alter table `activity_logs` add constraint `activity_logs_user_id_foreign` foreign key (`user_id`) references `users` (`id`) on delete set null;
-
--- Migration: 2026_09_27_000000_create_news_schema.php
-alter table `activity_logs` add index `activity_logs_subject_type_subject_id_index`(`subject_type`, `subject_id`);
-
 -- Migration: 2026_09_27_081033_add_seo_fields_to_posts_table.php
 alter table `posts` add `meta_title` varchar(255) null after `title`;
 
@@ -255,12 +247,6 @@ alter table `posts` add `meta_description` varchar(500) null after `summary`;
 
 -- Migration: 2026_09_27_143147_add_reporting_indexes_to_news_tables.php
 alter table `posts` add index `posts_view_count_index`(`view_count`);
-
--- Migration: 2026_09_27_143147_add_reporting_indexes_to_news_tables.php
-alter table `activity_logs` add index `activity_logs_action_created_at_index`(`action`, `created_at`);
-
--- Migration: 2026_09_27_143147_add_reporting_indexes_to_news_tables.php
-alter table `activity_logs` add index `activity_logs_user_created_at_index`(`user_id`, `created_at`);
 
 -- Migration: 2026_10_03_184025_create_author_applications_table.php
 create table `author_applications` (`id` bigint unsigned not null auto_increment primary key, `user_id` bigint unsigned not null, `pending_user_id` bigint unsigned null, `category_id` bigint unsigned not null, `bio` text not null, `sample_title` varchar(255) not null, `sample_content` text not null, `status` varchar(255) not null default 'pending', `rejection_reason` varchar(255) null, `reviewed_by` bigint unsigned null, `reviewed_at` timestamp null, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_unicode_ci';
@@ -472,16 +458,6 @@ INSERT INTO `post_views` (`id`, `post_id`, `user_id`, `session_id`, `ip_hash`, `
 (10, 1, 3, '38d6988b-e8d3-42c7-9a4a-ba84ab80981d', 'e181589457da407db2ea98f49f8b267743cf69f88a34b0d9b095dfe4f6ffee31', '2026-10-04 13:56:41'),
 (11, 15, 3, '38d6988b-e8d3-42c7-9a4a-ba84ab80981d', 'e181589457da407db2ea98f49f8b267743cf69f88a34b0d9b095dfe4f6ffee31', '2026-10-04 13:56:42');
 /*!40000 ALTER TABLE `post_views` ENABLE KEYS */;
-
--- Dữ liệu cho bảng `activity_logs` (5 dòng)
-/*!40000 ALTER TABLE `activity_logs` DISABLE KEYS */;
-INSERT INTO `activity_logs` (`id`, `user_id`, `action`, `subject_type`, `subject_id`, `description`, `created_at`) VALUES
-(1, 2, 'comment.delete', 'App\\Models\\Comment', 1, 'Admin kiểm duyệt bình luận.', '2026-10-03 17:51:56'),
-(2, 2, 'post.featured', 'App\\Models\\Post', 8, 'Ghim tiêu điểm bài viết: Thiết bị IoT và bài toán bảo mật ngay từ thiết kế', '2026-10-04 09:12:39'),
-(3, 3, 'post_request.created', 'App\\Models\\PostRequest', 1, 'Tác giả đã gửi yêu cầu correction cho bài viết.', '2026-10-04 10:08:27'),
-(4, 2, 'comment-report.hide', 'App\\Models\\Comment', 4, 'Đã xử lý báo cáo bình luận.', '2026-10-04 10:15:47'),
-(5, 3, 'post_request.cancelled', 'App\\Models\\PostRequest', 1, 'Tác giả đã hủy yêu cầu correction cho bài viết.', '2026-10-04 13:37:37');
-/*!40000 ALTER TABLE `activity_logs` ENABLE KEYS */;
 
 -- Dữ liệu cho bảng `author_applications` (1 dòng)
 /*!40000 ALTER TABLE `author_applications` DISABLE KEYS */;

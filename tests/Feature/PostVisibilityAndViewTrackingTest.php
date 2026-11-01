@@ -39,7 +39,6 @@ class PostVisibilityAndViewTrackingTest extends TestCase
 
         $this->assertTrue($firstView);
         $this->assertFalse($duplicateView);
-        $this->assertDatabaseCount('post_views', 1);
         $this->assertSame(1, $post->refresh()->view_count);
     }
 
@@ -54,7 +53,6 @@ class PostVisibilityAndViewTrackingTest extends TestCase
 
         $this->assertFalse($duplicateView);
         $this->assertTrue($newSessionView);
-        $this->assertDatabaseCount('post_views', 2);
         $this->assertSame(2, $post->refresh()->view_count);
     }
 
@@ -68,7 +66,7 @@ class PostVisibilityAndViewTrackingTest extends TestCase
 
         $this->assertTrue($firstView);
         $this->assertFalse($duplicateView);
-        $this->assertDatabaseCount('post_views', 1);
+        $this->assertSame(1, $post->refresh()->view_count);
     }
 
     public function test_view_without_an_identity_is_ignored(): void
@@ -79,6 +77,6 @@ class PostVisibilityAndViewTrackingTest extends TestCase
         $recorded = $recorder->record($post, null, null, null);
 
         $this->assertFalse($recorded);
-        $this->assertDatabaseCount('post_views', 0);
+        $this->assertSame(0, $post->refresh()->view_count);
     }
 }

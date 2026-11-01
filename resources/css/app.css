@@ -5,40 +5,41 @@
 @source '../views/**/*.blade.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-sans: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --font-serif: 'Merriweather', Georgia, 'Times New Roman', serif;
 
-    --color-paper: #F7F6F0;
-    --color-paper-light: #FAF9F5;
-    --color-surface: #FFFEFA;
-    --color-ink: #171715;
-    --color-ink-muted: #66645E;
-    --color-ink-light: #8E8C85;
-    --color-line: #C7C5BB;
-    --color-line-light: #E4E2D8;
-    --color-line-strong: #171715;
+    --color-paper: #FFFFFF;
+    --color-paper-light: #F5F7FA;
+    --color-surface: #FFFFFF;
+    --color-ink: #111827;
+    --color-ink-muted: #475569;
+    --color-ink-light: #6B7280;
+    --color-line: #E5E7EB;
+    --color-line-light: #F1F5F9;
+    --color-line-strong: #0F172A;
 
-    --color-lime: #D4FF3F;
-    --color-lime-hover: #C2F025;
-    --color-pink: #EE5BA6;
-    --color-danger: #B42318;
-    --color-success: #15803D;
+    --color-lime: #1D4ED8;
+    --color-lime-hover: #1E40AF;
+    --color-pink: #EFF6FF;
+    --color-danger: #DC2626;
+    --color-success: #16A34A;
 
-    --shadow-brutal-sm: 1px 1px 0px #171715;
-    --shadow-brutal: 2px 2px 0px #171715;
-    --shadow-brutal-lg: 4px 4px 0px #171715;
-    --shadow-brutal-lime: 2px 2px 0px #D4FF3F;
+    --shadow-brutal-sm: 1px 1px 0px #0F172A;
+    --shadow-brutal: 2px 2px 0px #0F172A;
+    --shadow-brutal-lg: 4px 4px 0px #0F172A;
+    --shadow-brutal-lime: 2px 2px 0px #1D4ED8;
 }
 
 @layer base {
     ::selection {
-        background-color: #D4FF3F;
-        color: #171715;
+        background-color: #1D4ED8;
+        color: #FFFFFF;
     }
 
     body {
-        background-color: #F7F6F0;
-        color: #171715;
+        background-color: #FFFFFF;
+        color: #0F172A;
         font-family: var(--font-sans);
         letter-spacing: -0.01em;
     }
@@ -53,16 +54,39 @@
     input[type="tel"],
     textarea,
     select {
-        border-color: #C7C5BB;
-        background-color: #FFFEFA;
-        color: #171715;
+        border-color: #CBD5E1;
+        background-color: #FFFFFF;
+        color: #0F172A;
     }
 
     input:focus,
     textarea:focus,
     select:focus {
         outline: none;
-        border-color: #171715;
-        box-shadow: 2px 2px 0px #171715;
+        border-color: #0F172A;
+        box-shadow: 2px 2px 0px #0F172A;
+    }
+}
+
+@layer utilities {
+    .hover\:bg-paper:hover {
+        background-color: #F5F7FA;
+    }
+
+    /* Quy tắc tương phản: Nền tối (bg-ink hoặc bg-lime) thì chữ bắt buộc phải là màu trắng sáng */
+    .bg-lime {
+        color: #FFFFFF;
+    }
+    .bg-ink {
+        color: #FFFFFF;
+    }
+
+    /* Hide scrollbars for clean horizontal subcategory track */
+    .scrollbar-none::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-none {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
 }

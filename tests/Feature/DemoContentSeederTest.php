@@ -17,15 +17,15 @@ class DemoContentSeederTest extends TestCase
         $this->seed(DatabaseSeeder::class);
 
         $this->assertDatabaseCount('users', 3);
-        $this->assertDatabaseCount('categories', 11);
-        $this->assertDatabaseCount('tags', 12);
+        $this->assertDatabaseCount('categories', 15);
         $this->assertDatabaseCount('posts', 15);
-        $this->assertDatabaseCount('post_tag', 31);
 
         $technology = Category::query()->where('slug', 'cong-nghe')->firstOrFail();
         $business = Category::query()->where('slug', 'kinh-doanh')->firstOrFail();
+        $life = Category::query()->where('slug', 'doi-song')->firstOrFail();
 
         $this->assertSame(7, $technology->children()->count());
         $this->assertTrue($business->children()->where('slug', 'khoi-nghiep-cong-nghe')->exists());
+        $this->assertSame(4, $life->children()->count());
     }
 }

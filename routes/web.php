@@ -1,15 +1,11 @@
 <?php
 
-use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\AuthorApplicationController as AdminAuthorApplicationController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
-use App\Http\Controllers\Admin\CommentReportController as AdminCommentReportController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
-use App\Http\Controllers\Admin\PostFeaturedController;
 use App\Http\Controllers\Admin\PostRequestController as AdminPostRequestController;
 use App\Http\Controllers\Admin\PostReviewController;
-use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -26,21 +22,16 @@ use App\Http\Controllers\Author\PostSubmissionController;
 use App\Http\Controllers\AuthorApplicationController;
 use App\Http\Controllers\AuthorProfileController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\CommentReportController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MyCommentController;
 use App\Http\Controllers\NewsController;
-use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostPreviewController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilePasswordController;
-use App\Http\Controllers\ReadingHistoryController;
 use App\Http\Controllers\RssFeedController;
 use App\Http\Controllers\SitemapController;
-use App\Http\Controllers\UserActivityHistoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
@@ -90,31 +81,16 @@ Route::middleware(['auth', 'active'])->group(function (): void {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', ProfilePasswordController::class)->name('profile.password.update');
     Route::get('/my-comments', MyCommentController::class)->name('profile.comments');
-    Route::get('/activity-history', UserActivityHistoryController::class)->name('profile.activity');
-
-    Route::get('/reading-history', [ReadingHistoryController::class, 'index'])->name('reading-history.index');
-    Route::delete('/reading-history/{post}', [ReadingHistoryController::class, 'destroy'])->name('reading-history.destroy');
-    Route::delete('/reading-history', [ReadingHistoryController::class, 'clear'])->name('reading-history.clear');
-
-    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-    Route::match(['get', 'patch'], '/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
-    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
 
     Route::middleware('verified')->group(function (): void {
         Route::post('/author-applications', [AuthorApplicationController::class, 'store'])
             ->name('author-applications.store');
         Route::get('/preview/posts/{post}', PostPreviewController::class)->name('posts.preview');
-        Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
-        Route::post('/news/{post}/favorite', [FavoriteController::class, 'store'])->name('favorites.store');
-        Route::delete('/news/{post}/favorite', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
         Route::post('/news/{post}/comments', [CommentController::class, 'store'])
             ->middleware('throttle:comments')
             ->name('comments.store');
         Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
         Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
-        Route::post('/comments/{comment}/reports', CommentReportController::class)
-            ->middleware('throttle:comment-reports')
-            ->name('comment-reports.store');
     });
 
     Route::get('/author', DashboardController::class)
@@ -141,18 +117,16 @@ Route::middleware(['auth', 'active'])->group(function (): void {
     Route::prefix('admin')->name('admin.')->middleware(['verified', 'role:admin'])->group(function (): void {
         Route::get('author-applications', [AdminAuthorApplicationController::class, 'index'])
             ->name('author-applications.index');
+        Route::get('author-applications/{application}/cv', [AdminAuthorApplicationController::class, 'downloadCv'])
+            ->name('author-applications.cv');
         Route::patch('author-applications/{application}/approve', [AdminAuthorApplicationController::class, 'approve'])
             ->name('author-applications.approve');
         Route::patch('author-applications/{application}/reject', [AdminAuthorApplicationController::class, 'reject'])
             ->name('author-applications.reject');
-        Route::get('activity-logs/export', [ActivityLogController::class, 'export'])->name('activity-logs.export');
-        Route::get('activity-logs', ActivityLogController::class)->name('activity-logs.index');
         Route::get('posts/export', [AdminPostController::class, 'export'])->name('posts.export');
         Route::get('posts', [AdminPostController::class, 'index'])->name('posts.index');
-        Route::patch('posts/{post}/featured', PostFeaturedController::class)->name('posts.toggle-featured');
         Route::patch('posts/{post}', [AdminPostController::class, 'update'])->name('posts.update');
         Route::resource('categories', CategoryController::class)->except('show');
-        Route::resource('tags', TagController::class)->except('show');
         Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
         Route::patch('users/{user}', [AdminUserController::class, 'update'])->name('users.update');
         Route::post('users/{user}/send-reset-link', [AdminUserController::class, 'sendResetLink'])->name('users.send-reset-link');
@@ -162,8 +136,6 @@ Route::middleware(['auth', 'active'])->group(function (): void {
         Route::get('post-requests', [AdminPostRequestController::class, 'index'])->name('post-requests.index');
         Route::patch('post-requests/{postRequest}', [AdminPostRequestController::class, 'update'])
             ->name('post-requests.update');
-        Route::get('comment-reports', [AdminCommentReportController::class, 'index'])->name('comment-reports.index');
-        Route::put('comment-reports/{commentReport}', [AdminCommentReportController::class, 'update'])->name('comment-reports.update');
         Route::get('comments/export', [AdminCommentController::class, 'export'])->name('comments.export');
         Route::get('comments', [AdminCommentController::class, 'index'])->name('comments.index');
         Route::patch('comments/{comment}', [AdminCommentController::class, 'update'])->name('comments.update');

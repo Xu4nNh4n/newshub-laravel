@@ -1,6 +1,20 @@
 # Backend handoff response
 
-**BACKEND STATUS: READY FOR FRONTEND**
+**BACKEND STATUS: NEEDS FOLLOW-UP — local migration is applied; the test suite was not run and the MySQL script remains unapplied.**
+
+## Cập nhật schema mới nhất (2026-10-25)
+
+Phần dưới của tài liệu là bàn giao cũ cho `BACKEND_REQUESTS.md` và có một số mô tả về tính năng đã bị loại bỏ. Theo yêu cầu rút gọn database, migration `2026_10_25_054950_simplify_news_schema_for_course_project.php` chuyển `users.role` sang bảng `roles`, bỏ avatar, mô tả category, lượt xem theo thời gian, cờ featured/SEO/tuỳ chọn ảnh trong bài viết, `comments.reply_to_id`, trường bài mẫu và `updated_at` của đơn ứng tuyển, độ ưu tiên yêu cầu, cùng bảng `notifications`. Cột tổng `posts.view_count` vẫn giữ để xếp hạng tin phổ biến. `author_applications.cv_path` được thêm; để nullable nhằm giữ các đơn cũ.
+
+Đã cập nhật model, luồng hồ sơ ứng tuyển CV, route tải CV có quyền Admin, các màn hình và sơ đồ chính `database/apptintuc.dbml`. Migration đã chạy trên SQLite local; trước đó tạo bản sao lưu tại `database/database.sqlite.before_schema_reduction`. Project đang cấu hình SQLite và không có kết nối MySQL, nên script `database/reduce_optional_engagement_tables.mysql.sql` chưa chạy. Không có thao tác nào lên MySQL online.
+
+`database/sql/apptintuc_mysql.sql` là dump cũ trước khi rút gọn. Nếu khởi tạo MySQL từ dump này, chạy script reduce ngay sau import để đưa schema về phiên bản hiện tại.
+
+## Cập nhật tính năng và database (2026-10-25)
+
+Theo yêu cầu giảm tải, ứng dụng đã gỡ tính năng yêu thích, lịch sử lượt xem chi tiết, thẻ bài viết, báo cáo bình luận và nhật ký hoạt động. Hai migration `2026_10_25_014106_drop_optional_engagement_tables.php` và `2026_10_25_022532_drop_activity_logs_table.php` sẽ bỏ sáu bảng tương ứng. Bộ đếm tổng `posts.view_count` vẫn hoạt động; thống kê lượt xem theo ngày không còn.
+
+Các route và mục giao diện tương ứng đã được gỡ. Form bài viết không nhận `tag_ids`/`tag_names`; news listing không lọc theo tag. Các mô tả route, breadcrumb, badge báo cáo, tag CRUD và thống kê lượt xem theo ngày ở phần dưới là tài liệu lịch sử và đã bị cập nhật này thay thế.
 
 Tài liệu này phản hồi các yêu cầu trong `BACKEND_REQUESTS.md`. Phạm vi triển khai tập trung vào backend, data contract và test; không redesign UI, CSS, JavaScript, layout hoặc style. Một số binding Blade tối thiểu được đổi để dùng HTML đã sanitize, tôn trọng tùy chọn thumbnail và loại query Eloquent khỏi view theo đúng contract backend.
 
@@ -15,7 +29,6 @@ Tài liệu này phản hồi các yêu cầu trong `BACKEND_REQUESTS.md`. Phạ
 ```php
 [
     'pending_posts_count' => int,
-    'pending_reports_count' => int,
     'pending_applications_count' => int,
     'pending_post_requests_count' => int,
 ]
@@ -25,7 +38,6 @@ Tài liệu này phản hồi các yêu cầu trong `BACKEND_REQUESTS.md`. Phạ
 
 ```php
 $adminStats['pending_posts'];
-$adminStats['pending_reports'];
 $adminStats['pending_applications'];
 $adminStats['pending_post_requests'];
 ```
@@ -39,7 +51,6 @@ $adminStats['pending_post_requests'];
 ```php
 $stats = [
     'comments_count' => int,
-    'favorites_count' => int,
     'posts_count' => int,
 ];
 ```
@@ -89,7 +100,6 @@ Các field nhạy cảm như `role` và `status` vẫn không được lấy t�
 Các view form sau đã nhận biến `$breadcrumbs`:
 
 - `admin.categories.form`: create và edit.
-- `admin.tags.form`: create và edit.
 - `author.posts.form`: create và edit.
 
 Cấu trúc thống nhất:
@@ -114,7 +124,7 @@ Phần tử cha có URL dùng named route; phần tử hiện tại có `url => 
 ]
 ```
 
-- Admin gửi `action=publish` khi tạo hoặc sửa bài sẽ đưa bài thẳng sang `published`, đặt `published_at` theo request hoặc thời điểm hiện tại, xóa rejection cũ và ghi activity log `post.published`.
+- Admin gửi `action=publish` khi tạo hoặc sửa bài sẽ đưa bài thẳng sang `published`, đặt `published_at` theo request hoặc thời điểm hiện tại và xóa rejection cũ.
 - Author gửi `action=publish` không thể bỏ qua kiểm duyệt: bài mới vẫn được lưu ở trạng thái `draft`.
 - `action=draft` khi cập nhật sẽ đưa bài về bản nháp và xóa lịch xuất bản/rejection cũ. Request cũ không gửi `action` vẫn giữ hành vi cập nhật hiện tại.
 - Có endpoint xuất bản nhanh dành riêng cho Admin và chỉ áp dụng với bài draft/rejected do chính Admin đó sở hữu.
@@ -290,7 +300,7 @@ Success: HTTP 201
 ```
 
 - Mỗi bài chỉ có tối đa một yêu cầu `pending` tại cùng thời điểm. Backend kiểm tra trong transaction và bảng có unique key kỹ thuật `pending_post_id` để chống request đồng thời.
-- Tác giả có thể rút bài `pending_review` của chính mình về `draft`; thao tác được ghi `activity_logs` với action `post.withdrawn`.
+- Tác giả có thể rút bài `pending_review` của chính mình về `draft`.
 - Admin có thể lọc danh sách yêu cầu theo `pending`, `approved`, `rejected` và xử lý từng yêu cầu.
 - Khi duyệt yêu cầu `removal`, bài chuyển sang `hidden` và tự bỏ trạng thái featured.
 - Khi duyệt yêu cầu `correction`, bài chuyển về `draft`, xóa `published_at` và tự bỏ featured để tác giả chỉnh sửa rồi gửi duyệt lại.
@@ -441,11 +451,9 @@ Success: HTTP 201
 ## 7. Kiểm tra đã chạy
 
 - Laravel Pint: passed sau khi tự sửa format.
-- Test hẹp sau Mục 15: **26 passed, 122 assertions**.
-- Toàn bộ test suite: **159 passed, 669 assertions**.
-- Route list: **76 routes**.
-- Migration local: passed.
+- Toàn bộ test suite trước migration bỏ `activity_logs`: **161 passed, 642 assertions**. Chưa chạy lại suite sau migration mới này.
+- Migration local `2026_10_25_014106_drop_optional_engagement_tables`: passed; năm bảng optional đã gỡ. Migration `2026_10_25_022532_drop_activity_logs_table` đã loại bỏ `activity_logs` khỏi schema. SQLite đã được `VACUUM`; file giảm từ **307,200** xuống **233,472 bytes** (giảm **73,728 bytes**).
 
 Không còn yêu cầu backend nào trong `BACKEND_REQUESTS.md` bị bỏ ngỏ.
 
-**BACKEND STATUS: READY FOR FRONTEND**
+**BACKEND STATUS: NEEDS FOLLOW-UP — run the test suite when requested; apply the MySQL script only if cần đồng bộ MySQL.**

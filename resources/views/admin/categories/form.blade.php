@@ -29,11 +29,6 @@
         </div>
 
         <div>
-            <label for="description" class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">Mô tả</label>
-            <textarea id="description" name="description" rows="3" placeholder="Mô tả tóm tắt..." class="mt-1.5 w-full border-2 border-line bg-paper px-3.5 py-2.5 text-xs text-ink outline-none focus:border-ink">{{ old('description', $category->description ?? '') }}</textarea>
-        </div>
-
-        <div>
             <label for="parent_id" class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">Danh mục cha (Tùy chọn)</label>
             <select id="parent_id" name="parent_id" class="mt-1.5 w-full border-2 border-line bg-paper px-3.5 py-2.5 text-xs text-ink outline-none focus:border-ink">
                 <option value="">-- Không có (Đây là danh mục chính) --</option>

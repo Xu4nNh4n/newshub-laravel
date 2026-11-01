@@ -29,12 +29,9 @@ class StorePostRequest extends FormRequest
 
         return [
             'title' => ['required', 'string', 'max:255'],
-            'meta_title' => ['nullable', 'string', 'max:60'],
             'slug' => ['required', 'string', 'max:255', Rule::unique(Post::class)],
             'summary' => ['nullable', 'string', 'max:1000'],
-            'meta_description' => ['nullable', 'string', 'max:160'],
             'content' => ['required', 'string'],
-            'show_thumbnail_in_post' => ['nullable', 'boolean'],
             'thumbnail' => [
                 'nullable',
                 'image',
@@ -44,10 +41,6 @@ class StorePostRequest extends FormRequest
                 Rule::dimensions()->maxWidth($maxImageDimension)->maxHeight($maxImageDimension),
             ],
             'category_id' => ['required', 'integer', Rule::exists('categories', 'id')->whereNull('deleted_at')],
-            'tag_ids' => ['nullable', 'array'],
-            'tag_ids.*' => ['integer', 'distinct', Rule::exists('tags', 'id')],
-            'tag_names' => ['nullable', 'array', 'max:20'],
-            'tag_names.*' => ['string', 'max:50'],
             'action' => ['nullable', 'string', Rule::in(['draft', 'publish'])],
             'published_at' => ['nullable', 'date'],
         ];

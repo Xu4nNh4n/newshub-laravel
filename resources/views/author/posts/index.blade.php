@@ -63,9 +63,6 @@
                                         <div class="min-w-0 flex-1">
                                             <div class="flex flex-wrap items-center gap-1.5 font-bold uppercase tracking-wider">
                                                 <span>Đang yêu cầu: {{ $pendingRequest->type === \App\Enums\PostRequestType::Removal ? 'Gỡ bài viết' : 'Đính chính / Sửa lỗi' }}</span>
-                                                <span class="border border-line-strong bg-surface px-1.5 py-0.2 text-[10px]">
-                                                    {{ $pendingRequest->priority === \App\Enums\PostRequestPriority::Urgent ? 'Khẩn cấp' : 'Bình thường' }}
-                                                </span>
                                                 <span class="text-ink-muted font-normal">({{ $pendingRequest->created_at->format('d/m/Y H:i') }})</span>
                                             </div>
                                             <p class="mt-1 text-xs truncate">
@@ -100,7 +97,7 @@
                             @php
                                 $statusConfig = match($post->status) {
                                     \App\Enums\PostStatus::Draft => ['label' => 'Bản nháp', 'class' => 'bg-paper text-ink border-line'],
-                                    \App\Enums\PostStatus::PendingReview => ['label' => 'Chờ duyệt', 'class' => 'bg-lime text-ink border-line-strong font-bold'],
+                                    \App\Enums\PostStatus::PendingReview => ['label' => 'Chờ duyệt', 'class' => 'bg-lime text-white border-line-strong font-bold'],
                                     \App\Enums\PostStatus::Published => ['label' => 'Đã xuất bản', 'class' => 'bg-surface text-ink border-line-strong font-bold'],
                                     \App\Enums\PostStatus::Rejected => ['label' => 'Bị từ chối', 'class' => 'bg-paper text-danger border-line-strong font-bold'],
                                     \App\Enums\PostStatus::Hidden => ['label' => 'Đã tạm ẩn', 'class' => 'bg-paper text-ink-muted border-line'],
@@ -113,7 +110,7 @@
                                     {{ $statusConfig['label'] }}
                                 </span>
                                 @if($pendingRequest)
-                                    <span class="border border-line-strong bg-lime px-2 py-0.5 text-[10px] font-bold text-ink uppercase">
+                                    <span class="border border-line-strong bg-lime px-2 py-0.5 text-[10px] font-bold text-white uppercase">
                                         Có yêu cầu chờ
                                     </span>
                                 @endif
@@ -182,8 +179,6 @@
                                                 data-btn-open-request-detail
                                                 data-post-title="{{ $post->title }}"
                                                 data-request-type="{{ $pendingRequest->type === \App\Enums\PostRequestType::Removal ? 'Gỡ bài viết (Take-down)' : 'Đính chính / Sửa lỗi (Correction)' }}"
-                                                data-request-priority="{{ $pendingRequest->priority === \App\Enums\PostRequestPriority::Urgent ? 'Khẩn cấp' : 'Bình thường' }}"
-                                                data-request-is-urgent="{{ $pendingRequest->priority === \App\Enums\PostRequestPriority::Urgent ? '1' : '0' }}"
                                                 data-request-reason="{{ $pendingRequest->reason }}"
                                                 data-request-notes="{{ $pendingRequest->notes }}"
                                                 data-request-time="{{ $pendingRequest->created_at->format('d/m/Y H:i') }}"
@@ -302,13 +297,6 @@
                         </select>
                     </div>
 
-                    <div class="space-y-1.5">
-                        <label for="request_priority" class="block text-xs font-mono font-bold uppercase tracking-wider text-ink">Mức độ ưu tiên</label>
-                        <select id="request_priority" name="priority" class="w-full border border-line bg-paper px-3 py-2 text-xs font-mono text-ink focus:border-line-strong focus:outline-hidden focus:bg-surface focus:shadow-brutal-sm">
-                            <option value="normal">Bình thường</option>
-                            <option value="urgent">Khẩn cấp (Sai số liệu/Bản quyền)</option>
-                        </select>
-                    </div>
                 </div>
 
                 <div class="space-y-1.5">
@@ -362,7 +350,6 @@
                     </div>
                     <div class="border border-line bg-paper p-2.5">
                         <span class="text-[10px] uppercase text-ink-muted">Mức độ ưu tiên:</span>
-                        <p id="rd-priority" class="mt-0.5 font-bold text-ink"></p>
                     </div>
                 </div>
 
@@ -474,7 +461,6 @@
         const requestDetailsModal = document.getElementById('request-details-modal');
         const rdTitle = document.getElementById('rd-post-title');
         const rdType = document.getElementById('rd-type');
-        const rdPriority = document.getElementById('rd-priority');
         const rdReason = document.getElementById('rd-reason');
         const rdNotesWrap = document.getElementById('rd-notes-wrap');
         const rdNotes = document.getElementById('rd-notes');
@@ -487,7 +473,6 @@
             if (!requestDetailsModal) return;
             rdTitle.textContent = data.title;
             rdType.textContent = data.type;
-            rdPriority.textContent = data.priority;
             rdPriority.className = 'mt-0.5 font-bold ' + (data.isUrgent ? 'text-danger' : 'text-ink');
             rdReason.textContent = data.reason;
             if (data.notes && data.notes.trim()) {
@@ -515,7 +500,6 @@
                 openRequestDetailsModal({
                     title: btn.getAttribute('data-post-title') || '',
                     type: btn.getAttribute('data-request-type') || '',
-                    priority: btn.getAttribute('data-request-priority') || '',
                     isUrgent: btn.getAttribute('data-request-is-urgent') === '1',
                     reason: btn.getAttribute('data-request-reason') || '',
                     notes: btn.getAttribute('data-request-notes') || '',
