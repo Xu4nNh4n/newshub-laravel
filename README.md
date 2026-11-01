@@ -5,7 +5,6 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![Automated Tests](https://img.shields.io/badge/Tests-150%20Passed%20(100%25)-success?style=for-the-badge&logo=phpunit&logoColor=white)](tests/)
 [![Code Style](https://img.shields.io/badge/Code_Style-Laravel_Pint-success?style=for-the-badge&logo=git&logoColor=white)](https://laravel.com/docs/pint)
-[![License](https://img.shields.io/badge/License-MIT-black?style=for-the-badge)](LICENSE)
 
 ---
 
@@ -304,9 +303,3 @@ PhpProject/
 ├── storage/                    # Thư mục lưu trữ tệp tải lên (ảnh, CV), logs và framework cache
 └── tests/                      # Bộ kiểm thử tự động 150 Feature & Unit Tests
 ```
-
----
-
-## 📄 9. BẢN QUYỀN & GIẤY PHÉP
-
-Dự án được phát hành theo giấy phép mã nguồn mở **[MIT License](LICENSE)**. Toàn bộ mã nguồn phục vụ mục đích học tập, nghiên cứu và phát triển phần mềm.
