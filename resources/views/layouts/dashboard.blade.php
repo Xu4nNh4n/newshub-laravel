@@ -4,13 +4,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $title ?? 'Dashboard' }} · {{ config('app.name') }}</title>
+    <title>{{ $title ?? 'Bảng điều khiển' }} · {{ config('app.name') }}</title>
     <meta name="description" content="Khu vực quản lý nội dung {{ config('app.name') }}.">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo-icon.svg') }}">
+    <link rel="alternate icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..900;1,400..900&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
     @vite('resources/css/app.css')
 </head>
 <body class="min-h-dvh bg-paper font-sans text-ink antialiased selection:bg-lime selection:text-ink">
     <!-- Skip to main content -->
-    <a href="#dashboard-content" class="sr-only z-50 rounded-none border border-line-strong bg-lime px-4 py-2 text-sm font-bold text-ink shadow-brutal-sm focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:outline-none">
+    <a href="#dashboard-content" class="sr-only z-50 rounded-[8px] border border-[#E2E8F0] bg-lime px-4 py-2 text-sm font-bold text-ink shadow-none focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:outline-none">
         Chuyển đến nội dung chính
     </a>
 
@@ -18,25 +23,20 @@
     <div id="dashboard-overlay" class="fixed inset-0 z-40 hidden bg-ink/70 backdrop-blur-xs transition-opacity lg:hidden" aria-hidden="true"></div>
 
     <!-- Sidebar -->
-    <aside id="dashboard-sidebar" class="fixed inset-y-0 left-0 z-50 flex w-64 -translate-x-full flex-col border-r border-line bg-paper transition-transform duration-200 ease-in-out motion-reduce:transition-none lg:translate-x-0" aria-label="Điều hướng bảng điều khiển">
+    <aside id="dashboard-sidebar" class="fixed inset-y-0 left-0 z-50 flex w-64 -translate-x-full flex-col border-r border-[#E2E8F0] bg-paper transition-transform duration-200 ease-in-out motion-reduce:transition-none lg:translate-x-0" aria-label="Điều hướng bảng điều khiển">
         <!-- Brand / Header -->
-        <div class="flex h-16 shrink-0 items-center justify-between border-b border-line px-4 bg-paper-light">
+        <div class="flex h-16 shrink-0 items-center justify-between border-b border-[#E2E8F0] px-4 bg-paper-light">
             <a href="{{ route('home') }}"
-               title="Về trang chủ tin tức NewsHub"
-               class="group flex items-center gap-2.5 rounded-none px-1 py-1 transition-colors focus-visible:outline-2 focus-visible:outline-ink">
-                <span class="grid size-8 shrink-0 place-items-center bg-lime text-white font-serif font-black text-base shadow-brutal-sm border border-line-strong select-none">
-                    N
-                </span>
+               title="Về trang chủ tin tức BaoUT"
+               class="group block rounded-[8px] px-1 py-1 transition-colors focus-visible:outline-2 focus-visible:outline-ink">
+                <x-brand-logo class="h-8" />
                 <span class="min-w-0 leading-none">
-                    <span class="block truncate text-base font-serif font-bold tracking-tight text-ink">
-                        NewsHub
-                    </span>
-                    <span class="block text-[9px] font-mono font-bold uppercase tracking-wider text-ink-muted flex items-center gap-0.5 mt-1">
+                    <span class="block text-[11px] font-mono font-bold uppercase tracking-wider text-ink-muted flex items-center gap-0.5 mt-1">
                         <span>&larr; Trang tin tức</span>
                     </span>
                 </span>
             </a>
-            <button type="button" data-sidebar-close class="grid size-8 cursor-pointer place-items-center text-ink hover:bg-surface border border-line lg:hidden" aria-label="Đóng menu điều hướng">
+            <button type="button" data-sidebar-close class="grid size-8 cursor-pointer place-items-center text-ink hover:bg-surface rounded-[8px] border border-[#E2E8F0] lg:hidden" aria-label="Đóng menu điều hướng">
                 <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-5">
                     <path d="m6 6 12 12M18 6 6 18"/>
                 </svg>
@@ -47,27 +47,27 @@
         <nav class="flex-1 space-y-6 overflow-y-auto px-3 py-4 font-mono text-xs" aria-label="Danh mục điều hướng">
             <!-- Tổng quan -->
             <div>
-                <p class="px-2 text-[10px] font-bold uppercase tracking-widest text-ink-muted">Tổng quan</p>
+                <p class="px-2 text-[11px] font-bold uppercase tracking-widest text-ink-muted">Tổng quan</p>
                 <div class="mt-1.5 space-y-1">
                     @php
                         $isDashboardActive = request()->routeIs('dashboard', 'admin.dashboard', 'author.dashboard');
                     @endphp
                     <a href="{{ route('dashboard') }}" @class([
                         'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all',
-                        'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isDashboardActive,
-                        'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isDashboardActive,
+                        'rounded-[8px] border border-[#E2E8F0] bg-ink text-white shadow-none' => $isDashboardActive,
+                        'rounded-[8px] border border-transparent text-ink hover:border-[#CBD5E1] hover:bg-ink hover:text-white' => ! $isDashboardActive,
                     ]) @if ($isDashboardActive) aria-current="page" @endif>
                         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                             <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
                         </svg>
-                        <span>Dashboard</span>
+                        <span>Bảng điều khiển</span>
                     </a>
                 </div>
             </div>
 
             <!-- Nội dung cá nhân -->
             <div>
-                <p class="px-2 text-[10px] font-bold uppercase tracking-widest text-ink-muted">Nội dung</p>
+                <p class="px-2 text-[11px] font-bold uppercase tracking-widest text-ink-muted">Nội dung</p>
                 <div class="mt-1.5 space-y-1">
                     @php
                         $isMyPostsActive = request()->routeIs('author.posts.index');
@@ -78,8 +78,8 @@
                     @if (auth()->user()->hasVerifiedEmail() && $canWritePosts)
                         <a href="{{ route('author.posts.index') }}" @class([
                             'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all',
-                            'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isMyPostsActive,
-                            'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isMyPostsActive,
+                            'rounded-[8px] border border-[#E2E8F0] bg-ink text-white shadow-none' => $isMyPostsActive,
+                            'rounded-[8px] border border-transparent text-ink hover:border-[#CBD5E1] hover:bg-ink hover:text-white' => ! $isMyPostsActive,
                         ]) @if ($isMyPostsActive) aria-current="page" @endif>
                             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                                 <path d="M5 3h11l3 3v15H5z"/><path d="M15 3v4h4M8 11h8M8 15h8"/>
@@ -89,8 +89,8 @@
 
                         <a href="{{ route('author.posts.create') }}" @class([
                             'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all',
-                            'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isCreateActive,
-                            'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isCreateActive,
+                            'rounded-[8px] border border-[#E2E8F0] bg-ink text-white shadow-none' => $isCreateActive,
+                            'rounded-[8px] border border-transparent text-ink hover:border-[#CBD5E1] hover:bg-ink hover:text-white' => ! $isCreateActive,
                         ]) @if ($isCreateActive) aria-current="page" @endif>
                             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                                 <path d="M12 5v14M5 12h14"/>
@@ -104,7 +104,7 @@
             <!-- Quản trị hệ thống (Admin only) -->
             @if (auth()->user()->role === \App\Enums\UserRole::Admin)
                 <div>
-                    <p class="px-2 text-[10px] font-bold uppercase tracking-widest text-ink-muted">Quản trị</p>
+                    <p class="px-2 text-[11px] font-bold uppercase tracking-widest text-ink-muted">Quản trị</p>
                     <div class="mt-1.5 space-y-1">
                         @php
                             $isReviewActive = request()->routeIs('admin.post-reviews.*');
@@ -123,8 +123,8 @@
                         <!-- Duyệt bài -->
                         <a href="{{ route('admin.post-reviews.index') }}" @class([
                             'group flex min-h-9 items-center justify-between gap-2.5 px-2.5 py-1.5 font-bold transition-all',
-                            'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isReviewActive,
-                            'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isReviewActive,
+                            'rounded-[8px] border border-[#E2E8F0] bg-ink text-white shadow-none' => $isReviewActive,
+                            'rounded-[8px] border border-transparent text-ink hover:border-[#CBD5E1] hover:bg-ink hover:text-white' => ! $isReviewActive,
                         ]) @if ($isReviewActive) aria-current="page" @endif>
                             <span class="flex items-center gap-2.5 min-w-0">
                                 <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
@@ -134,9 +134,9 @@
                             </span>
                             @if ($pendingPosts > 0)
                                 <span @class([
-                                    'px-2 py-0.5 text-[10px] font-bold border transition-colors',
+                                    'px-2 py-0.5 text-[11px] font-bold rounded-[6px] border transition-colors',
                                     'bg-lime text-white border-white' => $isReviewActive,
-                                    'bg-surface text-ink border-line-strong group-hover:bg-lime group-hover:text-white group-hover:border-white' => ! $isReviewActive,
+                                    'bg-surface text-ink border-[#E2E8F0] group-hover:bg-lime group-hover:text-white group-hover:border-white' => ! $isReviewActive,
                                 ])>
                                     {{ $pendingPosts }}
                                 </span>
@@ -146,8 +146,8 @@
                         <!-- Đơn ứng tuyển CTV -->
                         <a href="{{ route('admin.author-applications.index') }}" @class([
                             'group flex min-h-9 items-center justify-between gap-2.5 px-2.5 py-1.5 font-bold transition-all',
-                            'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isAuthorAppsActive,
-                            'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isAuthorAppsActive,
+                            'rounded-[8px] border border-[#E2E8F0] bg-ink text-white shadow-none' => $isAuthorAppsActive,
+                            'rounded-[8px] border border-transparent text-ink hover:border-[#CBD5E1] hover:bg-ink hover:text-white' => ! $isAuthorAppsActive,
                         ]) @if ($isAuthorAppsActive) aria-current="page" @endif>
                             <span class="flex items-center gap-2.5 min-w-0">
                                 <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
@@ -157,9 +157,9 @@
                             </span>
                             @if ($pendingApplications > 0)
                                 <span @class([
-                                    'px-2 py-0.5 text-[10px] font-bold border transition-colors',
+                                    'px-2 py-0.5 text-[11px] font-bold rounded-[6px] border transition-colors',
                                     'bg-lime text-white border-white' => $isAuthorAppsActive,
-                                    'bg-surface text-ink border-line-strong group-hover:bg-lime group-hover:text-white group-hover:border-white' => ! $isAuthorAppsActive,
+                                    'bg-surface text-ink border-[#E2E8F0] group-hover:bg-lime group-hover:text-white group-hover:border-white' => ! $isAuthorAppsActive,
                                 ])>
                                     {{ $pendingApplications }}
                                 </span>
@@ -169,8 +169,8 @@
                         <!-- Yêu cầu gỡ / sửa bài -->
                         <a href="{{ route('admin.post-requests.index') }}" @class([
                             'group flex min-h-9 items-center justify-between gap-2.5 px-2.5 py-1.5 font-bold transition-all',
-                            'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isPostRequestsActive,
-                            'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isPostRequestsActive,
+                            'rounded-[8px] border border-[#E2E8F0] bg-ink text-white shadow-none' => $isPostRequestsActive,
+                            'rounded-[8px] border border-transparent text-ink hover:border-[#CBD5E1] hover:bg-ink hover:text-white' => ! $isPostRequestsActive,
                         ]) @if ($isPostRequestsActive) aria-current="page" @endif>
                             <span class="flex items-center gap-2.5 min-w-0">
                                 <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
@@ -180,9 +180,9 @@
                             </span>
                             @if ($pendingPostRequests > 0)
                                 <span @class([
-                                    'px-2 py-0.5 text-[10px] font-bold border transition-colors',
+                                    'px-2 py-0.5 text-[11px] font-bold rounded-[6px] border transition-colors',
                                     'bg-lime text-white border-white' => $isPostRequestsActive,
-                                    'bg-surface text-ink border-line-strong group-hover:bg-lime group-hover:text-white group-hover:border-white' => ! $isPostRequestsActive,
+                                    'bg-surface text-ink border-[#E2E8F0] group-hover:bg-lime group-hover:text-white group-hover:border-white' => ! $isPostRequestsActive,
                                 ])>
                                     {{ $pendingPostRequests }}
                                 </span>
@@ -192,8 +192,8 @@
                         <!-- Tất cả bài viết -->
                         <a href="{{ route('admin.posts.index') }}" @class([
                             'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all',
-                            'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isPostsActive,
-                            'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isPostsActive,
+                            'rounded-[8px] border border-[#E2E8F0] bg-ink text-white shadow-none' => $isPostsActive,
+                            'rounded-[8px] border border-transparent text-ink hover:border-[#CBD5E1] hover:bg-ink hover:text-white' => ! $isPostsActive,
                         ]) @if ($isPostsActive) aria-current="page" @endif>
                             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                                 <path d="M4 6h16M4 12h16M4 18h10"/>
@@ -204,8 +204,8 @@
                         <!-- Danh mục -->
                         <a href="{{ route('admin.categories.index') }}" @class([
                             'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all',
-                            'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isCatActive,
-                            'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isCatActive,
+                            'rounded-[8px] border border-[#E2E8F0] bg-ink text-white shadow-none' => $isCatActive,
+                            'rounded-[8px] border border-transparent text-ink hover:border-[#CBD5E1] hover:bg-ink hover:text-white' => ! $isCatActive,
                         ]) @if ($isCatActive) aria-current="page" @endif>
                             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                                 <path d="M3 7h7l2 2h9v10H3z"/><path d="M3 7V5h7l2 2"/>
@@ -216,8 +216,8 @@
                         <!-- Người dùng -->
                         <a href="{{ route('admin.users.index') }}" @class([
                             'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all',
-                            'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isUsersActive,
-                            'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isUsersActive,
+                            'rounded-[8px] border border-[#E2E8F0] bg-ink text-white shadow-none' => $isUsersActive,
+                            'rounded-[8px] border border-transparent text-ink hover:border-[#CBD5E1] hover:bg-ink hover:text-white' => ! $isUsersActive,
                         ]) @if ($isUsersActive) aria-current="page" @endif>
                             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
@@ -228,8 +228,8 @@
                         <!-- Bình luận -->
                         <a href="{{ route('admin.comments.index') }}" @class([
                             'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all',
-                            'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => $isCommentsActive,
-                            'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! $isCommentsActive,
+                            'rounded-[8px] border border-[#E2E8F0] bg-ink text-white shadow-none' => $isCommentsActive,
+                            'rounded-[8px] border border-transparent text-ink hover:border-[#CBD5E1] hover:bg-ink hover:text-white' => ! $isCommentsActive,
                         ]) @if ($isCommentsActive) aria-current="page" @endif>
                             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                                 <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
@@ -242,11 +242,11 @@
         </nav>
 
         <!-- Sidebar footer -->
-        <div class="shrink-0 border-t border-line p-3 space-y-1 font-mono text-xs">
+        <div class="shrink-0 border-t border-[#E2E8F0] p-3 space-y-1 font-mono text-xs">
             <a href="{{ route('profile.edit') }}" @class([
                 'group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold transition-all',
-                'border-2 border-line-strong bg-ink text-white shadow-brutal-sm' => request()->routeIs('profile.*'),
-                'border border-transparent text-ink hover:border-line-strong hover:bg-ink hover:text-white' => ! request()->routeIs('profile.*'),
+                'rounded-[8px] border border-[#E2E8F0] bg-ink text-white shadow-none' => request()->routeIs('profile.*'),
+                'rounded-[8px] border border-transparent text-ink hover:border-[#CBD5E1] hover:bg-ink hover:text-white' => ! request()->routeIs('profile.*'),
             ])>
                 <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                     <circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>
@@ -254,7 +254,7 @@
                 <span>Hồ sơ & cài đặt</span>
             </a>
 
-            <a href="{{ route('home') }}" class="group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold text-ink hover:bg-ink hover:text-white transition-colors border border-transparent hover:border-line-strong">
+            <a href="{{ route('home') }}" class="group flex min-h-9 items-center gap-2.5 px-2.5 py-1.5 font-bold text-ink hover:bg-ink hover:text-white transition-colors rounded-[8px] border border-transparent hover:border-[#CBD5E1]">
                 <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                     <path d="M14 3h7v7M10 14 21 3M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/>
                 </svg>
@@ -263,7 +263,7 @@
 
             <form method="POST" action="{{ route('logout') }}" class="pt-1">
                 @csrf
-                <button type="submit" class="flex min-h-9 w-full cursor-pointer items-center gap-2.5 px-2.5 py-1.5 text-left font-bold text-danger hover:bg-rose-50 transition-colors border border-transparent hover:border-danger/30">
+                <button type="submit" class="flex min-h-9 w-full cursor-pointer items-center gap-2.5 px-2.5 py-1.5 text-left font-bold text-danger hover:bg-rose-50 transition-colors rounded-[8px] border border-transparent hover:border-danger/30">
                     <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 shrink-0">
                         <path d="M10 17l5-5-5-5M15 12H3M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
                     </svg>
@@ -276,10 +276,10 @@
     <!-- Main content area -->
     <div class="min-h-dvh lg:pl-64 flex flex-col">
         <!-- Sticky Topbar -->
-        <header class="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between border-b border-line bg-surface/95 px-4 backdrop-blur-md sm:px-6 lg:px-8">
+        <header class="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between border-b border-[#E2E8F0] bg-surface/95 px-4 backdrop-blur-md sm:px-6 lg:px-8">
             <!-- Left: Mobile toggle + Breadcrumb -->
             <div class="flex min-w-0 items-center gap-3">
-                <button type="button" data-sidebar-open class="grid size-9 shrink-0 cursor-pointer place-items-center border border-line-strong text-ink hover:bg-paper focus-visible:outline-2 focus-visible:outline-ink lg:hidden" aria-controls="dashboard-sidebar" aria-expanded="false" aria-label="Mở menu điều hướng">
+                <button type="button" data-sidebar-open class="grid size-9 shrink-0 cursor-pointer place-items-center rounded-[8px] border border-[#E2E8F0] text-ink hover:bg-paper focus-visible:outline-2 focus-visible:outline-ink lg:hidden" aria-controls="dashboard-sidebar" aria-expanded="false" aria-label="Mở menu điều hướng">
                     <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-5">
                         <path d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
@@ -288,12 +288,12 @@
                 <nav aria-label="Breadcrumb" class="min-w-0 font-mono text-xs">
                     <ol class="flex items-center gap-1.5 text-ink-muted">
                         <li class="hidden sm:inline-block">
-                            <span class="text-ink-muted">Workspace</span>
+                            <span class="text-ink-muted">Khu làm việc</span>
                         </li>
                         @if (!empty($breadcrumbs))
                             @foreach ($breadcrumbs as $crumb)
                                 <li class="hidden sm:inline-block text-line" aria-hidden="true">/</li>
-                                <li class="truncate">
+                                <li @class(['truncate', 'hidden sm:block' => ! $loop->last])>
                                     @if (!empty($crumb['url']))
                                         <a href="{{ $crumb['url'] }}" class="text-ink-muted hover:text-ink hover:underline transition-colors">
                                             {{ $crumb['label'] }}
@@ -306,7 +306,7 @@
                         @else
                             <li class="hidden sm:inline-block text-line" aria-hidden="true">/</li>
                             <li class="truncate font-bold text-ink">
-                                {{ $title ?? 'Dashboard' }}
+                                {{ $title ?? 'Bảng điều khiển' }}
                             </li>
                         @endif
                     </ol>
@@ -314,11 +314,12 @@
             </div>
 
             <!-- Right: Actions & User Info -->
-            <div class="flex items-center gap-2.5 sm:gap-3">
+            <div class="flex shrink-0 items-center gap-2 sm:gap-3">
                 <!-- Nút Xem trang tin -->
                 <a href="{{ route('home') }}"
-                   title="Xem trang tin tức NewsHub"
-                   class="inline-flex min-h-8 items-center gap-1.5 border-2 border-line-strong bg-surface px-3 py-1.5 text-xs font-bold text-ink shadow-brutal-sm transition-colors hover:bg-ink hover:text-white focus-visible:outline-2 focus-visible:outline-ink">
+                   title="Xem trang tin tức BaoUT"
+                   aria-label="Xem trang tin tức BaoUT"
+                   class="inline-flex min-h-9 items-center gap-1.5 sm:min-h-8 rounded-[8px] border border-[#CBD5E1] bg-surface px-3 py-1.5 text-xs font-bold text-ink shadow-none transition-colors hover:bg-ink hover:text-white focus-visible:outline-2 focus-visible:outline-ink">
                     <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-3.5">
                         <path d="M14 3h7v7M10 14 21 3M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/>
                     </svg>
@@ -326,11 +327,11 @@
                 </a>
 
                 @if (auth()->user()->hasVerifiedEmail() && in_array(auth()->user()->role, [\App\Enums\UserRole::Author, \App\Enums\UserRole::Admin], true))
-                    <a href="{{ route('author.posts.create') }}" class="inline-flex min-h-8 items-center gap-1.5 border-2 border-line-strong bg-lime px-3.5 py-1.5 text-xs font-bold text-white shadow-brutal-sm transition-colors hover:bg-ink hover:text-white focus-visible:outline-2 focus-visible:outline-ink">
+                    <a href="{{ route('author.posts.create') }}" title="Viết bài mới" aria-label="Viết bài mới" class="inline-flex min-h-9 items-center gap-1.5 sm:min-h-8 whitespace-nowrap rounded-[8px] border border-[#E2E8F0] bg-lime px-3 sm:px-3.5 py-1.5 text-xs font-bold text-white shadow-none transition-colors hover:bg-ink hover:text-white focus-visible:outline-2 focus-visible:outline-ink">
                         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="size-3.5">
                             <path d="M12 5v14M5 12h14"/>
                         </svg>
-                        <span>Viết bài</span>
+                        <span class="hidden sm:inline">Viết bài</span>
                     </a>
                 @endif
 
@@ -340,13 +341,13 @@
                             data-user-menu-trigger
                             aria-expanded="false"
                             aria-label="Menu cá nhân"
-                            class="group flex items-center gap-2.5 border border-transparent py-1 pl-1 pr-2 transition-all hover:border-line-strong hover:bg-paper focus-visible:outline-2 focus-visible:outline-ink cursor-pointer">
-                        <span class="grid size-8 shrink-0 place-items-center bg-lime text-xs font-bold font-mono text-white border border-line-strong shadow-brutal-sm select-none" aria-hidden="true">
+                            class="group flex items-center gap-2.5 rounded-[8px] border border-transparent py-1 pl-1 pr-2 transition-all hover:border-[#CBD5E1] hover:bg-paper focus-visible:outline-2 focus-visible:outline-ink cursor-pointer">
+                        <span class="grid size-8 shrink-0 place-items-center bg-lime text-xs font-bold font-mono text-white rounded-[8px] select-none" aria-hidden="true">
                             {{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
                         </span>
                         <div class="hidden min-w-0 text-left sm:block">
                             <p class="max-w-32 truncate text-xs font-bold text-ink leading-tight">{{ auth()->user()->name }}</p>
-                            <p class="text-[10px] font-mono font-medium uppercase tracking-wider text-ink-muted">{{ auth()->user()->role->value }}</p>
+                            <p class="text-[11px] font-mono font-medium uppercase tracking-wider text-ink-muted">{{ auth()->user()->role->label() }}</p>
                         </div>
                         <svg class="size-3 text-ink-muted transition-transform duration-200 group-hover:text-ink" data-user-menu-chevron viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
@@ -356,15 +357,15 @@
                     <!-- Dropdown Panel -->
                     <div data-user-menu-panel
                          class="pointer-events-none opacity-0 invisible translate-y-1 transition-all duration-150 ease-out absolute right-0 top-full pt-1.5 z-50 w-60">
-                        <div class="rounded-none border-2 border-line-strong bg-surface p-2 shadow-brutal divide-y divide-line">
+                        <div class="rounded-[12px] border border-[#E2E8F0] bg-surface p-2 shadow-[0_8px_24px_rgb(15_23_42_/_0.10)] divide-y divide-[#E2E8F0]">
                             <div class="px-2.5 py-2">
                                 <p class="truncate text-xs font-bold text-ink">{{ auth()->user()->name }}</p>
-                                <p class="text-[10px] font-mono font-bold uppercase tracking-wider text-ink-muted">{{ auth()->user()->role->value }}</p>
+                                <p class="text-[11px] font-mono font-bold uppercase tracking-wider text-ink-muted">{{ auth()->user()->role->label() }}</p>
                             </div>
 
                             <div class="py-1">
                                 <a href="{{ route('home') }}"
-                                   class="flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-bold text-ink hover:bg-ink hover:text-white transition-colors">
+                                   class="rounded-[8px] flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-bold text-ink hover:bg-ink hover:text-white transition-colors">
                                     <svg class="size-4 shrink-0 text-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
                                     </svg>
@@ -372,7 +373,7 @@
                                 </a>
 
                                 <a href="{{ route('profile.edit') }}"
-                                   class="flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-bold text-ink hover:bg-ink hover:text-white transition-colors">
+                                   class="rounded-[8px] flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-bold text-ink hover:bg-ink hover:text-white transition-colors">
                                     <svg class="size-4 shrink-0 text-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                         <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
                                     </svg>
@@ -384,7 +385,7 @@
                                 <form method="POST" action="{{ route('logout') }}" class="w-full">
                                     @csrf
                                     <button type="submit"
-                                            class="w-full flex items-center gap-2.5 px-2.5 py-2 text-xs font-bold text-danger hover:bg-rose-50 transition-colors cursor-pointer text-left">
+                                            class="rounded-[8px] w-full flex items-center gap-2.5 px-2.5 py-2 text-xs font-bold text-danger hover:bg-rose-50 transition-colors cursor-pointer text-left">
                                         <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                                             <path d="M10 17l5-5-5-5M15 12H3M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
                                         </svg>
@@ -402,7 +403,7 @@
         <main id="dashboard-content" tabindex="-1" class="flex-1 mx-auto w-full max-w-7xl px-4 py-6 focus:outline-none sm:px-6 sm:py-8 lg:px-8">
             <!-- Global Flash Messages -->
             @if (session('status'))
-                <div role="status" class="mb-6 flex items-start gap-3 border-2 border-line-strong bg-lime/20 p-3.5 text-xs font-medium text-ink shadow-brutal-sm">
+                <div role="status" class="mb-6 flex items-start gap-3 rounded-[12px] border border-[#E2E8F0] bg-lime/20 p-3.5 text-xs font-medium text-ink shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                     <svg class="size-4 shrink-0 text-ink mt-0.5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
                     </svg>
@@ -411,7 +412,7 @@
             @endif
 
             @if ($errors->any())
-                <div role="alert" class="mb-6 border-2 border-line-strong bg-rose-50 p-4 text-xs text-danger shadow-brutal-sm">
+                <div role="alert" class="mb-6 rounded-[12px] border border-[#E2E8F0] bg-rose-50 p-4 text-xs text-danger shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                     <p class="font-bold text-danger flex items-center gap-1.5 font-mono uppercase tracking-wider">
                         <svg class="size-4 text-danger" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
@@ -433,22 +434,22 @@
     <!-- Global Floating Confirmation Modal Markup (Neo-Brutalist) -->
     <div id="app-confirm-modal" class="fixed inset-0 z-[9999] hidden overflow-y-auto bg-ink/60 backdrop-blur-xs p-4 sm:p-6" aria-modal="true" role="dialog">
         <div class="flex min-h-full items-center justify-center">
-            <div id="app-confirm-panel" class="relative w-full max-w-md scale-95 opacity-0 border-2 border-line-strong bg-surface p-6 shadow-brutal-lg transition-all duration-150">
+            <div id="app-confirm-panel" class="relative w-full max-w-md scale-95 opacity-0 rounded-[12px] border border-[#E2E8F0] bg-surface p-6 shadow-[0_8px_24px_rgb(15_23_42_/_0.10)] transition-all duration-150">
                 <div class="flex items-start gap-3">
-                    <div id="app-confirm-icon-box" class="grid size-10 shrink-0 place-items-center border-2 border-line-strong">
+                    <div id="app-confirm-icon-box" class="grid size-10 shrink-0 place-items-center rounded-[8px] border border-[#E2E8F0]">
                         <span id="app-confirm-icon"></span>
                     </div>
                     <div class="flex-1 space-y-1">
                         <h3 id="app-confirm-title" class="text-base font-black text-ink tracking-tight">Xác nhận</h3>
                         <p id="app-confirm-message" class="text-xs text-ink-muted leading-relaxed"></p>
-                        <div id="app-confirm-subtext" class="mt-2.5 hidden text-xs font-semibold p-2.5 border text-left line-clamp-2"></div>
+                        <div id="app-confirm-subtext" class="mt-2.5 hidden text-xs font-semibold p-2.5 rounded-[8px] border text-left line-clamp-2"></div>
                     </div>
                 </div>
-                <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-line">
-                    <button type="button" id="app-confirm-cancel-btn" class="border border-line-strong bg-surface px-4 py-2 text-xs font-bold text-ink hover:bg-paper cursor-pointer transition-colors">
+                <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-[#E2E8F0]">
+                    <button type="button" id="app-confirm-cancel-btn" class="rounded-[8px] border border-[#E2E8F0] bg-surface px-4 py-2 text-xs font-bold text-ink hover:bg-paper cursor-pointer transition-colors">
                         Hủy bỏ
                     </button>
-                    <button type="button" id="app-confirm-ok-btn" class="border border-line-strong px-4 py-2 text-xs font-bold shadow-brutal-sm cursor-pointer transition-colors">
+                    <button type="button" id="app-confirm-ok-btn" class="rounded-[8px] border border-[#E2E8F0] px-4 py-2 text-xs font-bold shadow-none cursor-pointer transition-colors">
                         <span id="app-confirm-ok-text">Xác nhận</span>
                     </button>
                 </div>
@@ -563,24 +564,24 @@
 
         const CONFIRM_THEMES = {
             success: {
-                box: 'bg-lime text-white border-line-strong',
-                btn: 'border border-line-strong bg-lime text-white hover:bg-ink hover:text-white',
-                subtext: 'border-line bg-paper text-ink'
+                box: 'bg-lime text-white border-[#E2E8F0]',
+                btn: 'rounded-[8px] border border-[#E2E8F0] bg-lime text-white hover:bg-ink hover:text-white',
+                subtext: 'border-[#E2E8F0] bg-paper text-ink'
             },
             danger: {
-                box: 'bg-rose-100 text-danger border-line-strong',
-                btn: 'border border-line-strong bg-danger text-white hover:opacity-90',
+                box: 'bg-rose-100 text-danger border-[#E2E8F0]',
+                btn: 'rounded-[8px] border border-[#E2E8F0] bg-danger text-white hover:opacity-90',
                 subtext: 'border-danger/30 bg-rose-50 text-danger'
             },
             warning: {
-                box: 'bg-[#dce6f2] text-ink border-line-strong',
-                btn: 'border border-line-strong bg-lime text-white hover:bg-ink hover:text-white',
-                subtext: 'border-line bg-paper text-ink'
+                box: 'bg-[#dce6f2] text-ink border-[#E2E8F0]',
+                btn: 'rounded-[8px] border border-[#E2E8F0] bg-lime text-white hover:bg-ink hover:text-white',
+                subtext: 'border-[#E2E8F0] bg-paper text-ink'
             },
             info: {
-                box: 'bg-lime text-white border-line-strong',
-                btn: 'border border-line-strong bg-lime text-white hover:bg-ink hover:text-white',
-                subtext: 'border-line bg-paper text-ink'
+                box: 'bg-lime text-white border-[#E2E8F0]',
+                btn: 'rounded-[8px] border border-[#E2E8F0] bg-lime text-white hover:bg-ink hover:text-white',
+                subtext: 'border-[#E2E8F0] bg-paper text-ink'
             }
         };
 
@@ -620,15 +621,15 @@
 
             if (subtext) {
                 els.subtext.textContent = subtext;
-                els.subtext.className = 'mt-2.5 text-xs font-semibold p-2.5 border text-left line-clamp-2 ' + (CONFIRM_THEMES[type]?.subtext || CONFIRM_THEMES.warning.subtext);
+                els.subtext.className = 'mt-2.5 text-xs font-semibold p-2.5 rounded-[8px] border text-left line-clamp-2 ' + (CONFIRM_THEMES[type]?.subtext || CONFIRM_THEMES.warning.subtext);
                 els.subtext.classList.remove('hidden');
             } else {
                 els.subtext.classList.add('hidden');
             }
 
             els.icon.innerHTML = CONFIRM_ICONS[type] || CONFIRM_ICONS.warning;
-            els.iconBox.className = 'grid size-10 shrink-0 place-items-center border-2 ' + (CONFIRM_THEMES[type]?.box || CONFIRM_THEMES.warning.box);
-            els.okBtn.className = 'border px-4 py-2 text-xs font-bold shadow-brutal-sm cursor-pointer transition-colors ' + (CONFIRM_THEMES[type]?.btn || CONFIRM_THEMES.warning.btn);
+            els.iconBox.className = 'grid size-10 shrink-0 place-items-center rounded-[8px] border ' + (CONFIRM_THEMES[type]?.box || CONFIRM_THEMES.warning.box);
+            els.okBtn.className = 'rounded-[8px] border px-4 py-2 text-xs font-bold shadow-none cursor-pointer transition-colors ' + (CONFIRM_THEMES[type]?.btn || CONFIRM_THEMES.warning.btn);
 
             els.modal.classList.remove('hidden');
             document.body.classList.add('overflow-hidden');

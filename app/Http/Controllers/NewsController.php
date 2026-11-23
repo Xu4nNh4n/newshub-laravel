@@ -28,13 +28,14 @@ class NewsController extends Controller
 
         $selectedCategory = isset($filters['category'])
             ? Category::query()
+                ->publiclyVisible()
                 ->where('slug', $filters['category'])
                 ->with([
                     'children' => fn ($q) => $q->where('status', CategoryStatus::Active)->orderBy('name'),
                     'parent:id,name,slug',
                     'parent.children' => fn ($q) => $q->where('status', CategoryStatus::Active)->orderBy('name'),
                 ])
-                ->first()
+                ->firstOrFail()
             : null;
         $categoryIds = $selectedCategory?->selfAndChildIds();
 
@@ -82,7 +83,7 @@ class NewsController extends Controller
         $post = Post::query()
             ->publiclyVisible()
             ->where('slug', $slug)
-            ->with(['author:id,name', 'category:id,name,slug'])
+            ->with(['author:id,name,role_id', 'author.userRole:id,code', 'category:id,name,slug'])
             ->firstOrFail();
 
         $ipHash = $request->ip() === null ? null : hash_hmac('sha256', $request->ip(), config('app.key'));

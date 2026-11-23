@@ -60,4 +60,18 @@ class CommentManagementTest extends TestCase
 
         $this->assertSoftDeleted($comment);
     }
+
+    public function test_comment_export_reports_each_state_and_neutralises_formulas(): void
+    {
+        $admin = User::factory()->create(['role' => UserRole::Admin]);
+        Comment::factory()->create(['content' => '=1+1']);
+        Comment::factory()->create(['content' => 'bi-an', 'status' => CommentStatus::Hidden]);
+        Comment::factory()->create(['content' => 'da-xoa'])->delete();
+
+        $csv = $this->actingAs($admin)->get(route('admin.comments.export'))->streamedContent();
+
+        $this->assertStringContainsString("'=1+1,\"Hiển thị\"", $csv);
+        $this->assertStringContainsString('bi-an,"Đã ẩn"', $csv);
+        $this->assertStringContainsString('da-xoa,"Đã xóa"', $csv);
+    }
 }

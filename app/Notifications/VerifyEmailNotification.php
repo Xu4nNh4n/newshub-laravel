@@ -31,17 +31,17 @@ class VerifyEmailNotification extends Notification
         );
 
         return (new MailMessage)
-            ->subject('Xác minh địa chỉ email NewsHub')
+            ->subject('Xác minh địa chỉ email BaoUT')
             ->view(['html' => 'mail.auth-action', 'text' => 'mail.auth-action-text'], [
-                'preheader' => 'Xác minh email để hoàn tất tài khoản NewsHub.',
+                'preheader' => 'Xác minh email để hoàn tất tài khoản BaoUT.',
                 'eyebrow' => 'BẢO MẬT TÀI KHOẢN',
                 'title' => 'Chỉ còn một bước nữa',
                 'recipientName' => $notifiable->name,
-                'intro' => 'Cảm ơn bạn đã tham gia NewsHub. Hãy xác minh địa chỉ email để bình luận, lưu bài viết và sử dụng đầy đủ các tính năng.',
+                'intro' => 'Cảm ơn bạn đã tham gia BaoUT. Hãy xác minh địa chỉ email để bình luận, lưu bài viết và sử dụng đầy đủ các tính năng.',
                 'actionLabel' => 'Xác minh email',
                 'actionUrl' => $verificationUrl,
                 'expiryText' => 'Liên kết có hiệu lực trong '.Config::integer('auth.verification.expire', 60).' phút.',
-                'securityText' => 'Nếu bạn không tạo tài khoản NewsHub, hãy bỏ qua email này. Không cần thực hiện thêm thao tác nào.',
+                'securityText' => 'Nếu bạn không tạo tài khoản BaoUT, hãy bỏ qua email này. Không cần thực hiện thêm thao tác nào.',
                 'accentColor' => '#1D4ED8',
                 'accentTextColor' => '#FFFFFF',
                 'accentSoftColor' => '#EFF6FF',

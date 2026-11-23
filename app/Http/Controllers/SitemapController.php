@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\CategoryStatus;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,7 +19,7 @@ class SitemapController extends Controller
             ->get();
 
         $categories = Category::query()
-            ->where('status', CategoryStatus::Active)
+            ->publiclyVisible()
             ->whereHas('posts', fn (Builder $query): Builder => $query->publiclyVisible())
             ->select('id', 'slug', 'updated_at')
             ->orderBy('id')

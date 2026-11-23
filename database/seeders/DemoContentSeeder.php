@@ -203,7 +203,7 @@ class DemoContentSeeder extends Seeder
                     'category_id' => $categories[$categorySlug]->id,
                     'title' => $title,
                     'summary' => $metaDescription,
-                    'content' => "{$metaDescription} Bài viết cung cấp góc nhìn tổng quan và các gợi ý thực hành phù hợp cho độc giả NewsHub.",
+                    'content' => "{$metaDescription} Bài viết cung cấp góc nhìn tổng quan và các gợi ý thực hành phù hợp cho độc giả BaoUT.",
                     'status' => PostStatus::Published,
                     'published_at' => now()->subDays($index + 1),
                 ],

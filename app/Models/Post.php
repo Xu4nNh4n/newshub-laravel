@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\CategoryStatus;
 use App\Enums\PostStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -37,7 +36,7 @@ class Post extends Model
             ->where('status', PostStatus::Published)
             ->whereNotNull('published_at')
             ->where('published_at', '<=', now())
-            ->whereHas('category', fn (Builder $query): Builder => $query->where('status', CategoryStatus::Active));
+            ->whereHas('category', fn (Builder $query): Builder => $query->publiclyVisible());
     }
 
     public function author(): BelongsTo

@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class PostModerationTest extends TestCase
@@ -130,5 +131,28 @@ class PostModerationTest extends TestCase
 
         auth()->logout();
         $this->get(route('posts.preview', $post))->assertRedirect(route('login'));
+    }
+
+    #[DataProvider('formulaTitleProvider')]
+    public function test_post_export_neutralises_formula_titles(string $title): void
+    {
+        $admin = User::factory()->create(['role' => UserRole::Admin]);
+        Post::factory()->create(['title' => $title]);
+
+        $csv = $this->actingAs($admin)->get(route('admin.posts.export'))->streamedContent();
+
+        $this->assertStringContainsString("'".$title, $csv);
+    }
+
+    /** @return array<string, array{string}> */
+    public static function formulaTitleProvider(): array
+    {
+        return [
+            'equals' => ['=SUM(A1)'],
+            'plus' => ['+1'],
+            'minus' => ['-1'],
+            'at sign' => ['@SUM(A1)'],
+            'leading space' => [' =SUM(A1)'],
+        ];
     }
 }

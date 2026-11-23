@@ -6,16 +6,16 @@
     /* OpenJev Editorial Theme for Quill Editor */
     .ql-toolbar.ql-snow {
         background-color: var(--color-paper) !important;
-        border: 2px solid var(--color-line-strong) !important;
+        border: 1px solid var(--color-control) !important;
         border-bottom: none !important;
-        border-radius: 0 !important;
+        border-radius: 12px 12px 0 0 !important;
         font-family: inherit;
         padding: 0.625rem !important;
     }
     .ql-container.ql-snow {
         background-color: var(--color-surface) !important;
-        border: 2px solid var(--color-line-strong) !important;
-        border-radius: 0 !important;
+        border: 1px solid var(--color-control) !important;
+        border-radius: 0 0 12px 12px !important;
         color: var(--color-ink) !important;
         font-family: inherit;
         font-size: 0.95rem;
@@ -33,9 +33,9 @@
     }
     .ql-snow .ql-picker-options {
         background-color: var(--color-surface) !important;
-        border: 2px solid var(--color-line-strong) !important;
-        border-radius: 0 !important;
-        box-shadow: 2px 2px 0px var(--color-line-strong) !important;
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 8px !important;
+        box-shadow: 0 8px 24px rgb(15 23 42 / 0.10) !important;
     }
     .ql-snow.ql-toolbar button:hover,
     .ql-snow .ql-toolbar button:hover,
@@ -67,16 +67,18 @@
     .ql-editor img {
         max-width: 100%;
         height: auto;
-        border: 2px solid var(--color-line-strong);
+        border: 1px solid #E2E8F0;
+        border-radius: 8px;
         margin: 1.5rem auto;
         display: block;
-        box-shadow: 2px 2px 0px var(--color-line-strong);
+        box-shadow: 0 1px 3px rgb(15 23 42 / 0.04);
     }
     .ql-editor iframe {
         width: 100%;
         aspect-ratio: 16 / 9;
         height: auto;
-        border: 2px solid var(--color-line-strong);
+        border: 1px solid #E2E8F0;
+        border-radius: 8px;
         margin: 1.5rem 0;
     }
     .ql-editor blockquote {
@@ -106,7 +108,7 @@
 
 <div class="mx-auto max-w-4xl space-y-6">
     <!-- Header -->
-    <div class="border-b-2 border-line-strong pb-5">
+    <div class="border-b border-[#E2E8F0] pb-5">
         <span class="font-mono text-xs font-bold uppercase tracking-wider text-ink-muted block mb-1">Tòa soạn / Biên soạn nội dung</span>
         <h1 class="text-2xl font-black uppercase tracking-tight text-ink sm:text-3xl font-heading">
             {{ isset($post) ? 'Chỉnh sửa bài viết' : 'Viết bài mới' }}
@@ -127,9 +129,9 @@
         @endphp
 
         @if($pendingRequest)
-            <div class="border-2 border-line-strong bg-paper p-4 text-xs text-ink flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-brutal-sm">
+            <div class="rounded-[12px] border border-[#E2E8F0] bg-paper p-4 text-xs text-ink flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                 <div class="flex items-start gap-3 min-w-0 flex-1">
-                    <span class="mt-0.5 grid size-5 shrink-0 place-items-center bg-lime text-white border border-line-strong font-mono font-bold text-xs">
+                    <span class="mt-0.5 grid size-5 shrink-0 place-items-center bg-lime text-white rounded-[6px] border border-[#E2E8F0] font-mono font-bold text-xs">
                         !
                     </span>
                     <div class="min-w-0 flex-1">
@@ -153,7 +155,7 @@
                       class="shrink-0">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="inline-flex cursor-pointer items-center justify-center gap-1.5 border-2 border-line-strong bg-danger px-3 py-1.5 text-xs font-mono font-bold uppercase text-paper shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
+                    <button type="submit" class="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-[8px] border border-[#E2E8F0] bg-danger px-3 py-1.5 text-xs font-mono font-bold uppercase text-paper shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
                         <svg class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
@@ -162,7 +164,7 @@
                 </form>
             </div>
         @elseif($latestRejectedRequest)
-            <div class="border-2 border-line-strong bg-paper p-4 text-xs text-ink shadow-brutal-sm">
+            <div class="rounded-[12px] border border-[#E2E8F0] bg-paper p-4 text-xs text-ink shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                 <div class="flex items-center gap-2 font-bold text-danger uppercase tracking-tight">
                     <span class="font-mono font-black text-sm">⚠</span>
                     <span>Yêu cầu {{ $latestRejectedRequest->type === \App\Enums\PostRequestType::Removal ? 'gỡ bài' : 'đính chính' }} gần nhất đã bị từ chối</span>
@@ -172,7 +174,7 @@
         @endif
     @endisset
 
-    <form method="POST" enctype="multipart/form-data" action="{{ isset($post) ? route('author.posts.update', $post) : route('author.posts.store') }}" class="space-y-6 border-2 border-line-strong bg-surface p-6 sm:p-8 shadow-brutal">
+    <form method="POST" enctype="multipart/form-data" action="{{ isset($post) ? route('author.posts.update', $post) : route('author.posts.store') }}" class="space-y-6 rounded-[12px] border border-[#E2E8F0] bg-surface p-6 sm:p-8 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
         @csrf
         @isset($post) @method('PUT') @endisset
 
@@ -180,7 +182,7 @@
             <label for="title" class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">
                 Tiêu đề bài viết <span class="text-danger">*</span>
             </label>
-            <input id="title" name="title" required value="{{ old('title', $post->title ?? '') }}" placeholder="Nhập tiêu đề ấn tượng cho bài viết..." class="mt-1.5 w-full border-2 border-line bg-paper px-3.5 py-2.5 text-sm font-medium text-ink outline-none focus:border-ink transition-colors">
+            <input id="title" name="title" required value="{{ old('title', $post->title ?? '') }}" placeholder="Nhập tiêu đề ấn tượng cho bài viết..." class="mt-1.5 w-full rounded-[8px] border border-control bg-paper px-3.5 py-2.5 text-sm font-medium text-ink outline-none focus:border-[#1D4ED8] focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)] transition-colors">
         </div>
 
         <div>
@@ -188,7 +190,7 @@
                 <label for="slug" class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">
                     Slug (để trống sẽ tự sinh từ tiêu đề)
                 </label>
-                <input id="slug" name="slug" value="{{ old('slug', $post->slug ?? '') }}" placeholder="duong-dan-bai-viet" class="mt-1.5 w-full border-2 border-line bg-paper px-3.5 py-2.5 text-xs font-mono text-ink outline-none focus:border-ink transition-colors">
+                <input id="slug" name="slug" value="{{ old('slug', $post->slug ?? '') }}" placeholder="duong-dan-bai-viet" class="mt-1.5 w-full rounded-[8px] border border-control bg-paper px-3.5 py-2.5 text-xs font-mono text-ink outline-none focus:border-[#1D4ED8] focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)] transition-colors">
             </div>
         </div>
 
@@ -196,7 +198,7 @@
             <label for="category_id" class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">
                 Chuyên mục <span class="text-danger">*</span>
             </label>
-            <select id="category_id" name="category_id" required class="mt-1.5 w-full border-2 border-line bg-paper px-3.5 py-2.5 text-xs text-ink outline-none focus:border-ink transition-colors">
+            <select id="category_id" name="category_id" required class="mt-1.5 w-full rounded-[8px] border border-control bg-paper px-3.5 py-2.5 text-xs text-ink outline-none focus:border-[#1D4ED8] focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)] transition-colors">
                 @php
                     $pCategories = $categories->whereNull('parent_id');
                 @endphp
@@ -231,7 +233,7 @@
                        type="datetime-local"
                        name="published_at"
                        value="{{ old('published_at', isset($post) && $post->published_at ? $post->published_at->format('Y-m-d\TH:i') : '') }}"
-                       class="mt-1.5 w-full border-2 border-line bg-paper px-3.5 py-2.5 text-xs font-mono text-ink outline-none focus:border-ink transition-colors">
+                       class="mt-1.5 w-full rounded-[8px] border border-control bg-paper px-3.5 py-2.5 text-xs font-mono text-ink outline-none focus:border-[#1D4ED8] focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)] transition-colors">
                 <p class="mt-1 font-mono text-[11px] text-ink-muted">
                     Để trống sẽ tự động lấy thời điểm hiện tại khi bạn chọn Xuất bản ngay.
                 </p>
@@ -245,19 +247,19 @@
             <label for="summary" class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">
                 Tóm tắt bài viết / Sa-pô
             </label>
-            <textarea id="summary" name="summary" rows="3" class="mt-1.5 w-full border-2 border-line bg-paper px-3.5 py-2.5 text-xs text-ink outline-none focus:border-ink transition-colors" placeholder="Đoạn văn ngắn mở đầu giới thiệu nội dung chính của bài viết...">{{ old('summary', $post->summary ?? '') }}</textarea>
+            <textarea id="summary" name="summary" rows="3" class="mt-1.5 w-full rounded-[8px] border border-control bg-paper px-3.5 py-2.5 text-xs text-ink outline-none focus:border-[#1D4ED8] focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)] transition-colors" placeholder="Đoạn văn ngắn mở đầu giới thiệu nội dung chính của bài viết...">{{ old('summary', $post->summary ?? '') }}</textarea>
         </div>
 
         <div>
             <label for="thumbnail" class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">
                 Ảnh đại diện (JPG, PNG, WEBP; tối đa 4 MB)
             </label>
-            <input id="thumbnail" type="file" name="thumbnail" accept="image/jpeg,image/png,image/webp" class="mt-1.5 w-full border-2 border-line bg-paper px-3.5 py-2 text-xs text-ink file:mr-3 file:border-2 file:border-line-strong file:bg-surface file:px-3 file:py-1 file:font-mono file:text-xs file:font-bold file:uppercase file:text-ink hover:file:bg-lime">
+            <input id="thumbnail" type="file" name="thumbnail" accept="image/jpeg,image/png,image/webp" class="mt-1.5 w-full rounded-[8px] border border-control bg-paper px-3.5 py-2 text-xs text-ink file:mr-3 file:rounded-[6px] file:border file:border-solid file:border-[#E2E8F0] file:bg-surface file:px-3 file:py-1 file:font-mono file:text-xs file:font-bold file:uppercase file:text-ink hover:file:bg-lime">
             
             <div class="mt-2.5 flex flex-wrap items-center gap-4">
                 @if(isset($post) && $post->thumbnail)
                     <label class="inline-flex items-center gap-2 font-mono text-xs text-danger font-bold cursor-pointer select-none">
-                        <input type="checkbox" name="remove_thumbnail" value="1" class="border-2 border-line text-danger focus:ring-0">
+                        <input type="checkbox" name="remove_thumbnail" value="1" class="border border-control text-danger focus:ring-0">
                         Xóa ảnh hiện tại
                     </label>
                 @endif
@@ -292,26 +294,26 @@
             </div>
         </div>
 
-        <div class="flex flex-wrap items-center justify-between gap-3 pt-5 border-t-2 border-line-strong">
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-5 border-t border-[#E2E8F0]">
             <div class="flex flex-wrap items-center gap-2.5">
                 @if(auth()->user()->role === \App\Enums\UserRole::Admin)
-                    <button type="submit" name="action" value="publish" class="inline-flex min-h-10 items-center justify-center gap-1.5 border-2 border-line-strong bg-lime px-5 py-2 font-mono text-xs font-bold uppercase text-ink shadow-brutal hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
+                    <button type="submit" name="action" value="publish" class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-[8px] border border-[#E2E8F0] bg-lime px-5 py-2 font-mono text-xs font-bold uppercase text-ink shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
                         <svg class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
                         </svg>
                         <span>Xuất bản ngay</span>
                     </button>
-                    <button type="submit" name="action" value="draft" class="inline-flex min-h-10 items-center justify-center border-2 border-line-strong bg-surface px-5 py-2 font-mono text-xs font-bold uppercase text-ink shadow-brutal hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
+                    <button type="submit" name="action" value="draft" class="inline-flex min-h-10 items-center justify-center rounded-[8px] border border-[#CBD5E1] bg-surface px-5 py-2 font-mono text-xs font-bold uppercase text-ink shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
                         Lưu bản nháp
                     </button>
                 @else
-                    <button type="submit" name="action" value="draft" class="inline-flex min-h-10 items-center justify-center border-2 border-line-strong bg-lime px-5 py-2 font-mono text-xs font-bold uppercase text-ink shadow-brutal hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
+                    <button type="submit" name="action" value="draft" class="inline-flex min-h-10 items-center justify-center rounded-[8px] border border-[#E2E8F0] bg-lime px-5 py-2 font-mono text-xs font-bold uppercase text-ink shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
                         Lưu bản nháp
                     </button>
                 @endif
 
                 <!-- Live Preview Button -->
-                <button type="button" id="btn-open-preview" class="inline-flex min-h-10 items-center justify-center gap-1.5 border-2 border-line-strong bg-paper px-4 py-2 font-mono text-xs font-bold uppercase text-ink shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
+                <button type="button" id="btn-open-preview" class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-[8px] border border-[#CBD5E1] bg-paper px-4 py-2 font-mono text-xs font-bold uppercase text-ink shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
                     <svg class="size-4" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
                         <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
@@ -319,7 +321,7 @@
                     <span>Xem trước</span>
                 </button>
 
-                <a href="{{ route('author.posts.index') }}" class="inline-flex min-h-10 items-center justify-center border-2 border-line bg-surface px-4 py-2 font-mono text-xs font-bold uppercase text-ink-muted hover:text-ink hover:border-line-strong transition-all">
+                <a href="{{ route('author.posts.index') }}" class="inline-flex min-h-10 items-center justify-center rounded-[8px] border border-[#CBD5E1] bg-surface px-4 py-2 font-mono text-xs font-bold uppercase text-ink-muted hover:text-ink hover:border-[#94A3B8] transition-all">
                     Quay lại
                 </a>
             </div>
@@ -330,7 +332,7 @@
                     @if ($post->status === \App\Enums\PostStatus::Published)
                         @if ($pendingRequest)
                             <div class="flex items-center gap-2">
-                                <span class="inline-flex min-h-10 items-center justify-center gap-1.5 border-2 border-line-strong bg-paper px-3.5 py-2 font-mono text-xs font-bold text-ink">
+                                <span class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-[6px] border border-[#E2E8F0] bg-paper px-3.5 py-2 font-mono text-xs font-bold text-ink">
                                     <span class="size-2 bg-lime"></span>
                                     <span>Đã gửi yêu cầu (Chờ duyệt)</span>
                                 </span>
@@ -342,13 +344,13 @@
                                       data-confirm-btn="Xác nhận hủy yêu cầu">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="inline-flex min-h-10 cursor-pointer items-center justify-center border-2 border-line-strong bg-danger px-3.5 py-2 font-mono text-xs font-bold uppercase text-paper shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
+                                    <button type="submit" class="inline-flex min-h-10 cursor-pointer items-center justify-center rounded-[8px] border border-[#E2E8F0] bg-danger px-3.5 py-2 font-mono text-xs font-bold uppercase text-paper shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
                                         <span>Hủy</span>
                                     </button>
                                 </form>
                             </div>
                         @else
-                            <button type="button" id="btn-open-request-form" class="inline-flex min-h-10 items-center justify-center gap-1.5 border-2 border-line-strong bg-paper px-3.5 py-2 font-mono text-xs font-bold uppercase text-ink shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
+                            <button type="button" id="btn-open-request-form" class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-[8px] border border-[#CBD5E1] bg-paper px-3.5 py-2 font-mono text-xs font-bold uppercase text-ink shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
                                 <svg class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd" />
                                 </svg>
@@ -358,7 +360,7 @@
                     @endif
 
                     @can('delete', $post)
-                        <button type="button" id="btn-delete-post" class="inline-flex min-h-10 items-center justify-center gap-1.5 border-2 border-line-strong bg-danger px-3.5 py-2 font-mono text-xs font-bold uppercase text-paper shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
+                        <button type="button" id="btn-delete-post" class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-[8px] border border-[#E2E8F0] bg-danger px-3.5 py-2 font-mono text-xs font-bold uppercase text-paper shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
                             <svg class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clip-rule="evenodd" />
                             </svg>
@@ -373,14 +375,14 @@
 
 <!-- Live Preview Modal -->
 <div id="preview-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-ink/75 p-3 sm:p-6 md:p-8" aria-modal="true" role="dialog">
-    <div class="mx-auto max-w-4xl border-2 border-line-strong bg-surface shadow-brutal flex flex-col max-h-[92vh]">
+    <div class="mx-auto max-w-4xl rounded-[12px] border border-[#E2E8F0] bg-surface shadow-[0_8px_24px_rgb(15_23_42_/_0.10)] flex flex-col max-h-[92vh]">
         <!-- Preview Header Bar -->
-        <div class="flex items-center justify-between border-b-2 border-line-strong bg-paper px-6 py-3 shrink-0">
+        <div class="flex items-center justify-between rounded-t-[11px] border-b border-[#E2E8F0] bg-paper px-6 py-3 shrink-0">
             <div class="flex items-center gap-2">
                 <span class="font-mono text-xs font-bold uppercase tracking-wider text-ink">Xem trước bài viết (Live Preview)</span>
-                <span class="border border-line-strong bg-lime px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-ink">Bản nháp</span>
+                <span class="rounded-[6px] border border-[#E2E8F0] bg-lime px-2 py-0.5 font-mono text-[11px] font-bold uppercase text-ink">Bản nháp</span>
             </div>
-            <button type="button" id="btn-close-preview" class="border border-line-strong bg-surface p-1.5 text-ink hover:bg-lime transition-colors cursor-pointer" title="Đóng xem trước (ESC)">
+            <button type="button" id="btn-close-preview" class="rounded-[8px] border border-[#E2E8F0] bg-surface p-1.5 text-ink hover:bg-lime transition-colors cursor-pointer" title="Đóng xem trước (ESC)">
                 <svg class="size-4" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                 </svg>
@@ -391,7 +393,7 @@
         <div class="overflow-y-auto p-6 sm:p-10 space-y-6 flex-1 text-ink bg-surface">
             <!-- Category Badge & Time -->
             <div class="flex flex-wrap items-center gap-3">
-                <span id="preview-category" class="border border-line-strong bg-lime px-2.5 py-1 font-mono text-xs font-bold uppercase text-ink">Chuyên mục</span>
+                <span id="preview-category" class="rounded-[6px] border border-[#E2E8F0] bg-lime px-2.5 py-1 font-mono text-xs font-bold uppercase text-ink">Chuyên mục</span>
                 <span class="font-mono text-xs text-ink-muted" id="preview-date">Bản xem trước · {{ now()->format('d/m/Y H:i') }}</span>
             </div>
 
@@ -401,8 +403,8 @@
             </h1>
 
             <!-- Author info meta -->
-            <div class="flex items-center gap-3 border-y-2 border-line-strong py-3 font-mono text-xs text-ink-muted">
-                <span class="grid size-8 place-items-center border-2 border-line-strong bg-paper font-bold text-ink">
+            <div class="flex items-center gap-3 border-y border-[#E2E8F0] py-3 font-mono text-xs text-ink-muted">
+                <span class="grid size-8 place-items-center rounded-[6px] border border-[#E2E8F0] bg-paper font-bold text-ink">
                     {{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
                 </span>
                 <div>
@@ -419,10 +421,10 @@
 
             <!-- Featured Thumbnail -->
             <div id="preview-thumbnail-wrapper" class="hidden">
-                <figure class="border-2 border-line-strong bg-paper shadow-brutal-sm">
+                <figure class="rounded-[12px] border border-[#E2E8F0] bg-paper shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                     <img id="preview-thumbnail-img" src="" alt="Thumbnail bài viết" class="aspect-video w-full object-cover">
-                    <figcaption class="px-4 py-2 text-center font-mono text-xs text-ink-muted border-t-2 border-line-strong">
-                        Hình ảnh minh họa cho bài viết · Nguồn: NewsHub
+                    <figcaption class="px-4 py-2 text-center font-mono text-xs text-ink-muted border-t border-[#E2E8F0]">
+                        Hình ảnh minh họa cho bài viết · Nguồn: BaoUT
                     </figcaption>
                 </figure>
             </div>
@@ -434,9 +436,9 @@
         </div>
 
         <!-- Preview Footer -->
-        <div class="flex items-center justify-between border-t-2 border-line-strong bg-paper px-6 py-3 shrink-0">
+        <div class="flex items-center justify-between rounded-b-[11px] border-t border-[#E2E8F0] bg-paper px-6 py-3 shrink-0">
             <span class="font-mono text-xs text-ink-muted">Xem trước hoàn chỉnh bài viết.</span>
-            <button type="button" id="btn-close-preview-footer" class="border-2 border-line-strong bg-surface px-4 py-1.5 font-mono text-xs font-bold uppercase text-ink hover:bg-lime transition-colors cursor-pointer shadow-brutal-sm">
+            <button type="button" id="btn-close-preview-footer" class="rounded-[8px] border border-[#E2E8F0] bg-surface px-4 py-1.5 font-mono text-xs font-bold uppercase text-ink hover:bg-lime transition-colors cursor-pointer shadow-none">
                 Đóng & Tiếp tục sửa
             </button>
         </div>
@@ -448,9 +450,9 @@
         <!-- Modal xác nhận xóa bài viết -->
         <div id="delete-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-ink/75 p-4 sm:p-6" aria-modal="true" role="dialog">
             <div class="flex min-h-full items-center justify-center">
-                <div class="relative w-full max-w-md border-2 border-line-strong bg-surface p-6 shadow-brutal transition-all">
+                <div class="relative w-full max-w-md rounded-[12px] border border-[#E2E8F0] bg-surface p-6 shadow-[0_8px_24px_rgb(15_23_42_/_0.10)] transition-all">
                     <!-- Warning Icon -->
-                    <div class="flex size-12 items-center justify-center border-2 border-line-strong bg-danger text-paper mx-auto font-mono font-black text-xl shadow-brutal-sm">
+                    <div class="flex size-12 items-center justify-center rounded-[12px] border border-[#E2E8F0] bg-danger text-paper mx-auto font-mono font-black text-xl shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                         !
                     </div>
 
@@ -460,7 +462,7 @@
                         <p class="mt-2 text-xs text-ink-muted">
                             Bạn có chắc chắn muốn xóa bài viết này không?
                         </p>
-                        <p class="mt-2 text-xs font-bold text-danger line-clamp-2 bg-paper p-3 border border-line text-left">
+                        <p class="mt-2 text-xs font-bold text-danger line-clamp-2 bg-paper p-3 rounded-[12px] border border-[#E2E8F0] text-left">
                             {{ $post->title }}
                         </p>
                         <p class="mt-2 font-mono text-[11px] text-ink-muted">
@@ -470,14 +472,14 @@
 
                     <!-- Actions -->
                     <div class="mt-6 flex items-center justify-end gap-2.5">
-                        <button type="button" id="btn-cancel-delete" class="border-2 border-line bg-surface px-4 py-2 font-mono text-xs font-bold uppercase text-ink hover:border-line-strong transition-colors cursor-pointer">
+                        <button type="button" id="btn-cancel-delete" class="rounded-[8px] border border-[#E2E8F0] bg-surface px-4 py-2 font-mono text-xs font-bold uppercase text-ink hover:border-[#CBD5E1] transition-colors cursor-pointer">
                             Hủy bỏ
                         </button>
 
                         <form method="POST" action="{{ route('author.posts.destroy', $post) }}">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="border-2 border-line-strong bg-danger px-4 py-2 font-mono text-xs font-bold uppercase text-paper shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
+                            <button type="submit" class="rounded-[8px] border border-[#E2E8F0] bg-danger px-4 py-2 font-mono text-xs font-bold uppercase text-paper shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
                                 Xác nhận xóa
                             </button>
                         </form>
@@ -491,10 +493,10 @@
         <!-- Modal Form Yêu cầu gỡ bài / Đính chính thông tin -->
         <div id="request-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-ink/75 p-4 sm:p-6" aria-modal="true" role="dialog">
             <div class="flex min-h-full items-center justify-center">
-                <div class="relative w-full max-w-lg border-2 border-line-strong bg-surface shadow-brutal transition-all overflow-hidden">
-                    <div class="flex items-center justify-between border-b-2 border-line-strong bg-paper px-6 py-4">
+                <div class="relative w-full max-w-lg rounded-[12px] border border-[#E2E8F0] bg-surface shadow-[0_8px_24px_rgb(15_23_42_/_0.10)] transition-all overflow-hidden">
+                    <div class="flex items-center justify-between border-b border-[#E2E8F0] bg-paper px-6 py-4">
                         <div class="flex items-center gap-2.5">
-                            <span class="grid size-7 place-items-center border border-line-strong bg-lime text-white font-mono font-bold text-xs">
+                            <span class="grid size-7 place-items-center rounded-[6px] border border-[#E2E8F0] bg-lime text-white font-mono font-bold text-xs">
                                 ✉
                             </span>
                             <div>
@@ -502,7 +504,7 @@
                                 <p class="font-mono text-[11px] text-ink-muted">Gửi trực tiếp đến Ban biên tập để xử lý.</p>
                             </div>
                         </div>
-                        <button type="button" id="btn-close-request" class="border border-line-strong bg-surface p-1 text-ink hover:bg-ink hover:text-white transition-colors cursor-pointer" title="Đóng (ESC)">
+                        <button type="button" id="btn-close-request" class="rounded-[8px] border border-[#E2E8F0] bg-surface p-1 text-ink hover:bg-ink hover:text-white transition-colors cursor-pointer" title="Đóng (ESC)">
                             <svg class="size-4" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                             </svg>
@@ -511,15 +513,15 @@
 
                     <form id="request-modal-form" method="POST" action="{{ \Illuminate\Support\Facades\Route::has('author.posts.requests.store') ? route('author.posts.requests.store', $post) : '#' }}" class="p-6 space-y-4">
                         @csrf
-                        <div class="border border-line bg-paper p-3">
-                            <span class="font-mono text-[10px] uppercase font-bold text-ink-muted tracking-wider">Bài viết liên quan</span>
+                        <div class="rounded-[12px] border border-[#E2E8F0] bg-paper p-3">
+                            <span class="font-mono text-[11px] uppercase font-bold text-ink-muted tracking-wider">Bài viết liên quan</span>
                             <p class="mt-0.5 text-xs font-bold text-ink line-clamp-1">{{ $post->title }}</p>
                         </div>
 
                         <div class="grid gap-4 sm:grid-cols-2">
                             <div>
                                 <label for="request_type" class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">Loại yêu cầu <span class="text-danger">*</span></label>
-                                <select id="request_type" name="type" required class="mt-1.5 w-full border-2 border-line bg-paper px-3 py-2 text-xs text-ink outline-none focus:border-ink">
+                                <select id="request_type" name="type" required class="mt-1.5 w-full rounded-[8px] border border-control bg-paper px-3 py-2 text-xs text-ink outline-none focus:border-[#1D4ED8] focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)]">
                                     <option value="removal">Yêu cầu Gỡ bài viết (Take-down)</option>
                                     <option value="correction">Yêu cầu Đính chính / Sửa lỗi</option>
                                 </select>
@@ -529,19 +531,19 @@
 
                         <div>
                             <label for="request_reason" class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">Lý do chính <span class="text-danger">*</span></label>
-                            <input id="request_reason" name="reason" required maxlength="255" placeholder="Ví dụ: Cần cập nhật số liệu mới, bài viết có nội dung chưa chính xác..." class="mt-1.5 w-full border-2 border-line bg-paper px-3 py-2 text-xs text-ink placeholder-ink-muted outline-none focus:border-ink">
+                            <input id="request_reason" name="reason" required maxlength="255" placeholder="Ví dụ: Cần cập nhật số liệu mới, bài viết có nội dung chưa chính xác..." class="mt-1.5 w-full rounded-[8px] border border-control bg-paper px-3 py-2 text-xs text-ink placeholder-ink-muted outline-none focus:border-[#1D4ED8] focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)]">
                         </div>
 
                         <div>
                             <label for="request_notes" class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">Chi tiết đề xuất / Đoạn văn cần sửa đổi</label>
-                            <textarea id="request_notes" name="notes" rows="4" maxlength="2000" placeholder="Mô tả cụ thể vị trí sai sót, lý do cần gỡ bài hoặc nội dung đề xuất thay thế..." class="mt-1.5 w-full border-2 border-line bg-paper px-3 py-2 text-xs text-ink placeholder-ink-muted outline-none focus:border-ink"></textarea>
+                            <textarea id="request_notes" name="notes" rows="4" maxlength="2000" placeholder="Mô tả cụ thể vị trí sai sót, lý do cần gỡ bài hoặc nội dung đề xuất thay thế..." class="mt-1.5 w-full rounded-[8px] border border-control bg-paper px-3 py-2 text-xs text-ink placeholder-ink-muted outline-none focus:border-[#1D4ED8] focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)]"></textarea>
                         </div>
 
-                        <div class="pt-4 border-t-2 border-line-strong flex items-center justify-end gap-2.5">
-                            <button type="button" id="btn-cancel-request" class="border-2 border-line bg-surface px-4 py-2 font-mono text-xs font-bold uppercase text-ink hover:border-line-strong transition-colors cursor-pointer">
+                        <div class="pt-4 border-t border-[#E2E8F0] flex items-center justify-end gap-2.5">
+                            <button type="button" id="btn-cancel-request" class="rounded-[8px] border border-[#E2E8F0] bg-surface px-4 py-2 font-mono text-xs font-bold uppercase text-ink hover:border-[#CBD5E1] transition-colors cursor-pointer">
                                 Đóng
                             </button>
-                            <button type="submit" class="border-2 border-line-strong bg-lime px-4 py-2 font-mono text-xs font-bold uppercase text-white shadow-brutal-sm hover:bg-ink hover:text-white transition-all cursor-pointer">
+                            <button type="submit" class="rounded-[8px] border border-[#E2E8F0] bg-lime px-4 py-2 font-mono text-xs font-bold uppercase text-white shadow-none hover:bg-ink hover:text-white transition-all cursor-pointer">
                                 <span>Gửi tới Ban biên tập</span>
                             </button>
                         </div>

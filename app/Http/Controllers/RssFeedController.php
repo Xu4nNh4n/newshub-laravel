@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\CategoryStatus;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,7 +16,7 @@ class RssFeedController extends Controller
 
     public function category(Category $category): Response
     {
-        abort_unless($category->status === CategoryStatus::Active, 404);
+        abort_unless(Category::query()->publiclyVisible()->whereKey($category)->exists(), 404);
 
         return $this->feed($category);
     }

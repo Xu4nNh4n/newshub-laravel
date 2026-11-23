@@ -4,27 +4,29 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $title ?? 'NewsHub - Báo điện tử đa phương tiện' }}</title>
+    <title>{{ $title ?? 'BaoUT - Báo điện tử đa phương tiện' }}</title>
     <meta name="description" content="{{ $metaDescription ?? 'Tin tức mới nhất, chính xác, cập nhật liên tục 24/7 trên mọi lĩnh vực.' }}">
-    <meta property="og:title" content="{{ $title ?? 'NewsHub - Tin tức mới nhất' }}">
+    <meta property="og:title" content="{{ $title ?? 'BaoUT - Tin tức mới nhất' }}">
     <meta property="og:description" content="{{ $metaDescription ?? 'Tin tức mới nhất, chính xác và đáng tin cậy.' }}">
     @isset($ogImage)<meta property="og:image" content="{{ $ogImage }}">@endisset
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..900;1,400..900&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo-icon.svg') }}">
+    <link rel="alternate icon" type="image/png" href="{{ asset('favicon.png') }}">
     @vite('resources/css/app.css')
     @stack('head')
 </head>
 <body class="min-h-dvh flex flex-col bg-paper font-sans text-ink antialiased selection:bg-lime selection:text-ink">
     <!-- Top Masthead Bar: Date, Edition & Quick Info -->
-    <div class="border-b border-line bg-paper-light py-1.5 text-xs text-ink-muted font-mono uppercase tracking-wider">
+    <div class="border-b border-[#E2E8F0] bg-paper-light py-1.5 text-xs text-ink-muted font-mono uppercase tracking-wider">
         <div class="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
             <div class="flex items-center gap-3">
                 <span class="inline-flex items-center gap-1.5 text-ink font-semibold">
                     <svg class="size-3.5 text-ink" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
                     </svg>
-                    {{ now()->translatedFormat('l, d/m/Y') }}
+                    {{ Str::ucfirst(now()->translatedFormat('l, d/m/Y')) }}
                 </span>
                 <span class="hidden sm:inline text-line">|</span>
                 <span class="hidden sm:inline-flex items-center gap-1.5 text-ink font-medium">
@@ -53,31 +55,24 @@
     </div>
 
     <!-- Main Header (Logo, Search, User Menu) -->
-    <header class="sticky top-0 z-40 border-b border-line-strong bg-surface/95 backdrop-blur-md">
+    <header class="sticky top-0 z-40 border-b border-[#E2E8F0] bg-surface/95 backdrop-blur-md">
         <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
             <!-- Brand Logo -->
             <div class="flex items-center gap-3">
                 <button type="button"
                         id="mobile-menu-open-btn"
-                        class="grid size-9 shrink-0 place-items-center rounded-none border border-line-strong text-ink hover:bg-paper focus-visible:outline-2 focus-visible:outline-ink lg:hidden cursor-pointer"
+                        class="grid size-9 shrink-0 place-items-center rounded-[8px] border border-[#E2E8F0] text-ink hover:bg-paper focus-visible:outline-2 focus-visible:outline-ink lg:hidden cursor-pointer"
                         aria-label="Mở menu chuyên mục">
                     <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
                 </button>
 
-                <a href="{{ route('home') }}" class="group flex items-center gap-2.5">
-                    <span class="grid size-9 shrink-0 place-items-center bg-lime text-white border border-line-strong font-serif font-black text-lg shadow-brutal-sm transition-transform group-hover:scale-105 select-none">
-                        N
+                <a href="{{ route('home') }}" class="group block leading-none">
+                    <x-brand-logo class="h-8 sm:h-10 transition-transform group-hover:scale-105" />
+                    <span class="hidden sm:block text-[11px] font-sans font-bold uppercase tracking-normal text-[#6B7280] mt-1">
+                        Editorial Newsroom
                     </span>
-                    <div class="leading-none">
-                        <span class="block text-xl font-serif font-bold tracking-tight text-[#1D4ED8]">
-                            NewsHub
-                        </span>
-                        <span class="hidden sm:block text-[9px] font-sans font-bold uppercase tracking-widest text-[#6B7280] mt-1">
-                            Editorial Newsroom
-                        </span>
-                    </div>
                 </a>
             </div>
 
@@ -86,8 +81,9 @@
                 <input type="text"
                        name="q"
                        value="{{ request('q') }}"
+                       aria-label="Tìm kiếm tin tức"
                        placeholder="Tìm kiếm tin tức, sự kiện, chủ đề..."
-                       class="w-full rounded-none border border-line bg-paper py-1.5 pl-9 pr-4 text-xs text-ink placeholder:text-ink-muted outline-none transition-all focus:border-line-strong focus:shadow-brutal-sm">
+                       class="w-full rounded-[8px] border border-control bg-paper py-1.5 pl-9 pr-4 text-xs text-ink placeholder:text-ink-muted outline-none transition-all focus:border-[#1D4ED8] focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)]">
                 <svg class="pointer-events-none absolute left-3 size-4 text-ink-muted" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
                 </svg>
@@ -99,7 +95,7 @@
                     @if(auth()->user()->hasVerifiedEmail() && in_array(auth()->user()->role, [\App\Enums\UserRole::Author, \App\Enums\UserRole::Admin], true))
                         <!-- Quick Post Creation for Authors/Admins -->
                         <a href="{{ route('author.posts.create') }}"
-                           class="hidden sm:inline-flex min-h-9 items-center gap-1.5 rounded-none bg-lime border border-line-strong px-3 py-1.5 text-xs font-bold text-white shadow-brutal-sm hover:bg-ink hover:text-white transition-colors">
+                           class="hidden sm:inline-flex min-h-9 items-center gap-1.5 rounded-[8px] bg-lime border border-[#E2E8F0] px-3 py-1.5 text-xs font-bold text-white shadow-none hover:bg-ink hover:text-white transition-colors">
                             <svg class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
                             </svg>
@@ -113,7 +109,7 @@
                                 data-user-menu-trigger
                                 aria-expanded="false"
                                 aria-label="Mở menu người dùng"
-                                class="group flex items-center gap-2 rounded-none border border-line bg-surface py-1 pl-1 pr-2.5 text-xs text-ink transition-all hover:border-line-strong hover:bg-paper hover:shadow-brutal-sm focus-visible:outline-2 focus-visible:outline-ink cursor-pointer">
+                                class="group flex items-center gap-2 rounded-[8px] border border-[#E2E8F0] bg-surface py-1 pl-1 pr-2.5 text-xs text-ink transition-all hover:border-[#CBD5E1] hover:bg-paper hover:shadow-[0_4px_12px_rgb(15_23_42_/_0.08)] focus-visible:outline-2 focus-visible:outline-ink cursor-pointer">
                             <span class="grid size-7 place-items-center rounded-full bg-[#1D4ED8] text-xs font-bold font-mono text-white select-none">
                                 {{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
                             </span>
@@ -128,7 +124,7 @@
                         <!-- Floating Dropdown Panel -->
                         <div data-user-menu-panel
                              class="pointer-events-none opacity-0 invisible translate-y-1 transition-all duration-150 ease-out absolute right-0 top-full pt-2 z-50 w-64 max-w-[90vw]">
-                            <div class="rounded-none border-2 border-line-strong bg-surface p-2 shadow-brutal divide-y divide-line">
+                            <div class="rounded-[12px] border border-[#E2E8F0] bg-surface p-2 shadow-[0_8px_24px_rgb(15_23_42_/_0.10)] divide-y divide-[#E2E8F0]">
                                 <!-- User Header Identity -->
                                 <div class="px-2.5 py-2">
                                     <div class="flex items-center gap-2.5">
@@ -142,15 +138,15 @@
                                     </div>
                                     <div class="mt-2">
                                         @if (auth()->user()->role === \App\Enums\UserRole::Admin)
-                                            <span class="inline-flex items-center gap-1 border border-line-strong bg-pink px-2 py-0.5 text-[10px] font-bold font-mono uppercase tracking-wider text-ink shadow-2xs">
+                                            <span class="inline-flex items-center gap-1 rounded-[6px] border border-[#E2E8F0] bg-pink px-2 py-0.5 text-[11px] font-bold font-mono uppercase tracking-wider text-ink shadow-2xs">
                                                 Quản trị viên (Admin)
                                             </span>
                                         @elseif (auth()->user()->role === \App\Enums\UserRole::Author)
-                                            <span class="inline-flex items-center gap-1 border border-line-strong bg-lime px-2 py-0.5 text-[10px] font-bold font-mono uppercase tracking-wider text-ink shadow-2xs">
+                                            <span class="inline-flex items-center gap-1 rounded-[6px] border border-[#E2E8F0] bg-lime px-2 py-0.5 text-[11px] font-bold font-mono uppercase tracking-wider text-ink shadow-2xs">
                                                 Tác giả (Author)
                                             </span>
                                         @else
-                                            <span class="inline-flex items-center gap-1 border border-line bg-paper px-2 py-0.5 text-[10px] font-medium font-mono text-ink-muted">
+                                            <span class="inline-flex items-center gap-1 border border-line bg-paper px-2 py-0.5 text-[11px] font-medium font-mono text-ink-muted">
                                                 Độc giả
                                             </span>
                                         @endif
@@ -160,16 +156,16 @@
                                 <!-- Workspace / Dashboard Links -->
                                 <div class="py-1">
                                     <a href="{{ route('dashboard') }}"
-                                       class="flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
+                                       class="rounded-[8px] flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
                                         <svg class="size-4 text-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                             <rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/>
                                         </svg>
-                                        <span>Bảng điều khiển (Dashboard)</span>
+                                        <span>Bảng điều khiển</span>
                                     </a>
 
                                     @if(auth()->user()->role === \App\Enums\UserRole::Admin)
                                         <a href="{{ route('admin.post-reviews.index') }}"
-                                           class="flex items-center justify-between px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
+                                           class="rounded-[8px] flex items-center justify-between px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
                                             <span class="flex items-center gap-2.5">
                                                 <svg class="size-4 text-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                                     <path d="m5 12 4 4L19 6"/><path d="M21 12a9 9 0 1 1-5.3-8.2"/>
@@ -178,14 +174,14 @@
                                             </span>
                                         </a>
                                         <a href="{{ route('admin.posts.index') }}"
-                                           class="flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
+                                           class="rounded-[8px] flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
                                             <svg class="size-4 text-ink-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                                 <path d="M4 6h16M4 12h16M4 18h10"/>
                                             </svg>
                                             <span>Quản lý bài viết</span>
                                         </a>
                                         <a href="{{ route('admin.categories.index') }}"
-                                           class="flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
+                                           class="rounded-[8px] flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
                                             <svg class="size-4 text-ink-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                                 <path d="M3 7h7l2 2h9v10H3z"/>
                                             </svg>
@@ -193,14 +189,14 @@
                                         </a>
                                     @elseif(auth()->user()->role === \App\Enums\UserRole::Author)
                                         <a href="{{ route('author.posts.create') }}"
-                                           class="flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
+                                           class="rounded-[8px] flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
                                             <svg class="size-4 text-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                                 <path d="M12 5v14M5 12h14"/>
                                             </svg>
                                             <span>Viết bài mới</span>
                                         </a>
                                         <a href="{{ route('author.posts.index') }}"
-                                           class="flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
+                                           class="rounded-[8px] flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
                                             <svg class="size-4 text-ink-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                                 <path d="M4 6h16M4 12h16M4 18h10"/>
                                             </svg>
@@ -212,7 +208,7 @@
                                 <!-- Personal Links -->
                                 <div class="py-1">
                                     <a href="{{ route('profile.edit') }}"
-                                       class="flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
+                                       class="rounded-[8px] flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
                                         <svg class="size-4 text-ink-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                             <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
                                         </svg>
@@ -220,7 +216,7 @@
                                     </a>
 
                                     <a href="{{ route('profile.comments') }}"
-                                       class="flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
+                                       class="rounded-[8px] flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors">
                                         <svg class="size-4 text-ink-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                                         </svg>
@@ -233,7 +229,7 @@
                                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                                         @csrf
                                         <button type="submit"
-                                                class="w-full flex items-center gap-2.5 px-2.5 py-2 text-xs font-bold text-danger hover:bg-rose-50 transition-colors cursor-pointer text-left">
+                                                class="rounded-[8px] w-full flex items-center gap-2.5 px-2.5 py-2 text-xs font-bold text-danger hover:bg-rose-50 transition-colors cursor-pointer text-left">
                                             <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                                                 <path d="M10 17l5-5-5-5M15 12H3M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
                                             </svg>
@@ -245,10 +241,10 @@
                         </div>
                     </div>
                 @else
-                    <a href="{{ route('login') }}" class="inline-flex min-h-9 items-center justify-center border-2 border-line-strong bg-surface px-3.5 py-1.5 text-xs font-bold text-ink shadow-brutal-sm transition-all hover:bg-ink hover:text-white focus-visible:outline-2 focus-visible:outline-ink">
+                    <a href="{{ route('login') }}" class="inline-flex min-h-9 items-center justify-center whitespace-nowrap rounded-[8px] border border-[#CBD5E1] bg-surface px-2.5 sm:px-3.5 py-1.5 text-xs font-bold text-ink shadow-none transition-all hover:bg-ink hover:text-white focus-visible:outline-2 focus-visible:outline-ink">
                         Đăng nhập
                     </a>
-                    <a href="{{ route('register') }}" class="inline-flex min-h-9 items-center justify-center border-2 border-line-strong bg-lime px-4 py-1.5 text-xs font-bold text-white shadow-brutal-sm transition-all hover:bg-ink hover:text-white focus-visible:outline-2 focus-visible:outline-ink">
+                    <a href="{{ route('register') }}" class="inline-flex min-h-9 items-center justify-center whitespace-nowrap rounded-[8px] border border-[#E2E8F0] bg-lime px-2.5 sm:px-4 py-1.5 text-xs max-[359px]:hidden font-bold text-white shadow-none transition-all hover:bg-ink hover:text-white focus-visible:outline-2 focus-visible:outline-ink">
                         Đăng ký
                     </a>
                 @endauth
@@ -260,7 +256,7 @@
             $allActiveCats = \App\Models\Category::query()
                 ->where('status', \App\Enums\CategoryStatus::Active)
                 ->orderBy('name')
-                ->get(['id', 'name', 'slug', 'description']);
+                ->get(['id', 'name', 'slug']);
 
             if (method_exists(\App\Models\Category::class, 'children')) {
                 $dbParents = \App\Models\Category::query()
@@ -273,12 +269,10 @@
                     'id' => $parent->id,
                     'name' => $parent->name,
                     'slug' => $parent->slug,
-                    'description' => $parent->description,
                     'children' => $parent->children->map(fn ($c) => [
                         'id' => $c->id,
                         'name' => $c->name,
                         'slug' => $c->slug,
-                        'description' => $c->description,
                     ])->all(),
                 ]);
             } else {
@@ -311,12 +305,10 @@
                         'id' => $cat->id,
                         'name' => $cat->name,
                         'slug' => $cat->slug,
-                        'description' => $cat->description,
                         'children' => $children->map(fn ($c) => [
                             'id' => $c->id,
                             'name' => $c->name,
                             'slug' => $c->slug,
-                            'description' => $c->description,
                         ])->all(),
                     ]);
                 }
@@ -325,7 +317,16 @@
         <nav class="border-t border-line bg-paper relative z-30" aria-label="Chuyên mục tin tức">
             <div class="mx-auto flex max-w-7xl items-center justify-between gap-1 px-4 py-1 sm:px-6 lg:px-8 text-xs font-mono font-medium">
                 <!-- Left Nav Items -->
-                <div class="flex items-center gap-1 sm:gap-2 py-0.5 overflow-x-auto sm:overflow-visible scrollbar-none">
+                <div class="relative min-w-0 lg:static" data-nav-slider>
+                    <div data-nav-fade-prev class="pointer-events-none absolute inset-y-0 left-0 z-[5] hidden w-14 bg-gradient-to-r from-paper via-paper/90 to-transparent lg:!hidden" aria-hidden="true"></div>
+                    <button type="button" data-nav-prev aria-label="Xem chuyên mục phía trước" class="absolute left-0 top-1/2 z-10 hidden size-8 -translate-y-1/2 cursor-pointer place-items-center rounded-[8px] border border-[#CBD5E1] bg-paper text-ink hover:border-lime hover:text-lime lg:!hidden">
+                        <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+                    </button>
+                    <div data-nav-fade-next class="pointer-events-none absolute inset-y-0 right-0 z-[5] hidden w-14 bg-gradient-to-l from-paper via-paper/90 to-transparent lg:!hidden" aria-hidden="true"></div>
+                    <button type="button" data-nav-next aria-label="Xem thêm chuyên mục" class="absolute right-0 top-1/2 z-10 hidden size-8 -translate-y-1/2 cursor-pointer place-items-center rounded-[8px] border border-[#CBD5E1] bg-paper text-ink hover:border-lime hover:text-lime lg:!hidden">
+                        <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                    </button>
+                <div data-nav-track class="flex items-center gap-1 sm:gap-2 min-w-0 py-0.5 overflow-x-auto overflow-y-hidden lg:overflow-visible scrollbar-none">
                     <a href="{{ route('home') }}" @class([
                         'flex items-center gap-1.5 px-3 py-1.5 transition-colors shrink-0 uppercase tracking-wider pb-1.5 -mb-px border-b-2',
                         'border-lime text-lime font-bold' => request()->routeIs('home'),
@@ -355,7 +356,7 @@
 
                         @if ($hasChildren)
                             <!-- Dropdown Parent Item -->
-                            <div class="relative group/nav shrink-0" data-nav-dropdown>
+                            <div class="group/nav shrink-0 lg:relative" data-nav-dropdown>
                                 <button type="button"
                                         data-dropdown-trigger
                                         aria-expanded="false"
@@ -377,9 +378,9 @@
 
                                 <!-- Floating Dropdown Panel -->
                                 <div data-dropdown-panel
-                                     class="pointer-events-none opacity-0 invisible -translate-y-1 transition-all duration-150 ease-out group-hover/nav:pointer-events-auto group-hover/nav:opacity-100 group-hover/nav:visible group-hover/nav:translate-y-0 group-focus-within/nav:pointer-events-auto group-focus-within/nav:opacity-100 group-focus-within/nav:visible group-focus-within/nav:translate-y-0 absolute left-0 top-full pt-1.5 z-50 min-w-[320px] sm:min-w-[360px]">
-                                    <div class="rounded-none border-2 border-line-strong bg-surface p-3.5 shadow-brutal">
-                                        <div class="flex items-center justify-between border-b border-line pb-2 px-1 mb-2.5">
+                                     class="pointer-events-none opacity-0 invisible -translate-y-1 transition-all duration-150 ease-out group-hover/nav:pointer-events-auto group-hover/nav:opacity-100 group-hover/nav:visible group-hover/nav:translate-y-0 group-focus-within/nav:pointer-events-auto group-focus-within/nav:opacity-100 group-focus-within/nav:visible group-focus-within/nav:translate-y-0 absolute inset-x-0 top-full pt-1.5 z-50 lg:inset-x-auto lg:left-0 lg:min-w-[360px]">
+                                    <div class="max-h-[60vh] overflow-y-auto lg:max-h-none lg:overflow-visible rounded-[12px] border border-[#E2E8F0] bg-surface p-3.5 shadow-[0_8px_24px_rgb(15_23_42_/_0.10)]">
+                                        <div class="flex items-center justify-between border-b border-[#E2E8F0] pb-2 px-1 mb-2.5">
                                             <div class="flex items-center gap-2">
                                                 <span class="size-2 bg-lime border border-ink"></span>
                                                 <span class="text-xs font-bold uppercase tracking-wider font-mono text-ink">
@@ -387,7 +388,7 @@
                                                 </span>
                                             </div>
                                             <a href="{{ route('news.index', ['category' => $item['slug']]) }}"
-                                               class="text-[11px] font-bold text-lime hover:underline flex items-center gap-1 font-mono">
+                                               class="text-[11px] font-bold text-lime hover:underline flex min-h-6 items-center gap-1 font-mono">
                                                 <span>Xem tất cả tin</span>
                                                 <span>&rarr;</span>
                                             </a>
@@ -404,12 +405,12 @@
                                                 @endphp
                                                 <a href="{{ route('news.index', ['category' => $child['slug']]) }}"
                                                    @class([
-                                                       'flex items-center justify-between border px-2.5 py-1.5 text-xs transition-all font-sans',
-                                                       'border-line-strong bg-lime text-white font-bold shadow-2xs' => $isChildActive,
-                                                       'border-line-light text-ink hover:border-line-strong hover:bg-lime hover:text-white' => ! $isChildActive,
+                                                       'flex min-h-9 items-center justify-between rounded-[8px] border px-2.5 py-1.5 text-xs transition-all font-sans lg:min-h-0',
+                                                       'border-[#E2E8F0] bg-lime text-white font-bold shadow-2xs' => $isChildActive,
+                                                       'border-[#E2E8F0] text-ink hover:border-[#CBD5E1] hover:bg-lime hover:text-white' => ! $isChildActive,
                                                    ])>
                                                     <span class="truncate">{{ $child['name'] }}</span>
-                                                    <span class="text-[10px] shrink-0 ml-1 font-mono">&rsaquo;</span>
+                                                    <span class="text-[11px] shrink-0 ml-1 font-mono">&rsaquo;</span>
                                                 </a>
                                             @endforeach
                                         </div>
@@ -428,13 +429,14 @@
                         @endif
                     @endforeach
                 </div>
+                </div>
 
                 <!-- Right Nav Items: Mega Menu Trigger -->
                 <div class="relative group/mega shrink-0 hidden md:block" data-mega-menu>
                     <button type="button"
                             data-mega-trigger
                             aria-expanded="false"
-                            class="flex items-center gap-1.5 rounded-none border border-line-strong bg-surface px-2.5 py-1 text-xs font-bold font-mono uppercase tracking-wider text-ink hover:bg-ink hover:text-white transition-colors cursor-pointer select-none">
+                            class="flex items-center gap-1.5 rounded-[8px] border border-[#E2E8F0] bg-surface px-2.5 py-1 text-xs font-bold font-mono uppercase tracking-wider text-ink hover:bg-ink hover:text-white transition-colors cursor-pointer select-none">
                         <svg class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M3 4.25A2.25 2.25 0 015.25 2h1.5A2.25 2.25 0 019 4.25v1.5A2.25 2.25 0 016.75 8h-1.5A2.25 2.25 0 013 5.75v-1.5zm0 8.5A2.25 2.25 0 015.25 10.5h1.5A2.25 2.25 0 019 12.75v1.5A2.25 2.25 0 016.75 16.5h-1.5A2.25 2.25 0 013 14.25v-1.5zm8.5-8.5A2.25 2.25 0 0113.75 2h1.5A2.25 2.25 0 0117.5 4.25v1.5A2.25 2.25 0 0115.25 8h-1.5A2.25 2.25 0 0111.5 5.75v-1.5zm0 8.5a2.25 2.25 0 012.25-2.25h1.5a2.25 2.25 0 012.25 2.25v1.5a2.25 2.25 0 01-2.25 2.25h-1.5a2.25 2.25 0 01-2.25-2.25v-1.5z" clip-rule="evenodd" />
                         </svg>
@@ -447,8 +449,8 @@
                     <!-- Mega Menu Flyout Panel -->
                     <div data-mega-panel
                          class="pointer-events-none opacity-0 invisible -translate-y-1 transition-all duration-150 ease-out group-hover/mega:pointer-events-auto group-hover/mega:opacity-100 group-hover/mega:visible group-hover/mega:translate-y-0 group-focus-within/mega:pointer-events-auto group-focus-within/mega:opacity-100 group-focus-within/mega:visible group-focus-within/mega:translate-y-0 absolute right-0 top-full pt-1.5 z-50 w-[480px] max-w-[90vw]">
-                        <div class="rounded-none border-2 border-line-strong bg-surface p-4 shadow-brutal">
-                            <div class="flex items-center justify-between border-b border-line pb-2.5 mb-3">
+                        <div class="rounded-[12px] border border-[#E2E8F0] bg-surface p-4 shadow-[0_8px_24px_rgb(15_23_42_/_0.10)]">
+                            <div class="flex items-center justify-between border-b border-[#E2E8F0] pb-2.5 mb-3">
                                 <div class="flex items-center gap-2">
                                     <span class="size-2 bg-lime border border-ink"></span>
                                     <span class="text-xs font-bold uppercase tracking-wider font-mono text-ink">Toàn bộ chuyên mục</span>
@@ -464,7 +466,7 @@
                                         <a href="{{ route('news.index', ['category' => $treeItem['slug']]) }}"
                                            class="text-xs font-bold text-ink hover:underline transition-colors flex items-center gap-1">
                                             <span>{{ $treeItem['name'] }}</span>
-                                            <span class="text-ink-muted text-[10px] font-mono">&rsaquo;</span>
+                                            <span class="text-ink-muted text-[11px] font-mono">&rsaquo;</span>
                                         </a>
                                         @if (!empty($treeItem['children']))
                                             <ul class="space-y-1 border-l-2 border-line pl-2.5 text-[11px]">
@@ -490,13 +492,11 @@
 
     <!-- Mobile Navigation Drawer -->
     <div id="mobile-menu-overlay" class="fixed inset-0 z-50 hidden bg-ink/70 backdrop-blur-xs transition-opacity lg:hidden" aria-hidden="true"></div>
-    <div id="mobile-menu-drawer" class="fixed inset-y-0 left-0 z-50 w-72 -translate-x-full border-r-2 border-line-strong bg-paper p-5 transition-transform duration-200 ease-in-out lg:hidden flex flex-col justify-between overflow-y-auto">
+    <div id="mobile-menu-drawer" class="fixed inset-y-0 left-0 z-50 w-72 -translate-x-full border-r border-[#E2E8F0] bg-paper p-5 transition-transform duration-200 ease-in-out lg:hidden flex flex-col justify-between overflow-y-auto">
         <div class="space-y-5">
             <div class="flex items-center justify-between border-b border-line pb-4">
-                <span class="text-lg font-black tracking-tight text-ink">
-                    News<span class="underline decoration-lime decoration-2">Hub</span>
-                </span>
-                <button type="button" id="mobile-menu-close-btn" class="grid size-8 place-items-center text-ink hover:bg-surface border border-line" aria-label="Đóng menu">
+                <x-brand-logo class="h-9" />
+                <button type="button" id="mobile-menu-close-btn" class="grid size-8 place-items-center text-ink hover:bg-surface rounded-[8px] border border-[#E2E8F0]" aria-label="Đóng menu">
                     <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M6 18L18 6M6 6l12 12"/>
                     </svg>
@@ -508,8 +508,9 @@
                 <input type="text"
                        name="q"
                        value="{{ request('q') }}"
+                       aria-label="Tìm kiếm tin tức"
                        placeholder="Tìm kiếm tin tức..."
-                       class="w-full rounded-none border border-line bg-surface py-2 pl-9 pr-3 text-xs text-ink placeholder:text-ink-muted outline-none focus:border-line-strong">
+                       class="w-full rounded-[8px] border border-control bg-surface py-2 pl-9 pr-3 text-xs text-ink placeholder:text-ink-muted outline-none focus:border-[#1D4ED8] focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)]">
                 <svg class="pointer-events-none absolute left-3 top-2.5 size-4 text-ink-muted" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
                 </svg>
@@ -517,12 +518,12 @@
 
             <!-- Mobile Categories -->
             <div class="space-y-1">
-                <p class="px-2 text-[10px] font-mono font-bold uppercase tracking-widest text-ink-muted">Chuyên mục</p>
+                <p class="px-2 text-[11px] font-mono font-bold uppercase tracking-widest text-ink-muted">Chuyên mục</p>
                 <div class="mt-1 space-y-1">
-                    <a href="{{ route('home') }}" class="flex items-center gap-2 px-2.5 py-1.5 text-xs font-bold text-ink hover:bg-surface">
+                    <a href="{{ route('home') }}" class="rounded-[8px] flex items-center gap-2 px-2.5 py-1.5 text-xs font-bold text-ink hover:bg-surface">
                         Trang chủ
                     </a>
-                    <a href="{{ route('news.index', ['sort' => 'latest']) }}" class="flex items-center gap-2 px-2.5 py-1.5 text-xs font-bold text-ink hover:bg-surface">
+                    <a href="{{ route('news.index', ['sort' => 'latest']) }}" class="rounded-[8px] flex items-center gap-2 px-2.5 py-1.5 text-xs font-bold text-ink hover:bg-surface">
                         Mới nhất
                     </a>
 
@@ -535,11 +536,11 @@
                         @endphp
                         <div class="space-y-0.5" data-mobile-accordion>
                             <div @class([
-                                'flex items-center justify-between px-2.5 py-1.5 text-xs font-medium transition-colors border',
-                                'border-line-strong bg-lime text-white font-bold shadow-2xs' => $isParentActive,
+                                'rounded-[8px] flex items-center justify-between px-2.5 py-1.5 text-xs font-medium transition-colors border',
+                                'border-[#E2E8F0] bg-lime text-white font-bold shadow-2xs' => $isParentActive,
                                 'border-transparent text-ink hover:bg-surface' => ! $isParentActive,
                             ])>
-                                <a href="{{ route('news.index', ['category' => $parentItem['slug']]) }}" class="flex-1 flex items-center gap-1.5">
+                                <a href="{{ route('news.index', ['category' => $parentItem['slug']]) }}" class="flex-1 flex min-h-8 items-center gap-1.5">
                                     <span>{{ $parentItem['name'] }}</span>
                                     @if ($isChildSelected)
                                         <span class="size-1.5 bg-white"></span>
@@ -550,7 +551,7 @@
                                     <button type="button"
                                             data-accordion-toggle
                                             aria-label="Mở danh mục con của {{ $parentItem['name'] }}"
-                                            class="p-1 text-ink hover:bg-paper cursor-pointer">
+                                            class="rounded-[8px] p-2 text-ink hover:bg-paper cursor-pointer">
                                         <svg class="size-3.5 transition-transform duration-200 {{ $isParentActive ? 'rotate-180' : '' }}" data-accordion-icon viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
                                         </svg>
@@ -561,9 +562,9 @@
                             @if ($hasChildren)
                                 <div data-accordion-content class="grid transition-[grid-template-rows] duration-200 ease-in-out {{ $isParentActive ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]' }}">
                                     <div class="overflow-hidden">
-                                        <div class="pl-3 pr-1 py-1 space-y-0.5 border-l-2 border-line ml-3 mt-0.5 font-sans">
+                                        <div class="pl-3 pr-1 py-1 space-y-0.5 border-l border-[#E2E8F0] ml-3 mt-0.5 font-sans">
                                             <a href="{{ route('news.index', ['category' => $parentItem['slug']]) }}"
-                                               class="block px-2 py-1 text-[11px] font-medium text-ink hover:underline">
+                                               class="rounded-[8px] block px-2 py-1 text-[11px] font-medium text-ink hover:underline">
                                                 &bull; Xem tất cả {{ $parentItem['name'] }}
                                             </a>
                                             @foreach ($parentItem['children'] as $child)
@@ -572,7 +573,7 @@
                                                 @endphp
                                                 <a href="{{ route('news.index', ['category' => $child['slug']]) }}"
                                                    @class([
-                                                       'flex items-center justify-between px-2 py-1 text-[11px] font-medium transition-colors',
+                                                       'rounded-[8px] flex items-center justify-between px-2 py-1 text-[11px] font-medium transition-colors',
                                                        'text-ink font-bold underline decoration-lime decoration-2' => $isChildActive,
                                                        'text-ink-muted hover:text-ink' => ! $isChildActive,
                                                    ])>
@@ -593,9 +594,9 @@
             </div>
         </div>
 
-        <div class="border-t border-line pt-4 space-y-2">
+        <div class="border-t border-[#E2E8F0] pt-4 space-y-2">
             @auth
-                <div class="flex items-center gap-3 px-1 pb-3 border-b border-line mb-2">
+                <div class="flex items-center gap-3 px-1 pb-3 border-b border-[#E2E8F0] mb-2">
                     <span class="grid size-9 place-items-center rounded-full bg-[#1D4ED8] text-xs font-bold font-mono text-white select-none">
                         {{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
                     </span>
@@ -604,37 +605,37 @@
                         <p class="truncate text-[11px] font-mono text-ink-muted">{{ auth()->user()->email }}</p>
                         <div class="mt-0.5">
                             @if (auth()->user()->role === \App\Enums\UserRole::Admin)
-                                <span class="text-[10px] font-bold font-mono text-ink bg-pink px-1">ADMIN</span>
+                                <span class="text-[11px] font-bold font-mono text-ink bg-pink px-1">ADMIN</span>
                             @elseif (auth()->user()->role === \App\Enums\UserRole::Author)
-                                <span class="text-[10px] font-bold font-mono text-ink bg-lime px-1">TÁC GIẢ</span>
+                                <span class="text-[11px] font-bold font-mono text-ink bg-lime px-1">TÁC GIẢ</span>
                             @else
-                                <span class="text-[10px] font-medium font-mono text-ink-muted">ĐỘC GIẢ</span>
+                                <span class="text-[11px] font-medium font-mono text-ink-muted">ĐỘC GIẢ</span>
                             @endif
                         </div>
                     </div>
                 </div>
 
-                <a href="{{ route('dashboard') }}" class="flex w-full items-center justify-center gap-2 border border-line-strong bg-lime py-2 text-xs font-bold text-ink shadow-brutal-sm">
+                <a href="{{ route('dashboard') }}" class="flex w-full items-center justify-center gap-2 rounded-[8px] border border-[#E2E8F0] bg-lime py-2 text-xs font-bold text-ink shadow-none">
                     Bảng điều khiển
                 </a>
-                <a href="{{ route('profile.edit') }}" class="flex w-full items-center justify-center gap-2 border border-line bg-surface py-2 text-xs font-medium text-ink hover:bg-paper">
+                <a href="{{ route('profile.edit') }}" class="flex w-full items-center justify-center gap-2 rounded-[8px] border border-[#E2E8F0] bg-surface py-2 text-xs font-medium text-ink hover:bg-paper">
                     Hồ sơ cá nhân & Mật khẩu
                 </a>
-                <a href="{{ route('profile.comments') }}" class="flex w-full items-center justify-center gap-2 border border-line bg-surface py-2 text-xs font-medium text-ink hover:bg-paper">
+                <a href="{{ route('profile.comments') }}" class="flex w-full items-center justify-center gap-2 rounded-[8px] border border-[#E2E8F0] bg-surface py-2 text-xs font-medium text-ink hover:bg-paper">
                     Bình luận của tôi
                 </a>
                 <form method="POST" action="{{ route('logout') }}" class="w-full pt-1">
                     @csrf
-                    <button type="submit" class="flex w-full items-center justify-center gap-2 border border-line-strong bg-rose-100 py-2 text-xs font-bold text-danger hover:bg-rose-200 transition-colors">
+                    <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-[8px] border border-[#E2E8F0] bg-rose-100 py-2 text-xs font-bold text-danger hover:bg-rose-200 transition-colors">
                         Đăng xuất
                     </button>
                 </form>
             @else
                 <div class="grid grid-cols-2 gap-2">
-                    <a href="{{ route('login') }}" class="flex items-center justify-center border border-line-strong bg-surface py-2 text-xs font-bold text-ink hover:bg-paper">
+                    <a href="{{ route('login') }}" class="flex items-center justify-center rounded-[8px] border border-[#E2E8F0] bg-surface py-2 text-xs font-bold text-ink hover:bg-paper">
                         Đăng nhập
                     </a>
-                    <a href="{{ route('register') }}" class="flex items-center justify-center border border-line-strong bg-lime py-2 text-xs font-bold text-ink shadow-brutal-sm">
+                    <a href="{{ route('register') }}" class="flex items-center justify-center rounded-[8px] border border-[#E2E8F0] bg-lime py-2 text-xs font-bold text-ink shadow-none">
                         Đăng ký
                     </a>
                 </div>
@@ -645,7 +646,7 @@
     <!-- Main Body Container -->
     <main class="flex-1 mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         @if (session('status'))
-            <div role="status" class="mb-6 flex items-start gap-3 border-2 border-line-strong bg-lime/20 p-3.5 text-xs font-medium text-ink shadow-brutal-sm">
+            <div role="status" class="mb-6 flex items-start gap-3 rounded-[12px] border border-[#E2E8F0] bg-lime/20 p-3.5 text-xs font-medium text-ink shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                 <svg class="size-4 shrink-0 text-ink mt-0.5" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
                 </svg>
@@ -654,7 +655,7 @@
         @endif
 
         @if ($errors->any())
-            <div role="alert" class="mb-6 border-2 border-line-strong bg-rose-50 p-4 text-xs text-danger shadow-brutal-sm">
+            <div role="alert" class="mb-6 rounded-[12px] border border-[#E2E8F0] bg-rose-50 p-4 text-xs text-danger shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                 <p class="font-bold text-danger flex items-center gap-1.5 font-mono uppercase tracking-wider">
                     <svg class="size-4 text-danger" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
@@ -673,44 +674,37 @@
     </main>
 
     <!-- Professional Editorial News Portal Footer -->
-    <footer class="mt-auto border-t border-line bg-paper-light text-ink-muted text-xs">
+    <footer class="mt-auto border-t border-[#E2E8F0] bg-paper-light text-ink-muted text-xs">
         <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
             <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
                 <!-- Col 1: Editorial Info & Masthead -->
                 <div class="space-y-3">
-                    <div class="flex items-center gap-2.5">
-                        <span class="grid size-8 shrink-0 place-items-center bg-lime text-white border border-line-strong font-serif font-black text-base shadow-brutal-sm select-none">
-                            N
+                    <div class="leading-none">
+                        <x-brand-logo class="h-9" />
+                        <span class="block text-[11px] font-sans font-bold uppercase tracking-normal text-[#6B7280] mt-1">
+                            Editorial Newsroom
                         </span>
-                        <div class="leading-none">
-                            <span class="block text-base font-serif font-bold tracking-tight text-[#1D4ED8]">
-                                NewsHub
-                            </span>
-                            <span class="block text-[8px] font-sans font-bold uppercase tracking-widest text-[#6B7280] mt-0.5">
-                                Editorial Newsroom
-                            </span>
-                        </div>
                     </div>
                     <p class="text-xs text-ink-muted leading-relaxed">
                         Báo điện tử đa phương tiện cung cấp thông tin thời sự, công nghệ, kinh tế và đời sống chính xác, nhanh chóng và khách quan.
                     </p>
                     <div class="space-y-1 text-[11px] text-ink-light pt-1 font-mono">
                         <p>Giấy phép xuất bản số: <strong class="text-ink">128/GP-BTTTT</strong></p>
-                        <p>Tổng biên tập: Ban biên tập NewsHub</p>
+                        <p>Tổng biên tập: Ban biên tập BaoUT</p>
                         <p>Hotline: <strong class="text-ink font-bold">1900 8888</strong></p>
-                        <p>Email: <a href="mailto:toasoan@newshub.vn" class="text-ink hover:underline">toasoan@newshub.vn</a></p>
+                        <p>Email: <a href="mailto:toasoan@baout.vn" class="inline-block py-1 text-ink hover:underline">toasoan@baout.vn</a></p>
                     </div>
                 </div>
 
                 <!-- Col 2: Chuyên mục chính -->
                 <div class="space-y-3">
                     <h3 class="text-xs font-bold uppercase tracking-wider font-mono text-ink">Chuyên mục tin tức</h3>
-                    <ul class="space-y-2 text-xs">
-                        <li><a href="{{ route('home') }}" class="hover:text-ink hover:underline transition-colors">Trang chủ</a></li>
-                        <li><a href="{{ route('news.index', ['sort' => 'latest']) }}" class="hover:text-ink hover:underline transition-colors">Tin mới 24/7</a></li>
-                        <li><a href="{{ route('news.index', ['sort' => 'popular']) }}" class="hover:text-ink hover:underline transition-colors">Tin đọc nhiều nhất</a></li>
+                    <ul class="space-y-1 text-xs">
+                        <li><a href="{{ route('home') }}" class="inline-block py-1 hover:text-ink hover:underline transition-colors">Trang chủ</a></li>
+                        <li><a href="{{ route('news.index', ['sort' => 'latest']) }}" class="inline-block py-1 hover:text-ink hover:underline transition-colors">Tin mới 24/7</a></li>
+                        <li><a href="{{ route('news.index', ['sort' => 'popular']) }}" class="inline-block py-1 hover:text-ink hover:underline transition-colors">Tin đọc nhiều nhất</a></li>
                         @foreach ($navTree as $navParent)
-                            <li><a href="{{ route('news.index', ['category' => $navParent['slug']]) }}" class="hover:text-ink hover:underline transition-colors">{{ $navParent['name'] }}</a></li>
+                            <li><a href="{{ route('news.index', ['category' => $navParent['slug']]) }}" class="inline-block py-1 hover:text-ink hover:underline transition-colors">{{ $navParent['name'] }}</a></li>
                         @endforeach
                     </ul>
                 </div>
@@ -718,12 +712,12 @@
                 <!-- Col 3: Dành cho độc giả & Tác giả -->
                 <div class="space-y-3">
                     <h3 class="text-xs font-bold uppercase tracking-wider font-mono text-ink">Độc giả & Tác giả</h3>
-                    <ul class="space-y-2 text-xs">
-                        <li><a href="{{ route('profile.comments') }}" class="hover:text-ink hover:underline transition-colors">Lịch sử bình luận</a></li>
-                        <li><a href="{{ route('dashboard') }}" class="hover:text-ink hover:underline transition-colors">Đăng ký làm Tác giả / CTV</a></li>
-                        <li><a href="{{ route('profile.edit') }}" class="hover:text-ink hover:underline transition-colors">Tài khoản & Thiết lập</a></li>
+                    <ul class="space-y-1 text-xs">
+                        <li><a href="{{ route('profile.comments') }}" class="inline-block py-1 hover:text-ink hover:underline transition-colors">Lịch sử bình luận</a></li>
+                        <li><a href="{{ route('dashboard') }}" class="inline-block py-1 hover:text-ink hover:underline transition-colors">Đăng ký làm Tác giả / CTV</a></li>
+                        <li><a href="{{ route('profile.edit') }}" class="inline-block py-1 hover:text-ink hover:underline transition-colors">Tài khoản & Thiết lập</a></li>
                         @guest
-                            <li><a href="{{ route('login') }}" class="hover:text-ink hover:underline transition-colors">Đăng nhập tài khoản</a></li>
+                            <li><a href="{{ route('login') }}" class="inline-block py-1 hover:text-ink hover:underline transition-colors">Đăng nhập tài khoản</a></li>
                         @endguest
                     </ul>
                 </div>
@@ -731,23 +725,23 @@
                 <!-- Col 4: Pháp lý & Tiêu chuẩn xuất bản -->
                 <div class="space-y-3">
                     <h3 class="text-xs font-bold uppercase tracking-wider font-mono text-ink">Tiêu chuẩn & Pháp lý</h3>
-                    <ul class="space-y-2 text-xs">
-                        <li><a href="{{ route('pages.privacy') }}" class="hover:text-ink hover:underline transition-colors">Chính sách bảo mật thông tin</a></li>
-                        <li><a href="{{ route('pages.terms') }}" class="hover:text-ink hover:underline transition-colors">Điều khoản dịch vụ độc giả</a></li>
-                        <li><a href="{{ route('pages.moderation-policy') }}" class="hover:text-ink hover:underline transition-colors">Quy chế kiểm duyệt nội dung</a></li>
-                        <li><a href="{{ route('pages.contact') }}" class="hover:text-ink hover:underline transition-colors">Liên hệ quảng cáo & Tòa soạn</a></li>
+                    <ul class="space-y-1 text-xs">
+                        <li><a href="{{ route('pages.privacy') }}" class="inline-block py-1 hover:text-ink hover:underline transition-colors">Chính sách bảo mật thông tin</a></li>
+                        <li><a href="{{ route('pages.terms') }}" class="inline-block py-1 hover:text-ink hover:underline transition-colors">Điều khoản dịch vụ độc giả</a></li>
+                        <li><a href="{{ route('pages.moderation-policy') }}" class="inline-block py-1 hover:text-ink hover:underline transition-colors">Quy chế kiểm duyệt nội dung</a></li>
+                        <li><a href="{{ route('pages.contact') }}" class="inline-block py-1 hover:text-ink hover:underline transition-colors">Liên hệ quảng cáo & Tòa soạn</a></li>
                     </ul>
-                    <div class="mt-4 border border-line bg-surface p-3 text-[11px] leading-relaxed text-ink-muted">
-                        Nội dung trên NewsHub được bảo vệ bản quyền. Nghiêm cấm sao chép dưới mọi hình thức khi chưa có sự đồng ý bằng văn bản.
+                    <div class="mt-4 rounded-[12px] border border-[#E2E8F0] bg-surface p-3 text-[11px] leading-relaxed text-ink-muted">
+                        Nội dung trên BaoUT được bảo vệ bản quyền. Nghiêm cấm sao chép dưới mọi hình thức khi chưa có sự đồng ý bằng văn bản.
                     </div>
                 </div>
             </div>
 
             <!-- Bottom Copyright & Back to Top -->
-            <div class="mt-8 flex flex-col items-center justify-between gap-4 border-t border-line pt-6 text-[11px] font-mono text-ink-muted sm:flex-row">
-                <p>© {{ date('Y') }} NewsHub. Toàn bộ bản quyền thuộc về Tòa soạn Báo điện tử NewsHub.</p>
+            <div class="mt-8 flex flex-col items-center justify-between gap-4 border-t border-[#E2E8F0] pt-6 text-[11px] font-mono text-ink-muted sm:flex-row">
+                <p>© {{ date('Y') }} BaoUT. Toàn bộ bản quyền thuộc về Tòa soạn Báo điện tử BaoUT.</p>
                 <div class="flex items-center gap-4">
-                    <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="inline-flex items-center gap-1 hover:text-ink hover:underline transition-colors cursor-pointer">
+                    <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="inline-flex min-h-6 items-center gap-1 hover:text-ink hover:underline transition-colors cursor-pointer">
                         <span>Lên đầu trang</span>
                         <svg class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z" clip-rule="evenodd" />
@@ -760,9 +754,9 @@
 
     <!-- Universal Custom Confirmation Modal (Neo-Brutalist) -->
     <div id="universal-confirm-modal" class="fixed inset-0 z-50 hidden bg-ink/60 backdrop-blur-xs flex items-center justify-center p-4" aria-modal="true" role="dialog" aria-labelledby="confirm-modal-title">
-        <div class="w-full max-w-md border-2 border-line-strong bg-surface p-6 shadow-brutal-lg animate-in fade-in zoom-in-95 duration-150">
+        <div class="w-full max-w-md rounded-[12px] border border-[#E2E8F0] bg-surface p-6 shadow-[0_8px_24px_rgb(15_23_42_/_0.10)] animate-in fade-in zoom-in-95 duration-150">
             <div class="flex items-start gap-3">
-                <div id="confirm-modal-icon-container" class="grid size-10 shrink-0 place-items-center border-2 border-line-strong bg-lime text-white">
+                <div id="confirm-modal-icon-container" class="grid size-10 shrink-0 place-items-center rounded-[8px] border border-[#E2E8F0] bg-lime text-white">
                     <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                         <path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
                     </svg>
@@ -772,11 +766,11 @@
                     <p id="confirm-modal-message" class="text-xs text-ink-muted leading-relaxed">Bạn có chắc chắn muốn thực hiện thao tác này không?</p>
                 </div>
             </div>
-            <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-line">
-                <button type="button" id="confirm-modal-cancel-btn" class="border border-line-strong bg-surface px-4 py-2 text-xs font-bold text-ink hover:bg-paper cursor-pointer transition-colors">
+            <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-[#E2E8F0]">
+                <button type="button" id="confirm-modal-cancel-btn" class="rounded-[8px] border border-[#E2E8F0] bg-surface px-4 py-2 text-xs font-bold text-ink hover:bg-paper cursor-pointer transition-colors">
                     Hủy bỏ
                 </button>
-                <button type="button" id="confirm-modal-confirm-btn" class="border border-line-strong bg-lime px-4 py-2 text-xs font-bold text-white shadow-brutal-sm hover:bg-ink hover:text-white cursor-pointer transition-colors">
+                <button type="button" id="confirm-modal-confirm-btn" class="rounded-[8px] border border-[#E2E8F0] bg-lime px-4 py-2 text-xs font-bold text-white shadow-none hover:bg-ink hover:text-white cursor-pointer transition-colors">
                     Đồng ý
                 </button>
             </div>
@@ -806,11 +800,11 @@
                 cancelBtn.textContent = options.cancelText || 'Hủy bỏ';
 
                 if (options.isDanger) {
-                    confirmBtn.className = 'border border-line-strong bg-danger text-white px-4 py-2 text-xs font-bold shadow-brutal-sm hover:opacity-90 cursor-pointer transition-colors';
-                    iconContainer.className = 'grid size-10 shrink-0 place-items-center border-2 border-line-strong bg-rose-100 text-danger';
+                    confirmBtn.className = 'rounded-[8px] border border-[#E2E8F0] bg-danger text-white px-4 py-2 text-xs font-bold shadow-none hover:opacity-90 cursor-pointer transition-colors';
+                    iconContainer.className = 'grid size-10 shrink-0 place-items-center rounded-[8px] border border-[#E2E8F0] bg-rose-100 text-danger';
                 } else {
-                    confirmBtn.className = 'border border-line-strong bg-lime text-white px-4 py-2 text-xs font-bold shadow-brutal-sm hover:bg-ink hover:text-white cursor-pointer transition-colors';
-                    iconContainer.className = 'grid size-10 shrink-0 place-items-center border-2 border-line-strong bg-lime text-white';
+                    confirmBtn.className = 'rounded-[8px] border border-[#E2E8F0] bg-lime text-white px-4 py-2 text-xs font-bold shadow-none hover:bg-ink hover:text-white cursor-pointer transition-colors';
+                    iconContainer.className = 'grid size-10 shrink-0 place-items-center rounded-[8px] border border-[#E2E8F0] bg-lime text-white';
                 }
 
                 modal.classList.remove('hidden');
@@ -881,6 +875,41 @@
             });
         });
 
+        // Category strip: show arrows while more categories are hidden on either side
+        document.querySelectorAll('[data-nav-slider]').forEach((slider) => {
+            const track = slider.querySelector('[data-nav-track]');
+            const setVisible = (selector, visible) => {
+                slider.querySelectorAll(selector).forEach((el) => {
+                    el.classList.toggle('hidden', !visible);
+                    if (el.tagName === 'BUTTON') el.classList.toggle('grid', visible);
+                });
+            };
+            const update = () => {
+                const max = track.scrollWidth - track.clientWidth;
+                setVisible('[data-nav-prev], [data-nav-fade-prev]', max > 4 && track.scrollLeft > 4);
+                setVisible('[data-nav-next], [data-nav-fade-next]', max > 4 && track.scrollLeft < max - 4);
+            };
+            const center = (el, behavior) => {
+                const t = track.getBoundingClientRect();
+                const r = el.getBoundingClientRect();
+                track.scrollBy({ left: (r.left + r.right) / 2 - (t.left + t.right) / 2, behavior });
+            };
+
+            slider.querySelector('[data-nav-prev]')?.addEventListener('click', () => track.scrollBy({ left: -track.clientWidth * 0.6, behavior: 'smooth' }));
+            slider.querySelector('[data-nav-next]')?.addEventListener('click', () => track.scrollBy({ left: track.clientWidth * 0.6, behavior: 'smooth' }));
+            track.querySelectorAll('[data-dropdown-trigger]').forEach((trigger) => trigger.addEventListener('click', () => center(trigger, 'smooth')));
+            track.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('resize', update);
+
+            const active = track.querySelector(':scope > .border-lime, :scope > [data-nav-dropdown] > .border-lime');
+            const refresh = () => {
+                if (active) center(active, 'instant');
+                update();
+            };
+            refresh();
+            document.fonts?.ready.then(refresh);
+        });
+
         // Category dropdown
         document.querySelectorAll('[data-nav-dropdown]').forEach((dropdown) => {
             const trigger = dropdown.querySelector('[data-dropdown-trigger]');
@@ -918,13 +947,14 @@
                 });
                 if (isOpen) {
                     closeDropdown();
+                    trigger.blur();
                 } else {
                     openDropdown();
                 }
             });
 
-            dropdown.addEventListener('mouseenter', openDropdown);
-            dropdown.addEventListener('mouseleave', closeDropdown);
+            dropdown.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') openDropdown(); });
+            dropdown.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') closeDropdown(); });
         });
 
         // Mega Menu controller
@@ -953,13 +983,14 @@
                 const isOpen = trigger.getAttribute('aria-expanded') === 'true';
                 if (isOpen) {
                     closeMega();
+                    trigger.blur();
                 } else {
                     openMega();
                 }
             });
 
-            mega.addEventListener('mouseenter', openMega);
-            mega.addEventListener('mouseleave', closeMega);
+            mega.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') openMega(); });
+            mega.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') closeMega(); });
         });
 
         // Close dropdowns when clicking outside

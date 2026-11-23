@@ -177,13 +177,12 @@ class PostController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Soft delete the post, keeping its thumbnail so the article stays recoverable.
      */
-    public function destroy(Post $post, PostThumbnailService $thumbnails): RedirectResponse
+    public function destroy(Post $post): RedirectResponse
     {
         Gate::authorize('delete', $post);
         $post->delete();
-        $thumbnails->delete($post->thumbnail);
 
         return redirect()->route('author.posts.index')->with('status', 'Đã xóa bài viết.');
     }

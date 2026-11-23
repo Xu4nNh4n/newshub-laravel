@@ -1,9 +1,9 @@
-@extends('layouts.dashboard', ['title' => 'Dashboard'])
+@extends('layouts.dashboard', ['title' => 'Bảng điều khiển'])
 
 @section('content')
 <div class="space-y-8">
     <!-- Greeting & Status Header -->
-    <section class="flex flex-col gap-4 border-b-2 border-line-strong pb-6 sm:flex-row sm:items-center sm:justify-between">
+    <section class="flex flex-col gap-4 border-b border-[#E2E8F0] pb-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <div class="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-ink-muted">
                 <span class="inline-block size-2 bg-success" aria-hidden="true"></span>
@@ -15,18 +15,18 @@
             </p>
         </div>
         <div class="flex shrink-0 items-center gap-2">
-            <span class="inline-flex items-center gap-2 border border-line-strong bg-surface px-3 py-1.5 text-xs font-mono font-bold text-ink shadow-brutal-sm">
+            <span class="inline-flex items-center gap-2 rounded-[6px] border border-[#E2E8F0] bg-surface px-3 py-1.5 text-xs font-mono font-bold text-ink shadow-none">
                 <svg class="size-3.5 text-ink-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
-                {{ now()->translatedFormat('l, d/m/Y') }}
+                {{ Str::ucfirst(now()->translatedFormat('l, d/m/Y')) }}
             </span>
         </div>
     </section>
 
     <!-- Verification Notice (if unverified) -->
     @unless (auth()->user()->hasVerifiedEmail())
-        <section class="flex flex-col gap-4 border-2 border-line-strong bg-lime p-5 sm:flex-row sm:items-center sm:justify-between shadow-brutal" role="region" aria-label="Xác minh tài khoản">
+        <section class="flex flex-col gap-4 rounded-[12px] border border-[#E2E8F0] bg-lime p-5 sm:flex-row sm:items-center sm:justify-between shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]" role="region" aria-label="Xác minh tài khoản">
             <div class="flex items-start gap-3">
                 <span class="size-6 grid place-items-center bg-ink text-paper font-mono font-bold text-xs shrink-0 mt-0.5">!</span>
                 <div>
@@ -34,7 +34,7 @@
                     <p class="mt-0.5 text-xs text-ink/80 font-medium">Sau khi xác minh, bạn có thể tạo bản nháp và gửi bài cho quản trị viên duyệt.</p>
                 </div>
             </div>
-            <a href="{{ route('verification.notice') }}" class="inline-flex min-h-10 sm:min-h-9 shrink-0 items-center justify-center border-2 border-line-strong bg-surface px-4 py-1.5 text-xs font-mono font-bold uppercase tracking-wider text-ink shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
+            <a href="{{ route('verification.notice') }}" class="inline-flex min-h-10 sm:min-h-9 shrink-0 items-center justify-center rounded-[8px] border border-[#CBD5E1] bg-surface px-4 py-1.5 text-xs font-mono font-bold uppercase tracking-wider text-ink shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
                 Xác minh ngay
             </a>
         </section>
@@ -48,7 +48,7 @@
 
         <!-- System Overview Section -->
         <section aria-labelledby="admin-overview-title" class="space-y-4">
-            <div class="flex items-center justify-between gap-4 border-b border-line pb-3">
+            <div class="flex items-center justify-between gap-4 border-b border-[#E2E8F0] pb-3">
                 <div>
                     <h2 id="admin-overview-title" class="text-sm sm:text-base font-black uppercase tracking-tight text-ink">Tổng quan quản trị</h2>
                     <p class="text-xs font-mono text-ink-muted">Những chỉ số quan trọng của hệ thống.</p>
@@ -61,39 +61,39 @@
             <!-- Stats Grid -->
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <!-- Tổng bài viết -->
-                <article class="flex flex-col justify-between border-2 border-line-strong bg-surface p-5 shadow-brutal-sm">
+                <article class="flex flex-col justify-between rounded-[12px] border border-[#E2E8F0] bg-surface p-5 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                     <div>
-                        <div class="flex items-center justify-between gap-2 border-b border-line pb-2">
+                        <div class="flex items-center justify-between gap-2 border-b border-[#E2E8F0] pb-2">
                             <span class="text-xs font-mono font-bold uppercase tracking-wider text-ink-muted">Tổng bài viết</span>
-                            <span class="size-7 grid place-items-center border border-line-strong bg-paper text-ink font-mono text-xs">
+                            <span class="size-7 grid place-items-center rounded-[6px] border border-[#E2E8F0] bg-paper text-ink font-mono text-xs">
                                 #
                             </span>
                         </div>
                         <p class="mt-3 text-3xl sm:text-4xl font-mono font-black tabular-nums text-ink">{{ number_format($adminStats['posts_total']) }}</p>
                     </div>
-                    <p class="mt-3 text-xs font-mono text-ink-muted border-t border-line pt-2">{{ $adminStats['published_total'] }} bài đã được duyệt</p>
+                    <p class="mt-3 text-xs font-mono text-ink-muted border-t border-[#E2E8F0] pt-2">{{ $adminStats['published_total'] }} bài đã được duyệt</p>
                 </article>
 
                 <!-- Người dùng -->
-                <article class="flex flex-col justify-between border-2 border-line-strong bg-surface p-5 shadow-brutal-sm">
+                <article class="flex flex-col justify-between rounded-[12px] border border-[#E2E8F0] bg-surface p-5 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                     <div>
-                        <div class="flex items-center justify-between gap-2 border-b border-line pb-2">
+                        <div class="flex items-center justify-between gap-2 border-b border-[#E2E8F0] pb-2">
                             <span class="text-xs font-mono font-bold uppercase tracking-wider text-ink-muted">Người dùng</span>
-                            <span class="size-7 grid place-items-center border border-line-strong bg-paper text-ink font-mono text-xs">
+                            <span class="size-7 grid place-items-center rounded-[6px] border border-[#E2E8F0] bg-paper text-ink font-mono text-xs">
                                 U
                             </span>
                         </div>
                         <p class="mt-3 text-3xl sm:text-4xl font-mono font-black tabular-nums text-ink">{{ number_format($adminStats['users_total'] + $adminStats['authors_total']) }}</p>
                     </div>
-                    <p class="mt-3 text-xs font-mono text-ink-muted border-t border-line pt-2">{{ $adminStats['authors_total'] }} tài khoản author</p>
+                    <p class="mt-3 text-xs font-mono text-ink-muted border-t border-[#E2E8F0] pt-2">{{ $adminStats['authors_total'] }} tài khoản tác giả</p>
                 </article>
 
                 <!-- Bài chờ duyệt -->
-                <article class="flex flex-col justify-between border-2 border-line-strong bg-[#EFF6FF] p-5 shadow-brutal-sm">
+                <article class="flex flex-col justify-between rounded-[12px] border border-[#E2E8F0] bg-[#EFF6FF] p-5 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                     <div>
                         <div class="flex items-center justify-between gap-2 border-b border-[#BFDBFE]/60 pb-2">
                             <span class="text-xs font-bold uppercase tracking-wider text-[#1D4ED8]">Bài chờ duyệt</span>
-                            <span class="size-7 grid place-items-center bg-white text-[#1D4ED8] font-bold text-xs border border-[#BFDBFE]">
+                            <span class="size-7 grid place-items-center bg-white text-[#1D4ED8] font-bold text-xs rounded-[6px] border border-[#BFDBFE]">
                                 !
                             </span>
                         </div>
@@ -105,47 +105,47 @@
                 </article>
 
                 <!-- Đang hiển thị -->
-                <article class="flex flex-col justify-between border-2 border-line-strong bg-surface p-5 shadow-brutal-sm">
+                <article class="flex flex-col justify-between rounded-[12px] border border-[#E2E8F0] bg-surface p-5 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                     <div>
-                        <div class="flex items-center justify-between gap-2 border-b border-line pb-2">
+                        <div class="flex items-center justify-between gap-2 border-b border-[#E2E8F0] pb-2">
                             <span class="text-xs font-mono font-bold uppercase tracking-wider text-ink-muted">Đang hiển thị</span>
-                            <span class="size-7 grid place-items-center border border-line-strong bg-paper text-ink font-mono text-xs">
+                            <span class="size-7 grid place-items-center rounded-[6px] border border-[#E2E8F0] bg-paper text-ink font-mono text-xs">
                                 OK
                             </span>
                         </div>
                         <p class="mt-3 text-3xl sm:text-4xl font-mono font-black tabular-nums text-ink">{{ number_format($adminStats['published_visible']) }}</p>
                     </div>
-                    <p class="mt-3 text-xs font-mono text-ink-muted border-t border-line pt-2">Có thể đọc trên trang tin</p>
+                    <p class="mt-3 text-xs font-mono text-ink-muted border-t border-[#E2E8F0] pt-2">Có thể đọc trên trang tin</p>
                 </article>
 
                 <!-- Tài khoản bị khóa -->
-                <article class="flex flex-col justify-between border-2 border-line-strong bg-surface p-5 shadow-brutal-sm">
+                <article class="flex flex-col justify-between rounded-[12px] border border-[#E2E8F0] bg-surface p-5 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                     <div>
-                        <div class="flex items-center justify-between gap-2 border-b border-line pb-2">
+                        <div class="flex items-center justify-between gap-2 border-b border-[#E2E8F0] pb-2">
                             <span class="text-xs font-mono font-bold uppercase tracking-wider text-ink-muted">Tài khoản bị khóa</span>
-                            <span class="size-7 grid place-items-center border border-line-strong bg-paper text-ink font-mono text-xs">
+                            <span class="size-7 grid place-items-center rounded-[6px] border border-[#E2E8F0] bg-paper text-ink font-mono text-xs">
                                 X
                             </span>
                         </div>
                         <p class="mt-3 text-3xl sm:text-4xl font-mono font-black tabular-nums text-ink">{{ number_format($adminStats['blocked_total']) }}</p>
                     </div>
-                    <a href="{{ route('admin.users.index') }}" class="mt-3 inline-flex items-center gap-1 text-xs font-mono font-bold uppercase text-ink hover:underline border-t border-line pt-2">
+                    <a href="{{ route('admin.users.index') }}" class="mt-3 inline-flex items-center gap-1 text-xs font-mono font-bold uppercase text-ink hover:underline border-t border-[#E2E8F0] pt-2">
                         <span>Quản lý tài khoản &rarr;</span>
                     </a>
                 </article>
 
                 <!-- Đơn ứng tuyển CTV -->
-                <article class="flex flex-col justify-between border-2 border-line-strong bg-surface p-5 shadow-brutal-sm">
+                <article class="flex flex-col justify-between rounded-[12px] border border-[#E2E8F0] bg-surface p-5 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                     <div>
-                        <div class="flex items-center justify-between gap-2 border-b border-line pb-2">
+                        <div class="flex items-center justify-between gap-2 border-b border-[#E2E8F0] pb-2">
                             <span class="text-xs font-mono font-bold uppercase tracking-wider text-ink-muted">Đơn ứng tuyển CTV</span>
-                            <span class="size-7 grid place-items-center border border-line-strong bg-paper text-ink font-mono text-xs">
+                            <span class="size-7 grid place-items-center rounded-[6px] border border-[#E2E8F0] bg-paper text-ink font-mono text-xs">
                                 CTV
                             </span>
                         </div>
                         <p class="mt-3 text-3xl sm:text-4xl font-mono font-black tabular-nums text-ink">{{ number_format($adminStats['pending_applications']) }}</p>
                     </div>
-                    <a href="{{ route('admin.author-applications.index') }}" class="mt-3 inline-flex items-center gap-1 text-xs font-mono font-bold uppercase text-ink hover:underline border-t border-line pt-2">
+                    <a href="{{ route('admin.author-applications.index') }}" class="mt-3 inline-flex items-center gap-1 text-xs font-mono font-bold uppercase text-ink hover:underline border-t border-[#E2E8F0] pt-2">
                         <span>Xét duyệt đơn &rarr;</span>
                     </a>
                 </article>
@@ -155,27 +155,27 @@
         <!-- Charts & Activity Trends -->
         <section aria-label="Xu hướng nội dung">
             <!-- Bài tạo theo tháng (Full width) -->
-            <article class="flex flex-col justify-between border-2 border-line-strong bg-surface p-5 shadow-brutal-sm">
-                <div class="flex items-start justify-between gap-4 border-b border-line pb-3">
+            <article class="flex flex-col justify-between rounded-[12px] border border-[#E2E8F0] bg-surface p-5 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
+                <div class="flex items-start justify-between gap-4 border-b border-[#E2E8F0] pb-3">
                     <div>
                         <h3 class="text-sm font-black uppercase text-ink">Bài tạo theo tháng</h3>
                         <p class="text-xs font-mono text-ink-muted">Số lượng nội dung mới trong 6 tháng gần nhất.</p>
                     </div>
-                    <span class="border border-line bg-paper px-2 py-0.5 text-xs font-mono font-bold text-ink">6 tháng</span>
+                    <span class="rounded-[6px] border border-[#E2E8F0] bg-paper px-2 py-0.5 text-xs font-mono font-bold text-ink whitespace-nowrap">6 tháng</span>
                 </div>
 
-                <div class="mt-6 flex h-48 items-end gap-2 sm:gap-4 border-b border-line pb-2" role="img" aria-label="Biểu đồ số bài viết được tạo trong 6 tháng gần nhất">
+                <div class="mt-6 flex h-48 items-end gap-2 sm:gap-4 border-b border-[#E2E8F0] pb-2" role="img" aria-label="Biểu đồ số bài viết được tạo trong 6 tháng gần nhất">
                     @foreach ($adminStats['posts_by_month'] as $item)
                         @php
-                            $percentage = $item['count'] > 0 ? max(10, (int) round(($item['count'] / $maximumMonthlyPosts) * 100)) : 4;
+                            $percentage = $item['count'] > 0 ? max(10, (int) round(($item['count'] / $maximumMonthlyPosts) * 100)) : 0;
                             $isCurrentMonth = $loop->last;
                         @endphp
-                        <div class="group flex h-full flex-1 flex-col items-center justify-end gap-1.5 text-center">
+                        <div class="group flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-1.5 text-center">
                             <span class="text-xs font-mono font-bold tabular-nums text-ink-muted group-hover:text-ink">{{ $item['count'] }}</span>
                             <div class="flex h-36 w-full max-w-10 items-end rounded-t-md bg-[#F3F4F6] overflow-hidden">
                                 <span class="block w-full transition-colors rounded-t-md {{ $isCurrentMonth ? 'bg-[#1D4ED8]' : 'bg-[#BFDBFE] group-hover:bg-[#93C5FD]' }}" style="height: {{ $percentage }}%"></span>
                             </div>
-                            <span class="mt-1 block truncate text-xs font-mono font-medium text-ink-muted group-hover:text-ink">{{ $item['label'] }}</span>
+                            <span class="mt-1 block truncate text-xs font-mono font-medium text-ink-muted group-hover:text-ink"><span class="sm:hidden">T{{ Str::before($item['label'], '/') }}</span><span class="hidden sm:inline">{{ $item['label'] }}</span></span>
                         </div>
                     @endforeach
                 </div>
@@ -185,8 +185,8 @@
         <!-- Top Content & Categories Grid -->
         <section class="grid gap-6 xl:grid-cols-12">
             <!-- Bài đang được xem nhiều (7 columns) -->
-            <article class="xl:col-span-7 flex flex-col border-2 border-line-strong bg-surface shadow-brutal-sm">
-                <div class="flex items-center justify-between border-b-2 border-line-strong px-5 py-3.5 bg-paper">
+            <article class="min-w-0 xl:col-span-7 flex flex-col rounded-[12px] border border-[#E2E8F0] bg-surface shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
+                <div class="flex items-center justify-between rounded-t-[11px] border-b border-[#E2E8F0] px-5 py-3.5 bg-paper">
                     <div>
                         <h3 class="text-sm font-black uppercase text-ink">Bài đang được xem nhiều</h3>
                         <p class="text-xs font-mono text-ink-muted">Nội dung công khai nổi bật theo lượt xem.</p>
@@ -196,11 +196,11 @@
                     </a>
                 </div>
 
-                <div class="divide-y border-line">
+                <div class="divide-y divide-[#E2E8F0]">
                     @forelse ($adminStats['top_posts'] as $index => $topPost)
                         <a href="{{ route('news.show', $topPost->slug) }}" class="group flex items-center justify-between gap-3 px-5 py-3.5 transition-colors hover:bg-paper">
                             <div class="flex items-center gap-3 min-w-0">
-                                <span class="size-6 grid place-items-center border border-line-strong bg-paper text-xs font-mono font-bold text-ink shrink-0">
+                                <span class="size-6 grid place-items-center rounded-[6px] border border-[#E2E8F0] bg-paper text-xs font-mono font-bold text-ink shrink-0">
                                     {{ sprintf('%02d', $index + 1) }}
                                 </span>
                                 <div class="min-w-0">
@@ -208,7 +208,7 @@
                                     <p class="mt-0.5 truncate text-xs font-mono text-ink-muted">{{ $topPost->category->name }} · {{ $topPost->author->name }}</p>
                                 </div>
                             </div>
-                            <span class="shrink-0 border border-line bg-paper px-2.5 py-1 text-xs font-mono font-bold text-ink">
+                            <span class="shrink-0 rounded-[6px] border border-[#E2E8F0] bg-paper px-2.5 py-1 text-xs font-mono font-bold text-ink">
                                 {{ number_format($topPost->view_count) }} lượt xem
                             </span>
                         </a>
@@ -221,18 +221,17 @@
             </article>
 
             <!-- Chuyên mục nổi bật (5 columns) -->
-            <article class="xl:col-span-5 flex flex-col border-2 border-line-strong bg-surface shadow-brutal-sm">
-                <div class="border-b-2 border-line-strong px-5 py-3.5 bg-paper">
+            <article class="min-w-0 xl:col-span-5 flex flex-col rounded-[12px] border border-[#E2E8F0] bg-surface shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
+                <div class="rounded-t-[11px] border-b border-[#E2E8F0] px-5 py-3.5 bg-paper">
                     <h3 class="text-sm font-black uppercase text-ink">Chuyên mục nổi bật</h3>
                     <p class="text-xs font-mono text-ink-muted">Số bài viết đã xuất bản.</p>
                 </div>
 
-                <div class="divide-y border-line">
+                <div class="divide-y divide-[#E2E8F0]">
                     @forelse ($adminStats['top_categories'] as $category)
                         <div class="flex items-center justify-between gap-3 px-5 py-3.5">
                             <div class="min-w-0">
                                 <p class="truncate text-xs sm:text-sm font-bold text-ink">{{ $category->name }}</p>
-                                <p class="mt-0.5 text-xs font-mono text-ink-muted">{{ $category->published_posts_count }} bài</p>
                             </div>
                             <span class="shrink-0 text-xs font-mono font-bold tabular-nums text-ink">{{ $category->published_posts_count }} bài</span>
                         </div>
@@ -249,12 +248,12 @@
     <!-- AUTHOR STATISTICS (If user has verified email) -->
     @if ($authorStats ?? null)
         <section aria-labelledby="author-overview-title" class="space-y-4 pt-2">
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-line pb-3">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#E2E8F0] pb-3">
                 <div>
                     <h2 id="author-overview-title" class="text-sm sm:text-base font-black uppercase tracking-tight text-ink">Thống kê bài viết của bạn</h2>
                     <p class="text-xs font-mono text-ink-muted">Theo dõi toàn bộ quy trình từ bản nháp đến xuất bản.</p>
                 </div>
-                <a href="{{ route('author.posts.create') }}" class="inline-flex min-h-9 items-center justify-center gap-1.5 border-2 border-line-strong bg-lime px-4 py-1.5 text-xs font-mono font-bold uppercase tracking-wider text-white shadow-brutal-sm hover:bg-ink hover:text-white hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
+                <a href="{{ route('author.posts.create') }}" class="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-[8px] border border-[#E2E8F0] bg-lime px-4 py-1.5 text-xs font-mono font-bold uppercase tracking-wider text-white shadow-none hover:bg-ink hover:text-white hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
                     <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="size-3.5">
                         <path d="M12 5v14M5 12h14"/>
                     </svg>
@@ -272,12 +271,12 @@
                     ['label' => 'Đã xuất bản', 'value' => $authorStats['published_posts'], 'hint' => 'Đã xuất hiện trên trang tin'],
                     ['label' => 'Tổng lượt xem', 'value' => $authorStats['total_views'], 'hint' => 'Cộng dồn trên các bài viết'],
                 ] as $stat)
-                    <article class="flex flex-col justify-between border-2 border-line-strong bg-surface p-5 shadow-brutal-sm">
+                    <article class="flex flex-col justify-between rounded-[12px] border border-[#E2E8F0] bg-surface p-5 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                         <div>
                             <span class="text-xs font-mono font-bold uppercase tracking-wider text-ink-muted">{{ $stat['label'] }}</span>
                             <p class="mt-2 text-3xl font-mono font-black tabular-nums text-ink">{{ number_format($stat['value']) }}</p>
                         </div>
-                        <p class="mt-3 text-xs font-mono text-ink-muted border-t border-line pt-2">{{ $stat['hint'] }}</p>
+                        <p class="mt-3 text-xs font-mono text-ink-muted border-t border-[#E2E8F0] pt-2">{{ $stat['hint'] }}</p>
                     </article>
                 @endforeach
             </div>
@@ -286,8 +285,8 @@
         <!-- Author Top Posts & Workflow Details -->
         <section class="grid gap-6 lg:grid-cols-12">
             <!-- Bài viết có lượt xem cao nhất (7 columns) -->
-            <article class="flex flex-col border-2 border-line-strong bg-surface lg:col-span-7 shadow-brutal-sm">
-                <div class="flex items-center justify-between border-b-2 border-line-strong px-5 py-3.5 bg-paper">
+            <article class="min-w-0 flex flex-col rounded-[12px] border border-[#E2E8F0] bg-surface lg:col-span-7 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
+                <div class="flex items-center justify-between rounded-t-[11px] border-b border-[#E2E8F0] px-5 py-3.5 bg-paper">
                     <div>
                         <h3 class="text-sm font-black uppercase text-ink">Bài viết có lượt xem cao nhất</h3>
                         <p class="text-xs font-mono text-ink-muted">Hiệu quả nội dung của riêng bạn.</p>
@@ -297,14 +296,14 @@
                     </a>
                 </div>
 
-                <div class="divide-y border-line">
+                <div class="divide-y divide-[#E2E8F0]">
                     @forelse ($authorStats['top_posts'] as $topPost)
                         <a href="{{ route('posts.preview', $topPost) }}" class="group flex items-center justify-between gap-3 px-5 py-3.5 transition-colors hover:bg-paper">
                             <div class="min-w-0">
                                 <p class="truncate text-xs sm:text-sm font-bold text-ink group-hover:underline">{{ $topPost->title }}</p>
-                                <p class="mt-0.5 text-xs font-mono text-ink-muted">{{ $topPost->category->name }} · {{ str_replace('_', ' ', $topPost->status->value) }}</p>
+                                <p class="mt-0.5 text-xs font-mono text-ink-muted">{{ $topPost->category->name }} · {{ $topPost->status->label() }}</p>
                             </div>
-                            <span class="shrink-0 border border-line bg-paper px-2.5 py-1 text-xs font-mono font-bold text-ink">
+                            <span class="shrink-0 rounded-[6px] border border-[#E2E8F0] bg-paper px-2.5 py-1 text-xs font-mono font-bold text-ink">
                                 {{ number_format($topPost->view_count) }} lượt xem
                             </span>
                         </a>
@@ -318,13 +317,13 @@
             </article>
 
             <!-- Quy trình xuất bản (5 columns) -->
-            <article class="flex flex-col border-2 border-line-strong bg-surface lg:col-span-5 shadow-brutal-sm">
-                <div class="flex items-center justify-between border-b-2 border-line-strong px-5 py-3.5 bg-paper">
+            <article class="min-w-0 flex flex-col rounded-[12px] border border-[#E2E8F0] bg-surface lg:col-span-5 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
+                <div class="flex items-center justify-between rounded-t-[11px] border-b border-[#E2E8F0] px-5 py-3.5 bg-paper">
                     <div>
                         <h3 class="text-sm font-black uppercase text-ink">Quy trình xuất bản</h3>
                         <p class="text-xs font-mono text-ink-muted">Kiểm duyệt trước khi xuất hiện công khai.</p>
                     </div>
-                    <span class="border border-line-strong bg-lime px-2 py-0.5 text-xs font-mono font-bold text-ink">
+                    <span class="rounded-[6px] border border-[#E2E8F0] bg-lime px-2 py-0.5 text-xs font-mono font-bold text-ink">
                         3 bước
                     </span>
                 </div>
@@ -336,8 +335,8 @@
                             ['02', 'Gửi duyệt', 'Khóa chỉnh sửa trong lúc chờ ban biên tập xét duyệt.'],
                             ['03', 'Xuất bản', 'Quản trị viên duyệt và bài viết chính thức lên trang tin.']
                         ] as $step)
-                            <li class="flex items-start gap-3 border border-line bg-paper p-2.5">
-                                <span class="size-6 grid place-items-center border border-line-strong bg-lime text-xs font-mono font-bold text-ink shrink-0">
+                            <li class="flex items-start gap-3 rounded-[12px] border border-[#E2E8F0] bg-paper p-2.5">
+                                <span class="size-6 grid place-items-center rounded-[6px] border border-[#E2E8F0] bg-lime text-xs font-mono font-bold text-ink shrink-0">
                                     {{ $step[0] }}
                                 </span>
                                 <div class="min-w-0">
@@ -348,7 +347,7 @@
                         @endforeach
                     </ol>
 
-                    <div class="mt-auto flex items-center justify-between gap-2.5 border border-line bg-paper p-3 text-xs font-mono">
+                    <div class="mt-auto flex items-center justify-between gap-2.5 rounded-[12px] border border-[#E2E8F0] bg-paper p-3 text-xs font-mono">
                         <div class="flex min-w-0 items-center gap-2">
                             <span class="text-ink font-bold">i</span>
                             <p class="truncate text-ink-muted">Có thể lưu nháp nhiều lần trước khi gửi.</p>
@@ -364,7 +363,7 @@
     @if (auth()->user()->role === \App\Enums\UserRole::User)
         <!-- Reader Quick Activity Section -->
         <section aria-labelledby="reader-overview-title" class="space-y-4">
-            <div class="flex items-center justify-between gap-4 border-b border-line pb-3">
+            <div class="flex items-center justify-between gap-4 border-b border-[#E2E8F0] pb-3">
                 <div>
                     <h2 id="reader-overview-title" class="text-sm sm:text-base font-black uppercase tracking-tight text-ink">Không gian Độc giả</h2>
                     <p class="text-xs font-mono text-ink-muted">Các hoạt động đọc tin, lưu trữ và tương tác của bạn.</p>
@@ -376,31 +375,31 @@
 
             <div class="grid gap-4 sm:grid-cols-2">
                 <!-- Lịch sử bình luận -->
-                <a href="{{ route('profile.comments') }}" class="group flex flex-col justify-between border-2 border-line-strong bg-surface p-5 shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
+                <a href="{{ route('profile.comments') }}" class="group flex flex-col justify-between rounded-[8px] border border-[#E2E8F0] bg-surface p-5 shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
                     <div>
-                        <div class="flex items-center justify-between gap-2 border-b border-line pb-2">
+                        <div class="flex items-center justify-between gap-2 border-b border-[#E2E8F0] pb-2">
                             <span class="text-xs font-mono font-bold uppercase tracking-wider text-ink-muted">Bình luận của tôi</span>
-                            <span class="size-7 grid place-items-center border border-line-strong bg-paper text-ink font-mono text-xs">
+                            <span class="size-7 grid place-items-center rounded-[6px] border border-[#E2E8F0] bg-paper text-ink font-mono text-xs">
                                 “
                             </span>
                         </div>
                         <p class="mt-3 text-sm font-bold uppercase text-ink group-hover:underline">Ý kiến đóng góp</p>
                     </div>
-                    <p class="mt-3 text-xs font-mono text-ink-muted border-t border-line pt-2">Xem và quản lý các bình luận &rarr;</p>
+                    <p class="mt-3 text-xs font-mono text-ink-muted border-t border-[#E2E8F0] pt-2">Xem và quản lý các bình luận &rarr;</p>
                 </a>
 
                 <!-- Hồ sơ & Thiết lập -->
-                <a href="{{ route('profile.edit') }}" class="group flex flex-col justify-between border-2 border-line-strong bg-surface p-5 shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
+                <a href="{{ route('profile.edit') }}" class="group flex flex-col justify-between rounded-[8px] border border-[#E2E8F0] bg-surface p-5 shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
                     <div>
-                        <div class="flex items-center justify-between gap-2 border-b border-line pb-2">
+                        <div class="flex items-center justify-between gap-2 border-b border-[#E2E8F0] pb-2">
                             <span class="text-xs font-mono font-bold uppercase tracking-wider text-ink-muted">Tài khoản</span>
-                            <span class="size-7 grid place-items-center border border-line-strong bg-paper text-ink font-mono text-xs">
+                            <span class="size-7 grid place-items-center rounded-[6px] border border-[#E2E8F0] bg-paper text-ink font-mono text-xs">
                                 ID
                             </span>
                         </div>
                         <p class="mt-3 text-sm font-bold uppercase text-ink group-hover:underline">Hồ sơ cá nhân</p>
                     </div>
-                    <p class="mt-3 text-xs font-mono text-ink-muted border-t border-line pt-2">Cài đặt email và mật khẩu &rarr;</p>
+                    <p class="mt-3 text-xs font-mono text-ink-muted border-t border-[#E2E8F0] pt-2">Cài đặt email và mật khẩu &rarr;</p>
                 </a>
             </div>
         </section>
@@ -408,15 +407,15 @@
         <!-- Author Application Program Section -->
         <section aria-labelledby="author-program-title" class="space-y-6 pt-2">
             <!-- Program Header Banner -->
-            <div class="border-2 border-line-strong bg-surface p-6 sm:p-7 shadow-brutal space-y-4">
+            <div class="rounded-[12px] border border-[#E2E8F0] bg-surface p-6 sm:p-7 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)] space-y-4">
                 <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                     <div class="space-y-2 max-w-2xl">
-                        <div class="inline-flex items-center gap-2 border border-line-strong bg-lime px-3 py-1 text-xs font-mono font-bold uppercase tracking-wider text-ink shadow-brutal-sm">
+                        <div class="inline-flex items-center gap-2 rounded-[12px] border border-[#E2E8F0] bg-lime px-3 py-1 text-xs font-mono font-bold uppercase tracking-wider text-ink shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                             <span>●</span>
-                            <span>Chương trình Cộng tác viên & Tác giả NewsHub</span>
+                            <span>Chương trình Cộng tác viên & Tác giả BaoUT</span>
                         </div>
                         <h2 id="author-program-title" class="text-xl font-black uppercase tracking-tight text-ink sm:text-2xl">
-                            Trở thành Tác giả bài viết trên NewsHub
+                            Trở thành Tác giả bài viết trên BaoUT
                         </h2>
                         <p class="text-xs sm:text-sm text-ink-muted leading-relaxed">
                             Bạn đam mê chia sẻ chuyên môn, phân tích góc nhìn và viết bài? Hãy gia nhập đội ngũ tác giả để xuất bản nội dung chất lượng tới hàng nghìn độc giả trên toàn hệ thống.
@@ -424,21 +423,21 @@
                     </div>
 
                     <!-- 3 Steps Mini Timeline -->
-                    <div class="grid grid-cols-3 gap-2 sm:gap-3 border border-line bg-paper p-3 sm:p-4 shrink-0">
+                    <div class="grid grid-cols-3 gap-2 sm:gap-3 rounded-[12px] border border-[#E2E8F0] bg-paper p-3 sm:p-4 shrink-0">
                         <div class="text-center font-mono">
-                            <span class="mx-auto grid size-6 place-items-center border border-line-strong bg-lime text-xs font-bold text-ink">1</span>
+                            <span class="mx-auto grid size-6 place-items-center rounded-[6px] border border-[#E2E8F0] bg-lime text-xs font-bold text-ink">1</span>
                             <p class="mt-1 text-xs font-bold uppercase text-ink">Gửi bài mẫu</p>
-                            <p class="text-[10px] text-ink-muted">Chọn chuyên mục</p>
+                            <p class="text-[11px] text-ink-muted">Chọn chuyên mục</p>
                         </div>
                         <div class="text-center font-mono">
-                            <span class="mx-auto grid size-6 place-items-center border border-line-strong bg-surface text-xs font-bold text-ink">2</span>
+                            <span class="mx-auto grid size-6 place-items-center rounded-[6px] border border-[#E2E8F0] bg-surface text-xs font-bold text-ink">2</span>
                             <p class="mt-1 text-xs font-bold uppercase text-ink">Xét duyệt</p>
-                            <p class="text-[10px] text-ink-muted">Ban biên tập</p>
+                            <p class="text-[11px] text-ink-muted">Ban biên tập</p>
                         </div>
                         <div class="text-center font-mono">
-                            <span class="mx-auto grid size-6 place-items-center border border-line-strong bg-surface text-xs font-bold text-ink">3</span>
+                            <span class="mx-auto grid size-6 place-items-center rounded-[6px] border border-[#E2E8F0] bg-surface text-xs font-bold text-ink">3</span>
                             <p class="mt-1 text-xs font-bold uppercase text-ink">Đăng bài</p>
-                            <p class="text-[10px] text-ink-muted">Nâng cấp Author</p>
+                            <p class="text-[11px] text-ink-muted">Nâng cấp Author</p>
                         </div>
                     </div>
                 </div>
@@ -446,21 +445,21 @@
 
             <!-- STATE 1: PENDING APPLICATION -->
             @if ($authorApplication && $authorApplication->status === \App\Enums\AuthorApplicationStatus::Pending)
-                <article class="border-2 border-line-strong bg-surface p-5 sm:p-6 shadow-brutal space-y-4">
+                <article class="rounded-[12px] border border-[#E2E8F0] bg-surface p-5 sm:p-6 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)] space-y-4">
                     <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div class="flex items-start gap-3.5">
-                            <span class="grid size-10 shrink-0 place-items-center border-2 border-line-strong bg-lime text-white font-mono font-bold text-base shadow-brutal-sm">
+                            <span class="grid size-10 shrink-0 place-items-center rounded-[6px] border border-[#E2E8F0] bg-lime text-white font-mono font-bold text-base shadow-none">
                                 ⏳
                             </span>
                             <div>
                                 <div class="flex flex-wrap items-center gap-2">
                                     <h3 class="text-base font-black uppercase text-ink">Đơn ứng tuyển của bạn đang được xét duyệt</h3>
-                                    <span class="border border-line-strong bg-lime px-2.5 py-0.5 text-xs font-mono font-bold uppercase text-white">
+                                    <span class="rounded-[6px] border border-[#E2E8F0] bg-lime px-2.5 py-0.5 text-xs font-mono font-bold uppercase text-white">
                                         Chờ duyệt
                                     </span>
                                 </div>
                                 <p class="mt-1 text-xs text-ink-muted leading-relaxed">
-                                    Hồ sơ CV của bạn đã được chuyển đến Ban biên tập NewsHub. Chúng tôi sẽ xem xét và phản hồi trong thời gian sớm nhất.
+                                    Hồ sơ CV của bạn đã được chuyển đến Ban biên tập BaoUT. Chúng tôi sẽ xem xét và phản hồi trong thời gian sớm nhất.
                                 </p>
                             </div>
                         </div>
@@ -471,8 +470,8 @@
                     </div>
 
                     <!-- Submitted Details Preview -->
-                    <div class="mt-5 space-y-3 border border-line bg-paper p-4 text-xs font-mono">
-                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-2.5">
+                    <div class="mt-5 space-y-3 rounded-[12px] border border-[#E2E8F0] bg-paper p-4 text-xs font-mono">
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#E2E8F0] pb-2.5">
                             <span class="text-ink-muted uppercase">Chuyên mục đăng ký:</span>
                             <span class="font-bold text-ink">{{ $authorApplication->category->name }}</span>
                         </div>
@@ -480,7 +479,7 @@
                             <span class="block text-ink-muted uppercase font-bold">Giới thiệu bản thân & kinh nghiệm:</span>
                             <p class="mt-1 text-ink whitespace-pre-line leading-relaxed font-sans">{{ $authorApplication->bio }}</p>
                         </div>
-                        <p class="border-t border-line pt-2.5 text-xs text-ink-muted">Bạn đã gửi CV kèm đơn ứng tuyển.</p>
+                        <p class="border-t border-[#E2E8F0] pt-2.5 text-xs text-ink-muted">Bạn đã gửi CV kèm đơn ứng tuyển.</p>
                     </div>
 
                     <p class="mt-4 text-xs font-mono text-ink-muted flex items-center gap-1.5">
@@ -492,17 +491,17 @@
 
             <!-- STATE 2: REJECTED APPLICATION (Show Reason + Allow Re-applying) -->
             @if ($authorApplication && $authorApplication->status === \App\Enums\AuthorApplicationStatus::Rejected)
-                <div class="border-2 border-line-strong bg-surface p-5 shadow-brutal">
+                <div class="rounded-[12px] border border-[#E2E8F0] bg-surface p-5 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                     <div class="flex items-start gap-3">
                         <span class="size-6 grid place-items-center bg-danger text-paper font-mono font-bold text-xs shrink-0 mt-0.5">X</span>
                         <div class="flex-1">
-                            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-2">
+                            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#E2E8F0] pb-2">
                                 <h3 class="text-sm font-black uppercase text-danger">Đơn ứng tuyển trước đó chưa được chấp thuận</h3>
                                 <span class="text-xs font-mono text-ink-muted">
                                     Xét duyệt ngày: {{ $authorApplication->reviewed_at?->format('d/m/Y H:i') }}
                                 </span>
                             </div>
-                            <div class="mt-3 border border-line bg-paper p-3 text-xs font-mono text-ink">
+                            <div class="mt-3 rounded-[12px] border border-[#E2E8F0] bg-paper p-3 text-xs font-mono text-ink">
                                 <p class="font-bold uppercase text-danger">Phản hồi từ Ban biên tập:</p>
                                 <p class="mt-1 leading-relaxed whitespace-pre-line font-sans">{{ $authorApplication->rejection_reason }}</p>
                             </div>
@@ -516,14 +515,14 @@
 
             <!-- APPLICATION FORM (Rendered when no active pending application) -->
             @if (! $authorApplication || $authorApplication->status === \App\Enums\AuthorApplicationStatus::Rejected)
-                <div class="border-2 border-line-strong bg-surface p-5 sm:p-6 shadow-brutal space-y-5">
-                    <div class="border-b border-line pb-4">
+                <div class="rounded-[12px] border border-[#E2E8F0] bg-surface p-5 sm:p-6 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)] space-y-5">
+                    <div class="border-b border-[#E2E8F0] pb-4">
                         <h3 class="text-base font-black uppercase text-ink">Nộp hồ sơ ứng tuyển Tác giả</h3>
                         <p class="text-xs font-mono text-ink-muted">Giới thiệu ngắn về bạn và đính kèm CV để Ban biên tập xem xét.</p>
                     </div>
 
                     @unless (auth()->user()->hasVerifiedEmail())
-                        <div class="border-2 border-line-strong bg-lime p-4 text-xs font-mono text-ink space-y-2 shadow-brutal-sm">
+                        <div class="rounded-[12px] border border-[#E2E8F0] bg-lime p-4 text-xs font-mono text-ink space-y-2 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                             <p class="font-bold uppercase flex items-center gap-2">
                                 <span>!</span>
                                 Yêu cầu xác thực tài khoản
@@ -532,7 +531,7 @@
                                 Bạn cần hoàn tất xác minh địa chỉ email trước khi có thể nộp đơn ứng tuyển làm Tác giả.
                             </p>
                             <div class="pt-2">
-                                <a href="{{ route('verification.notice') }}" class="inline-flex min-h-8 items-center justify-center border border-line-strong bg-surface px-3 py-1 text-xs font-bold uppercase text-ink hover:bg-paper">
+                                <a href="{{ route('verification.notice') }}" class="inline-flex min-h-8 items-center justify-center rounded-[8px] border border-[#CBD5E1] bg-surface px-3 py-1 text-xs font-bold uppercase text-ink hover:bg-paper">
                                     Xác minh email ngay &rarr;
                                 </a>
                             </div>
@@ -549,7 +548,7 @@
                                 <select id="category_id"
                                         name="category_id"
                                         required
-                                        class="w-full border border-line bg-paper px-3 py-2.5 text-xs text-ink focus:border-line-strong focus:outline-hidden focus:bg-surface focus:shadow-brutal-sm">
+                                        class="w-full rounded-[8px] border border-control bg-paper px-3 py-2.5 text-xs text-ink focus:border-[#1D4ED8] focus:outline-hidden focus:bg-surface focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)]">
                                     <option value="">-- Chọn chuyên mục bạn muốn viết bài --</option>
                                     @foreach ($authorApplicationCategories as $category)
                                         <option value="{{ $category->id }}" @selected((int) old('category_id') === $category->id)>
@@ -573,7 +572,7 @@
                                           required
                                           maxlength="5000"
                                           placeholder="Chia sẻ ngắn về bạn, lĩnh vực am hiểu, kinh nghiệm viết bài hoặc link bài viết/blog bạn từng thực hiện..."
-                                          class="w-full border border-line bg-paper px-3 py-2.5 text-xs text-ink placeholder:text-ink-light focus:border-line-strong focus:outline-hidden focus:bg-surface focus:shadow-brutal-sm leading-relaxed">{{ old('bio') }}</textarea>
+                                          class="w-full rounded-[8px] border border-control bg-paper px-3 py-2.5 text-xs text-ink placeholder:text-ink-light focus:border-[#1D4ED8] focus:outline-hidden focus:bg-surface focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)] leading-relaxed">{{ old('bio') }}</textarea>
                                 @error('bio')
                                     <p class="text-xs text-danger font-mono">{{ $message }}</p>
                                 @enderror
@@ -583,16 +582,16 @@
                                 <label for="cv" class="block text-xs font-mono font-bold uppercase tracking-wider text-ink">
                                     Tệp CV (PDF, DOC hoặc DOCX, tối đa 5 MB) <span class="text-danger">*</span>
                                 </label>
-                                <input id="cv" type="file" name="cv" accept=".pdf,.doc,.docx" required class="w-full border border-line bg-paper px-3 py-2.5 text-xs text-ink">
+                                <input id="cv" type="file" name="cv" accept=".pdf,.doc,.docx" required class="w-full rounded-[8px] border border-control bg-paper px-3 py-2.5 text-xs text-ink">
                                 @error('cv')
                                     <p class="text-xs text-danger font-mono">{{ $message }}</p>
                                 @enderror
                             </div>
 
                             <!-- Submit Action -->
-                            <div class="pt-3 border-t border-line">
+                            <div class="pt-3 border-t border-[#E2E8F0]">
                                 <button type="submit"
-                                        class="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 border-2 border-line-strong bg-lime px-6 py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-white shadow-brutal hover:bg-ink hover:text-white hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-brutal-sm transition-all active:translate-x-1 active:translate-y-1">
+                                        class="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-[8px] border border-[#E2E8F0] bg-lime px-6 py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-white shadow-none hover:bg-ink hover:text-white hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[0_4px_12px_rgb(15_23_42_/_0.08)] transition-all active:translate-x-1 active:translate-y-1">
                                     <svg class="size-4" viewBox="0 0 20 20" fill="currentColor">
                                         <path d="M3.105 2.289a.75.75 0 00-.826.95l1.414 4.925A1.5 1.5 0 005.135 9.25h6.115a.75.75 0 010 1.5H5.135a1.5 1.5 0 00-1.442 1.086l-1.414 4.926a.75.75 0 00.826.95 28.896 28.896 0 0015.293-7.154.75.75 0 000-1.115A28.897 28.897 0 003.105 2.289z" />
                                     </svg>

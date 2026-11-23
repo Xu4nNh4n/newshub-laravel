@@ -3,13 +3,13 @@
 @section('content')
 <div class="space-y-6">
     <!-- Header -->
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b-2 border-line-strong pb-5">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#E2E8F0] pb-5">
         <div>
             <span class="font-mono text-xs font-bold uppercase tracking-wider text-ink-muted block mb-1">Tương tác độc giả</span>
             <h1 class="text-2xl font-black uppercase tracking-tight text-ink sm:text-3xl font-heading">Quản lý bình luận</h1>
             <p class="text-xs text-ink-muted mt-1">Ẩn, khôi phục hoặc xóa mềm bình luận vi phạm quy chuẩn cộng đồng.</p>
         </div>
-        <a href="{{ route('admin.comments.export') }}" class="inline-flex min-h-10 items-center gap-2 border-2 border-line-strong bg-surface px-4 py-2 font-mono text-xs font-bold uppercase text-ink shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
+        <a href="{{ route('admin.comments.export') }}" class="inline-flex min-h-10 items-center gap-2 rounded-[8px] border border-[#CBD5E1] bg-surface px-4 py-2 font-mono text-xs font-bold uppercase text-ink shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
             <svg class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0010.378 2H4.5zm4.75 6.75a.75.75 0 011.5 0v3.69l1.22-1.22a.75.75 0 111.06 1.06l-2.5 2.5a.75.75 0 01-1.06 0l-2.5-2.5a.75.75 0 111.06-1.06l1.22 1.22V8.75z" clip-rule="evenodd" />
             </svg>
@@ -18,21 +18,21 @@
     </div>
 
     <!-- Filter Bar -->
-    <form method="GET" class="flex flex-col gap-3 border-2 border-line-strong bg-surface p-4 sm:flex-row sm:items-center shadow-brutal-sm">
+    <form method="GET" class="flex flex-col gap-3 rounded-[12px] border border-[#E2E8F0] bg-surface p-4 sm:flex-row sm:items-center shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
         <div class="min-w-0 flex-1">
             <label for="q" class="sr-only">Tìm kiếm</label>
-            <input id="q" name="q" value="{{ $filters['q'] ?? '' }}" maxlength="100" placeholder="Tìm trong nội dung bình luận..." class="w-full border-2 border-line bg-paper px-3.5 py-2 text-xs text-ink placeholder-ink-muted outline-none focus:border-ink">
+            <input id="q" name="q" value="{{ $filters['q'] ?? '' }}" maxlength="100" placeholder="Tìm trong nội dung bình luận..." class="w-full rounded-[8px] border border-control bg-paper px-3.5 py-2 text-xs text-ink placeholder-ink-muted outline-none focus:border-[#1D4ED8] focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)]">
         </div>
         <div class="w-full sm:w-48">
             <label for="state" class="sr-only">Trạng thái</label>
-            <select id="state" name="state" class="w-full border-2 border-line bg-paper px-3 py-2 text-xs font-mono text-ink outline-none focus:border-ink">
+            <select id="state" name="state" class="w-full rounded-[8px] border border-control bg-paper px-3 py-2 text-xs font-mono text-ink outline-none focus:border-[#1D4ED8] focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)]">
                 <option value="">Mọi trạng thái</option>
                 @foreach($states as $value => $label)
                     <option value="{{ $value }}" @selected(($filters['state'] ?? '') === $value)>{{ $label }}</option>
                 @endforeach
             </select>
         </div>
-        <button type="submit" class="inline-flex min-h-9 cursor-pointer shrink-0 items-center justify-center gap-1.5 border-2 border-line-strong bg-paper px-5 py-2 font-mono text-xs font-bold uppercase text-ink shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
+        <button type="submit" class="inline-flex min-h-9 cursor-pointer shrink-0 items-center justify-center gap-1.5 rounded-[8px] border border-[#CBD5E1] bg-paper px-5 py-2 font-mono text-xs font-bold uppercase text-ink shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
             <svg class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 01.628.74v2.288a2.25 2.25 0 01-.659 1.59l-4.682 4.683a2.25 2.25 0 00-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 018 18.25v-5.757a2.25 2.25 0 00-.659-1.591L2.659 6.22A2.25 2.25 0 012 4.629V2.34a.75.75 0 01.628-.74z" clip-rule="evenodd" />
             </svg>
@@ -43,7 +43,7 @@
     <!-- Comments List -->
     <div class="space-y-4">
         @forelse($comments as $comment)
-            <article class="border-2 border-line-strong bg-surface p-5 shadow-brutal transition-all">
+            <article class="rounded-[12px] border border-[#E2E8F0] bg-surface p-5 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)] transition-all">
                 <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                     <div>
                         <p class="font-bold text-ink text-sm">
@@ -54,28 +54,28 @@
                             Bài viết: {{ $comment->post->title }}
                         </a>
                     </div>
-                    <span class="shrink-0 border border-line-strong bg-paper px-2 py-0.5 font-mono text-[11px] font-bold uppercase text-ink">
-                        {{ $comment->trashed() ? 'deleted' : $comment->status->value }} · {{ $comment->created_at->format('d/m/Y H:i') }}
+                    <span class="shrink-0 rounded-[6px] border border-[#E2E8F0] bg-paper px-2 py-0.5 font-mono text-[11px] font-bold uppercase text-ink">
+                        {{ $comment->trashed() ? 'Đã xóa' : $comment->status->label() }} · {{ $comment->created_at->format('d/m/Y H:i') }}
                     </span>
                 </div>
 
-                <p class="mt-3 whitespace-pre-line text-xs leading-relaxed text-ink bg-paper p-3 border border-line">
+                <p class="mt-3 whitespace-pre-line text-xs leading-relaxed text-ink bg-paper p-3 rounded-[12px] border border-[#E2E8F0]">
                     {{ $comment->content }}
                 </p>
 
                 @unless($comment->trashed())
-                    <div class="mt-4 flex flex-wrap items-center gap-2 pt-3 border-t border-line">
+                    <div class="mt-4 flex flex-wrap items-center gap-2 pt-3 border-t border-[#E2E8F0]">
                         @if($comment->status === \App\Enums\CommentStatus::Visible)
                             <form method="POST" action="{{ route('admin.comments.update', $comment) }}">
                                 @csrf @method('PATCH')
-                                <button name="action" value="hide" class="inline-flex min-h-7 cursor-pointer items-center border border-line-strong bg-paper px-3 py-1 font-mono text-[11px] font-bold uppercase text-ink shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
+                                <button name="action" value="hide" class="inline-flex min-h-7 cursor-pointer items-center rounded-[8px] border border-[#CBD5E1] bg-paper px-3 py-1 font-mono text-[11px] font-bold uppercase text-ink shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
                                     Ẩn bình luận
                                 </button>
                             </form>
                         @else
                             <form method="POST" action="{{ route('admin.comments.update', $comment) }}">
                                 @csrf @method('PATCH')
-                                <button name="action" value="restore" class="inline-flex min-h-7 cursor-pointer items-center border border-line-strong bg-lime px-3 py-1 font-mono text-[11px] font-bold uppercase text-ink shadow-brutal-sm transition-all">
+                                <button name="action" value="restore" class="inline-flex min-h-7 cursor-pointer items-center rounded-[8px] border border-[#E2E8F0] bg-lime px-3 py-1 font-mono text-[11px] font-bold uppercase text-ink shadow-none transition-all">
                                     Hiện lại
                                 </button>
                             </form>
@@ -87,7 +87,7 @@
                               data-confirm-type="danger"
                               data-confirm-btn="Xác nhận xóa">
                             @csrf @method('PATCH')
-                            <button name="action" value="delete" class="inline-flex min-h-7 cursor-pointer items-center border border-line-strong bg-paper px-3 py-1 font-mono text-[11px] font-bold uppercase text-danger shadow-brutal-sm hover:bg-danger hover:text-paper transition-all">
+                            <button name="action" value="delete" class="inline-flex min-h-7 cursor-pointer items-center rounded-[8px] border border-[#CBD5E1] bg-paper px-3 py-1 font-mono text-[11px] font-bold uppercase text-danger shadow-none hover:bg-danger hover:text-paper transition-all">
                                 Xóa
                             </button>
                         </form>
@@ -95,7 +95,7 @@
                 @endunless
             </article>
         @empty
-            <div class="border-2 border-line-strong bg-surface p-12 text-center font-mono text-xs text-ink-muted shadow-brutal">
+            <div class="rounded-[12px] border border-[#E2E8F0] bg-surface p-12 text-center font-mono text-xs text-ink-muted shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                 Không có bình luận phù hợp.
             </div>
         @endforelse

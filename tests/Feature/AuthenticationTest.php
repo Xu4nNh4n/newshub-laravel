@@ -130,14 +130,14 @@ class AuthenticationTest extends TestCase
         $resetHtml = view($resetMail->view['html'], $resetMail->viewData)->render();
         $resetText = view($resetMail->view['text'], $resetMail->viewData)->render();
 
-        $this->assertSame('Xác minh địa chỉ email NewsHub', $verificationMail->subject);
+        $this->assertSame('Xác minh địa chỉ email BaoUT', $verificationMail->subject);
         $this->assertSame(['html' => 'mail.auth-action', 'text' => 'mail.auth-action-text'], $verificationMail->view);
         $this->assertStringContainsString('signature=', $verificationMail->viewData['actionUrl']);
         $this->assertStringContainsString('Xác minh email', $verificationHtml);
         $this->assertStringContainsString('Xác minh email', $verificationText);
         $this->assertStringContainsString('&lt;script&gt;', $verificationHtml);
         $this->assertStringNotContainsString('<script>alert(1)</script>', $verificationHtml);
-        $this->assertSame('Đặt lại mật khẩu NewsHub', $resetMail->subject);
+        $this->assertSame('Đặt lại mật khẩu BaoUT', $resetMail->subject);
         $this->assertStringContainsString('secret-reset-token', $resetMail->viewData['actionUrl']);
         $this->assertStringContainsString(urlencode($user->email), $resetMail->viewData['actionUrl']);
         $this->assertStringContainsString('Đặt lại mật khẩu', $resetHtml);

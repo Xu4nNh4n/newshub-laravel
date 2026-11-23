@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class PostWorkflowTest extends TestCase
@@ -204,5 +205,48 @@ class PostWorkflowTest extends TestCase
 
         $this->actingAs($admin)->post(route('author.posts.publish', $otherPost))->assertForbidden();
         $this->assertSame(PostStatus::Draft, $otherPost->refresh()->status);
+    }
+
+    #[DataProvider('blankContentProvider')]
+    public function test_blank_content_is_rejected_when_creating_and_updating_a_post(string $content): void
+    {
+        $author = User::factory()->create(['role' => UserRole::Author]);
+        $post = Post::factory()->create(['author_id' => $author, 'content' => '<p>Nội dung cũ.</p>']);
+        $data = [
+            'title' => 'Bài rỗng',
+            'content' => $content,
+            'category_id' => $post->category_id,
+        ];
+        $error = ['content' => 'Nội dung bài viết không được để trống.'];
+
+        $this->actingAs($author)->post(route('author.posts.store'), $data)->assertSessionHasErrors($error);
+        $this->actingAs($author)->put(route('author.posts.update', $post), $data)->assertSessionHasErrors($error);
+
+        $this->assertDatabaseCount('posts', 1);
+        $this->assertSame('<p>Nội dung cũ.</p>', $post->refresh()->content);
+    }
+
+    /** @return array<string, array{string}> */
+    public static function blankContentProvider(): array
+    {
+        return [
+            'empty editor paragraph' => ['<p><br></p>'],
+            'non-breaking spaces' => ['<p>&nbsp;&nbsp;</p>'],
+            'only discarded content' => ['<script>alert(1)</script>'],
+            'image with a disallowed source' => ['<p><img src="javascript:alert(1)"></p>'],
+        ];
+    }
+
+    public function test_post_containing_only_an_image_is_accepted(): void
+    {
+        $author = User::factory()->create(['role' => UserRole::Author]);
+
+        $this->actingAs($author)->post(route('author.posts.store'), [
+            'title' => 'Phóng sự ảnh',
+            'content' => '<p><img src="/storage/posts/media/a.webp"></p>',
+            'category_id' => Category::factory()->create()->id,
+        ])->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('posts', ['title' => 'Phóng sự ảnh']);
     }
 }

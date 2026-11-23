@@ -1,9 +1,9 @@
-@extends('layouts.app', ['title' => 'Xác minh tài khoản - NewsHub'])
+@extends('layouts.app', ['title' => 'Xác minh tài khoản - BaoUT'])
 
 @section('content')
 <div class="mx-auto max-w-lg py-8 sm:py-16">
-    <section class="border-2 border-line-strong bg-surface p-6 sm:p-10 shadow-brutal text-center space-y-6">
-        <div class="mx-auto grid size-14 place-items-center border-2 border-line-strong bg-lime text-white font-mono font-black shadow-brutal-sm">
+    <section class="rounded-[12px] border border-[#E2E8F0] bg-surface p-6 sm:p-10 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)] text-center space-y-6">
+        <div class="mx-auto grid size-14 place-items-center rounded-[12px] border border-[#E2E8F0] bg-lime text-white font-mono font-black">
             <svg class="size-7" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" />
                 <path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" />
@@ -18,7 +18,7 @@
         </div>
 
         @if (session('status') == 'verification-link-sent')
-            <div class="border-2 border-line-strong bg-lime p-3 text-xs font-mono font-bold text-white shadow-brutal-sm">
+            <div class="rounded-[12px] border border-[#E2E8F0] bg-lime p-3 text-xs font-mono font-bold text-white shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                 Một liên kết xác minh mới đã được gửi tới địa chỉ email của bạn!
             </div>
         @endif
@@ -27,12 +27,12 @@
             <form method="POST" action="{{ route('verification.send') }}">
                 @csrf
                 <button type="submit"
-                        class="inline-flex min-h-11 cursor-pointer items-center justify-center border-2 border-line-strong bg-lime px-6 py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-white shadow-brutal hover:bg-ink hover:text-white hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-brutal-sm transition-all active:translate-x-1 active:translate-y-1">
+                        class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-[8px] border border-[#E2E8F0] bg-lime px-6 py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-white shadow-none hover:bg-ink hover:text-white hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[0_4px_12px_rgb(15_23_42_/_0.08)] transition-all active:translate-x-1 active:translate-y-1">
                     Gửi lại email xác minh
                 </button>
             </form>
 
-            <a href="{{ route('home') }}" class="inline-flex min-h-11 items-center justify-center border border-line bg-paper px-5 py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-ink hover:border-line-strong hover:bg-ink hover:text-white transition-colors">
+            <a href="{{ route('home') }}" class="inline-flex min-h-11 items-center justify-center rounded-[8px] border border-[#CBD5E1] bg-paper px-5 py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-ink hover:border-[#94A3B8] hover:bg-ink hover:text-white transition-colors">
                 Về trang chủ
             </a>
         </div>

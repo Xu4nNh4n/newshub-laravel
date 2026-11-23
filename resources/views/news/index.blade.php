@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => ($selectedCategory ? $selectedCategory->name . ' - ' : '') . 'Tin tức - NewsHub'])
+@extends('layouts.app', ['title' => ($selectedCategory ? $selectedCategory->name . ' - ' : '') . 'Tin tức - BaoUT'])
 
 @section('content')
 @php
@@ -39,14 +39,14 @@
     <!-- Breadcrumb -->
     <nav aria-label="Breadcrumb" class="text-xs font-mono text-ink-muted">
         <ol class="flex items-center gap-1.5 flex-wrap">
-            <li><a href="{{ route('home') }}" class="hover:text-ink hover:underline transition-colors">Trang chủ</a></li>
+            <li><a href="{{ route('home') }}" class="inline-block py-1 hover:text-ink hover:underline transition-colors">Trang chủ</a></li>
             <li class="text-line">/</li>
-            <li><a href="{{ route('news.index') }}" class="hover:text-ink hover:underline transition-colors">Tin tức</a></li>
+            <li><a href="{{ route('news.index') }}" class="inline-block py-1 hover:text-ink hover:underline transition-colors">Tin tức</a></li>
             @if ($selectedCategory)
                 @if ($selectedCategory->parent)
                     <li class="text-line">/</li>
                     <li>
-                        <a href="{{ route('news.index', ['category' => $selectedCategory->parent->slug]) }}" class="hover:text-ink hover:underline transition-colors">
+                        <a href="{{ route('news.index', ['category' => $selectedCategory->parent->slug]) }}" class="inline-block py-1 hover:text-ink hover:underline transition-colors">
                             {{ $selectedCategory->parent->name }}
                         </a>
                     </li>
@@ -60,7 +60,7 @@
     </nav>
 
     <!-- Category Header Strip (Designed from docs/docs/2.png) -->
-    <div class="border-b-2 border-line-strong pb-3">
+    <div class="border-b border-[#E2E8F0] pb-3">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4">
             <!-- Left: Prominent Category Title + Subcategories Row -->
             <div class="flex items-center gap-3 sm:gap-6 flex-1 min-w-0">
@@ -81,7 +81,7 @@
                             data-subcat-prev
                             aria-label="Cuộn sang trái"
                             title="Cuộn sang trái"
-                            class="hidden absolute left-0 top-1/2 -translate-y-1/2 z-10 h-7 w-7 items-center justify-center border border-line bg-paper text-ink hover:text-lime hover:border-lime hover:bg-lime/5 shadow-2xs transition-all cursor-pointer">
+                            class="hidden absolute left-0 top-1/2 -translate-y-1/2 z-10 h-7 w-7 items-center justify-center rounded-[8px] border border-[#E2E8F0] bg-paper text-ink hover:text-lime hover:border-lime hover:bg-lime/5 shadow-2xs transition-all cursor-pointer">
                         <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="m15 18-6-6 6-6"/>
                         </svg>
@@ -95,8 +95,8 @@
                         <!-- 'All' of this group -->
                         <a href="{{ $allPillUrl }}"
                            @class([
-                               'shrink-0 whitespace-nowrap transition-colors pb-0.5',
-                               'text-lime font-bold border-b-2 border-lime' => $allPillActive,
+                               'inline-flex min-h-6 shrink-0 items-center whitespace-nowrap transition-colors pb-0.5',
+                               'text-lime font-bold border-b border-lime' => $allPillActive,
                                'text-ink-muted hover:text-lime font-medium' => ! $allPillActive,
                            ])
                            @if($allPillActive) data-active-topic @endif>
@@ -114,8 +114,8 @@
                             @endphp
                             <a href="{{ $topicUrl }}"
                                @class([
-                                   'shrink-0 whitespace-nowrap transition-colors pb-0.5',
-                                   'text-lime font-bold border-b-2 border-lime' => $isTopicActive,
+                                   'inline-flex min-h-6 shrink-0 items-center whitespace-nowrap transition-colors pb-0.5',
+                                   'text-lime font-bold border-b border-lime' => $isTopicActive,
                                    'text-ink-muted hover:text-lime font-medium' => ! $isTopicActive,
                                ])
                                @if($isTopicActive) data-active-topic @endif>
@@ -132,7 +132,7 @@
                             data-subcat-next
                             aria-label="Xem thêm danh mục con"
                             title="Xem thêm danh mục con"
-                            class="hidden absolute right-0 top-1/2 -translate-y-1/2 z-10 h-7 w-7 items-center justify-center border border-line bg-paper text-lime hover:border-lime hover:bg-lime/5 shadow-2xs transition-all cursor-pointer">
+                            class="hidden absolute right-0 top-1/2 -translate-y-1/2 z-10 h-7 w-7 items-center justify-center rounded-[8px] border border-[#E2E8F0] bg-paper text-lime hover:border-lime hover:bg-lime/5 shadow-2xs transition-all cursor-pointer">
                         <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="m9 18 6-6-6-6"/>
                         </svg>
@@ -141,12 +141,12 @@
             </div>
 
             <!-- Right: Sort Pills & Article Count -->
-            <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 text-xs font-mono pt-1 lg:pt-0 border-t lg:border-t-0 border-line">
+            <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 text-xs font-mono pt-1 lg:pt-0 border-t lg:border-t-0 border-[#E2E8F0]">
                 <!-- Quick Sort Filter -->
-                <div class="inline-flex items-center rounded-none border border-line bg-paper p-0.5 shadow-2xs">
+                <div class="inline-flex items-center rounded-[12px] border border-[#E2E8F0] bg-paper p-0.5 shadow-2xs">
                     <a href="{{ route('news.index', array_filter(['category' => $currentCatSlug, 'q' => $searchQuery, 'sort' => 'latest'])) }}"
                        @class([
-                           'px-2.5 py-1 text-xs font-semibold transition-colors',
+                           'rounded-[10px] px-2.5 py-1 text-xs font-semibold transition-colors',
                            'bg-lime text-white font-bold' => $currentSort === 'latest',
                            'text-ink-muted hover:text-ink' => $currentSort !== 'latest',
                        ])>
@@ -154,7 +154,7 @@
                     </a>
                     <a href="{{ route('news.index', array_filter(['category' => $currentCatSlug, 'q' => $searchQuery, 'sort' => 'popular'])) }}"
                        @class([
-                           'px-2.5 py-1 text-xs font-semibold transition-colors',
+                           'rounded-[10px] px-2.5 py-1 text-xs font-semibold transition-colors',
                            'bg-lime text-white font-bold' => $currentSort === 'popular',
                            'text-ink-muted hover:text-ink' => $currentSort !== 'popular',
                        ])>
@@ -172,9 +172,9 @@
 
         <!-- Search Keyword Active Badge (if searching) -->
         @if (!empty($filters['q']))
-            <div class="mt-3 flex items-center gap-2 text-xs font-mono pt-2 border-t border-line">
+            <div class="mt-3 flex items-center gap-2 text-xs font-mono pt-2 border-t border-[#E2E8F0]">
                 <span class="text-ink-muted">Kết quả tìm kiếm cho:</span>
-                <span class="inline-flex items-center gap-1 border border-line-strong bg-paper px-2 py-0.5 text-ink font-bold">
+                <span class="inline-flex items-center gap-1 rounded-[6px] border border-[#E2E8F0] bg-paper px-2 py-0.5 text-ink font-bold">
                     "{{ $filters['q'] }}"
                 </span>
                 <a href="{{ route('news.index', array_filter(['category' => $currentCatSlug, 'sort' => $currentSort])) }}"
@@ -190,8 +190,8 @@
         @forelse ($posts as $post)
             <x-post-card :post="$post" />
         @empty
-            <div class="col-span-full flex flex-col items-center justify-center border-2 border-line-strong bg-surface p-12 text-center shadow-brutal rounded-none">
-                <span class="grid size-12 place-items-center bg-paper border border-line-strong text-ink mb-3">
+            <div class="col-span-full flex flex-col items-center justify-center border border-[#E2E8F0] bg-surface p-12 text-center shadow-[0_1px_3px_rgb(15_23_42_/_0.04)] rounded-[12px]">
+                <span class="grid size-12 place-items-center bg-paper rounded-[6px] border border-[#E2E8F0] text-ink mb-3">
                     <svg class="size-6 text-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <circle cx="11" cy="11" r="8"/>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -201,7 +201,7 @@
                 <p class="mt-1 max-w-sm text-xs text-ink-muted leading-relaxed">
                     Rất tiếc, không có bài viết nào khớp với tiêu chí tìm kiếm hoặc chuyên mục bạn chọn.
                 </p>
-                <a href="{{ route('news.index') }}" class="mt-4 inline-flex min-h-9 items-center gap-1.5 border-2 border-line-strong bg-lime px-4 py-2 text-xs font-bold font-mono text-white shadow-brutal-sm hover:bg-ink hover:text-white transition-colors">
+                <a href="{{ route('news.index') }}" class="mt-4 inline-flex min-h-9 items-center gap-1.5 rounded-[8px] border border-[#E2E8F0] bg-lime px-4 py-2 text-xs font-bold font-mono text-white shadow-none hover:bg-ink hover:text-white transition-colors">
                     Xem toàn bộ bài viết
                 </a>
             </div>

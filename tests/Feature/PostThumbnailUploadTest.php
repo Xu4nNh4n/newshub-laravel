@@ -87,6 +87,20 @@ class PostThumbnailUploadTest extends TestCase
         $this->assertSame([], Storage::disk('public')->allFiles());
     }
 
+    public function test_soft_deleting_a_post_keeps_its_thumbnail(): void
+    {
+        Storage::fake('public');
+        Storage::disk('public')->put('posts/thumbnails/kept.webp', 'image');
+        $author = User::factory()->create(['role' => UserRole::Author]);
+        $post = Post::factory()->create(['author_id' => $author, 'thumbnail' => 'posts/thumbnails/kept.webp']);
+
+        $this->actingAs($author)->delete(route('author.posts.destroy', $post))
+            ->assertRedirect(route('author.posts.index'));
+
+        $this->assertSoftDeleted($post);
+        Storage::disk('public')->assertExists('posts/thumbnails/kept.webp');
+    }
+
     /** @return array<string, mixed> */
     private function postData(Category $category): array
     {

@@ -1,9 +1,9 @@
 @props(['post'])
 
-<article {{ $attributes->merge(['class' => 'group flex flex-col justify-between border border-line bg-surface transition-all duration-150 hover:border-line-strong hover:shadow-brutal-sm']) }}>
+<article {{ $attributes->merge(['class' => 'group flex flex-col justify-between rounded-[12px] border border-[#E2E8F0] bg-surface shadow-[0_1px_3px_rgb(15_23_42_/_0.04)] transition-all duration-150 hover:border-[#CBD5E1] hover:shadow-[0_4px_12px_rgb(15_23_42_/_0.08)]']) }}>
     <div>
         <!-- Card Thumbnail -->
-        <a href="{{ route('news.show', $post->slug) }}" class="relative block aspect-video w-full overflow-hidden border-b border-line bg-paper">
+        <a href="{{ route('news.show', $post->slug) }}" class="relative block aspect-video w-full overflow-hidden rounded-t-[11px] border-b border-[#E2E8F0] bg-paper">
             @if ($post->thumbnail)
                 <img src="{{ asset('storage/' . $post->thumbnail) }}"
                      alt="{{ $post->title }}"
@@ -19,7 +19,7 @@
 
             <!-- Category Badge (Kept with crisp border) -->
             @if ($post->category)
-                <span class="absolute left-2.5 top-2.5 border border-line-strong bg-paper px-2.5 py-0.5 text-[10px] font-bold font-mono uppercase tracking-wider text-ink shadow-2xs group-hover:bg-lime group-hover:text-white transition-colors">
+                <span class="absolute left-2.5 top-2.5 rounded-[6px] border border-[#E2E8F0] bg-paper px-2.5 py-0.5 text-[11px] font-bold font-mono uppercase tracking-wider text-ink group-hover:bg-lime group-hover:text-white transition-colors">
                     {{ $post->category->name }}
                 </span>
             @endif
@@ -42,11 +42,11 @@
     </div>
 
     <!-- Card Metadata Footer -->
-    <div class="flex items-center justify-between border-t border-line bg-paper-light px-4 py-2.5 text-[11px] font-mono text-ink-muted">
+    <div class="flex items-center justify-between rounded-b-[11px] border-t border-[#E2E8F0] bg-paper-light px-4 py-2.5 text-[11px] font-mono text-ink-muted">
         <div class="flex items-center gap-2 min-w-0">
             @if ($post->author)
-                <a href="{{ route('authors.show', $post->author) }}" class="flex items-center gap-1.5 hover:text-ink hover:underline transition-colors truncate">
-                    <span class="grid size-4 shrink-0 place-items-center bg-lime text-[9px] font-bold font-mono text-white border border-line-strong">
+                <a href="{{ route('authors.show', $post->author) }}" class="flex min-h-6 items-center gap-1.5 hover:text-ink hover:underline transition-colors truncate">
+                    <span class="grid size-4 shrink-0 place-items-center bg-lime text-[11px] font-bold font-mono text-white rounded-[6px]">
                         {{ mb_strtoupper(mb_substr($post->author->name, 0, 1)) }}
                     </span>
                     <span class="truncate font-semibold">{{ $post->author->name }}</span>

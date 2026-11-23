@@ -18,8 +18,19 @@ final class PostContentSanitizer
 
     /** @var list<string> */
     private const ALLOWED_ELEMENTS = [
-        'p', 'br', 'h2', 'h3', 'strong', 'em', 'u', 'blockquote',
+        'p', 'br', 'h2', 'h3', 'strong', 'em', 'u', 's', 'blockquote',
         'ul', 'ol', 'li', 'a', 'figure', 'img', 'figcaption', 'iframe', 'div',
+    ];
+
+    /**
+     * Elements removed together with their contents. Other unsupported elements are unwrapped so their text survives.
+     *
+     * @var list<string>
+     */
+    private const DISCARDED_ELEMENTS = [
+        'script', 'style', 'noscript', 'template', 'object', 'embed', 'applet', 'frame', 'frameset', 'noframes', 'noembed',
+        'svg', 'math', 'form', 'input', 'button', 'select', 'textarea', 'option', 'title', 'head', 'meta', 'link', 'base',
+        'audio', 'video', 'canvas', 'xmp', 'plaintext',
     ];
 
     /** Remove active content while retaining the editorial markup supported by the editor. */
@@ -44,6 +55,7 @@ final class PostContentSanitizer
             return '';
         }
 
+        $this->convertEditorLists($root);
         $this->sanitizeChildren($root);
 
         $sanitized = '';
@@ -53,6 +65,45 @@ final class PostContentSanitizer
         }
 
         return trim($sanitized);
+    }
+
+    /** Determine whether nothing readable or viewable remains once the content is sanitized. */
+    public function isBlank(string $html): bool
+    {
+        $sanitized = $this->sanitize($html);
+
+        if (preg_match('/<(?:img|iframe)\b[^>]*\ssrc=/i', $sanitized) === 1) {
+            return false;
+        }
+
+        $text = html_entity_decode(strip_tags($sanitized), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        return preg_match('/[^\s\p{Z}\p{Cf}]/u', $text) !== 1;
+    }
+
+    /** Split Quill's mixed lists, which mark bullets only with data-list, into semantic lists. */
+    private function convertEditorLists(DOMElement $root): void
+    {
+        foreach (iterator_to_array($root->getElementsByTagName('ol')) as $list) {
+            $currentList = null;
+
+            foreach (iterator_to_array($list->childNodes) as $child) {
+                $tag = $currentList instanceof DOMElement ? $currentList->tagName : 'ol';
+
+                if ($child instanceof DOMElement && $child->hasAttribute('data-list')) {
+                    $tag = $child->getAttribute('data-list') === 'ordered' ? 'ol' : 'ul';
+                }
+
+                if (! $currentList instanceof DOMElement || $currentList->tagName !== $tag) {
+                    $currentList = $list->ownerDocument->createElement($tag);
+                    $list->parentNode->insertBefore($currentList, $list);
+                }
+
+                $currentList->appendChild($child);
+            }
+
+            $list->parentNode->removeChild($list);
+        }
     }
 
     private function sanitizeChildren(DOMNode $parent): void
@@ -70,7 +121,19 @@ final class PostContentSanitizer
 
             $tag = strtolower($child->tagName);
 
+            if (in_array($tag, self::DISCARDED_ELEMENTS, true)) {
+                $parent->removeChild($child);
+
+                continue;
+            }
+
             if (! in_array($tag, self::ALLOWED_ELEMENTS, true)) {
+                $this->sanitizeChildren($child);
+
+                while ($child->firstChild !== null) {
+                    $parent->insertBefore($child->firstChild, $child);
+                }
+
                 $parent->removeChild($child);
 
                 continue;

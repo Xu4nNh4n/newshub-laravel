@@ -3,10 +3,12 @@
 namespace App\Http\Requests\Author;
 
 use App\Models\Post;
+use App\Services\PostContentSanitizer;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 class StorePostRequest extends FormRequest
 {
@@ -43,6 +45,18 @@ class StorePostRequest extends FormRequest
             'category_id' => ['required', 'integer', Rule::exists('categories', 'id')->whereNull('deleted_at')],
             'action' => ['nullable', 'string', Rule::in(['draft', 'publish'])],
             'published_at' => ['nullable', 'date'],
+        ];
+    }
+
+    /** @return list<callable(Validator): void> */
+    public function after(PostContentSanitizer $contentSanitizer): array
+    {
+        return [
+            function (Validator $validator) use ($contentSanitizer): void {
+                if (! $validator->errors()->has('content') && $contentSanitizer->isBlank($this->string('content')->toString())) {
+                    $validator->errors()->add('content', 'Nội dung bài viết không được để trống.');
+                }
+            },
         ];
     }
 

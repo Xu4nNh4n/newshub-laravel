@@ -1,11 +1,11 @@
-@extends('layouts.app', ['title' => 'Tác giả '.$author->name.' - NewsHub'])
+@extends('layouts.app', ['title' => 'Tác giả '.$author->name.' - BaoUT'])
 
 @section('content')
 <div class="space-y-8 font-sans">
     <!-- Breadcrumb -->
     <nav aria-label="Breadcrumb" class="text-xs font-mono text-ink-muted">
         <ol class="flex items-center gap-1.5">
-            <li><a href="{{ route('home') }}" class="hover:text-ink hover:underline transition-colors">Trang chủ</a></li>
+            <li><a href="{{ route('home') }}" class="inline-block py-1 hover:text-ink hover:underline transition-colors">Trang chủ</a></li>
             <li class="text-line">/</li>
             <li class="text-ink-muted">Tác giả</li>
             <li class="text-line">/</li>
@@ -14,10 +14,10 @@
     </nav>
 
     <!-- Author Profile Hero Card -->
-    <section class="border-2 border-line-strong bg-surface p-6 sm:p-8 shadow-brutal rounded-none">
+    <section class="border border-[#E2E8F0] bg-surface p-6 sm:p-8 shadow-[0_1px_3px_rgb(15_23_42_/_0.04)] rounded-[12px]">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
             <div class="flex items-center gap-5">
-                <div class="size-20 sm:size-24 shrink-0 overflow-hidden border-2 border-line-strong bg-paper">
+                <div class="size-20 sm:size-24 shrink-0 overflow-hidden rounded-[12px] border border-[#E2E8F0] bg-paper">
                     <div class="size-full grid place-items-center bg-[#1D4ED8] text-2xl font-bold font-mono text-white" aria-hidden="true">
                         {{ mb_strtoupper(mb_substr($author->name, 0, 1)) }}
                     </div>
@@ -26,11 +26,11 @@
                 <div class="space-y-1.5">
                     <div class="flex flex-wrap items-center gap-2">
                         <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-ink">{{ $author->name }}</h1>
-                        <span class="border border-line-strong bg-lime px-2.5 py-0.5 text-xs font-bold font-mono uppercase tracking-wider text-white shadow-2xs">
-                            {{ $author->role->value }}
+                        <span class="rounded-[6px] border border-[#E2E8F0] bg-lime px-2.5 py-0.5 text-xs font-bold font-mono uppercase tracking-wider text-white shadow-2xs">
+                            {{ $author->role->label() }}
                         </span>
                     </div>
-                    <p class="text-xs text-ink-muted">Tác giả / Thành viên ban biên tập NewsHub</p>
+                    <p class="text-xs text-ink-muted">Tác giả / Thành viên ban biên tập BaoUT</p>
                     <p class="text-xs font-mono text-ink-muted">
                         Tham gia từ: <strong class="text-ink">{{ $author->created_at?->format('d/m/Y') ?? '—' }}</strong>
                     </p>
@@ -38,8 +38,8 @@
             </div>
 
             <!-- Stats Box -->
-            <div class="flex items-center gap-4 border-t border-line pt-4 sm:border-t-0 sm:pt-0">
-                <div class="border-2 border-line-strong bg-paper px-5 py-3 text-center min-w-32 shadow-2xs font-mono">
+            <div class="flex items-center gap-4 border-t border-[#E2E8F0] pt-4 sm:border-t-0 sm:pt-0">
+                <div class="rounded-[12px] border border-[#E2E8F0] bg-paper px-5 py-3 text-center min-w-32 shadow-2xs font-mono">
                     <span class="text-xs text-ink-muted font-bold uppercase tracking-wider">Tổng bài viết</span>
                     <p class="mt-1 text-2xl font-black text-ink tabular-nums">
                         {{ number_format($posts->total()) }}
@@ -51,7 +51,7 @@
 
     <!-- Published Articles -->
     <section class="space-y-5">
-        <div class="flex items-center justify-between border-b-2 border-line-strong pb-3">
+        <div class="flex items-center justify-between border-b border-[#E2E8F0] pb-3">
             <div class="flex items-center gap-2.5">
                 <span class="size-2.5 bg-lime border border-ink"></span>
                 <h2 class="text-lg sm:text-xl font-black tracking-tight text-ink font-mono uppercase">
@@ -67,7 +67,7 @@
             @forelse ($posts as $post)
                 <x-post-card :post="$post" />
             @empty
-                <div class="col-span-full border-2 border-line bg-paper p-10 text-center text-xs font-mono text-ink-muted">
+                <div class="col-span-full rounded-[12px] border border-[#E2E8F0] bg-paper p-10 text-center text-xs font-mono text-ink-muted">
                     Tác giả chưa có bài viết công khai nào.
                 </div>
             @endforelse

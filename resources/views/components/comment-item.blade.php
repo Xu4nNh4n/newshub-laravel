@@ -1,8 +1,8 @@
 @props(['comment', 'post', 'isReply' => false])
 
 <article {{ $attributes->merge(['class' => ($isReply ?? false)
-    ? 'border-l-2 border-line-strong bg-surface p-3 transition-colors hover:border-ink'
-    : 'border border-line bg-surface p-4 transition-colors hover:border-line-strong shadow-2xs']) }}>
+    ? 'border-l border-[#E2E8F0] bg-surface p-3 transition-colors hover:border-[#CBD5E1]'
+    : 'rounded-[12px] border border-[#E2E8F0] bg-surface p-4 transition-colors hover:border-[#CBD5E1] shadow-2xs']) }}>
     @if ($comment->trashed() || $comment->status === \App\Enums\CommentStatus::Hidden)
         <div class="flex items-center gap-2 py-0.5 text-xs italic text-ink-muted font-mono">
             <svg class="size-3.5 shrink-0 text-ink-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -13,7 +13,7 @@
     @else
         <div class="flex items-start gap-2.5 sm:gap-3">
             <!-- User Avatar -->
-            <span class="grid {{ ($isReply ?? false) ? 'size-6 text-[10px]' : 'size-7 sm:size-8 text-[11px]' }} shrink-0 place-items-center bg-[#1D4ED8] font-bold font-mono text-white rounded-full">
+            <span class="grid {{ ($isReply ?? false) ? 'size-6 text-[11px]' : 'size-7 sm:size-8 text-[11px]' }} shrink-0 place-items-center bg-[#1D4ED8] font-bold font-mono text-white rounded-full">
                 {{ mb_strtoupper(mb_substr($comment->user->name, 0, 1)) }}
             </span>
 
@@ -24,12 +24,12 @@
                     <span class="text-xs sm:text-[13px] font-bold text-ink">{{ $comment->user->name }}</span>
 
                     @if ($comment->user->id === $post->author_id)
-                        <span class="border border-line-strong bg-lime px-1.5 py-0.2 text-[9px] font-bold font-mono uppercase tracking-wider text-white shadow-2xs">
+                        <span class="rounded-[6px] border border-[#E2E8F0] bg-lime px-1.5 py-0.2 text-[11px] font-bold font-mono uppercase tracking-wider text-white shadow-2xs">
                             Tác giả
                         </span>
                     @endif
 
-                    <span class="text-[10px] text-ink-muted font-mono">
+                    <span class="text-[11px] text-ink-muted font-mono">
                         {{ $comment->created_at->format('d/m/Y H:i') }}
                     </span>
                 </div>
@@ -53,8 +53,8 @@
                                 <form method="POST" action="{{ route('comments.store', $post) }}" class="mt-2 flex flex-col sm:flex-row gap-1.5">
                                     @csrf
                                     <input type="hidden" name="reply_to_id" value="{{ $comment->id }}">
-                                    <input name="content" required maxlength="2000" placeholder="Trả lời {{ $comment->user->name }}..." class="min-w-0 flex-1 border border-line bg-paper px-2.5 py-1 text-xs text-ink outline-none focus:border-line-strong focus:shadow-brutal-sm">
-                                    <button type="submit" class="inline-flex min-h-7 cursor-pointer items-center justify-center border border-line-strong bg-lime px-3 py-1 text-xs font-bold text-white shadow-brutal-sm hover:bg-ink hover:text-white transition-colors active:scale-[0.98]">
+                                    <input name="content" aria-label="Trả lời {{ $comment->user->name }}" required maxlength="2000" placeholder="Trả lời {{ $comment->user->name }}..." class="min-w-0 flex-1 rounded-[8px] border border-control bg-paper px-2.5 py-1 text-xs text-ink outline-none focus:border-[#1D4ED8] focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)]">
+                                    <button type="submit" class="inline-flex min-h-7 cursor-pointer items-center justify-center rounded-[8px] border border-[#E2E8F0] bg-lime px-3 py-1 text-xs font-bold text-white shadow-none hover:bg-ink hover:text-white transition-colors active:scale-[0.98]">
                                         Gửi
                                     </button>
                                 </form>
@@ -72,8 +72,8 @@
                                 <form method="POST" action="{{ route('comments.update', $comment) }}" class="mt-2 flex flex-col sm:flex-row gap-1.5">
                                     @csrf
                                     @method('PUT')
-                                    <input name="content" value="{{ $comment->content }}" required maxlength="2000" class="min-w-0 flex-1 border border-line bg-paper px-2.5 py-1 text-xs text-ink outline-none focus:border-line-strong focus:shadow-brutal-sm">
-                                    <button type="submit" class="inline-flex min-h-7 cursor-pointer items-center justify-center border border-line-strong bg-lime px-3 py-1 text-xs font-bold text-white shadow-brutal-sm hover:bg-ink hover:text-white transition-colors active:scale-[0.98]">
+                                    <input name="content" aria-label="Sửa bình luận" value="{{ $comment->content }}" required maxlength="2000" class="min-w-0 flex-1 rounded-[8px] border border-control bg-paper px-2.5 py-1 text-xs text-ink outline-none focus:border-[#1D4ED8] focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)]">
+                                    <button type="submit" class="inline-flex min-h-7 cursor-pointer items-center justify-center rounded-[8px] border border-[#E2E8F0] bg-lime px-3 py-1 text-xs font-bold text-white shadow-none hover:bg-ink hover:text-white transition-colors active:scale-[0.98]">
                                         Lưu
                                     </button>
                                 </form>

@@ -2,44 +2,44 @@
 
 @section('content')
 <div class="space-y-6">
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b-2 border-line-strong pb-5">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#E2E8F0] pb-5">
         <div>
             <h1 class="text-xl font-black uppercase tracking-tight text-ink sm:text-2xl">Bài viết của tôi</h1>
             <p class="text-xs font-mono text-ink-muted">Tạo bản nháp, gửi Admin duyệt và theo dõi trạng thái xuất bản.</p>
         </div>
-        <a href="{{ route('author.posts.create') }}" class="inline-flex min-h-10 items-center gap-1.5 border-2 border-line-strong bg-lime px-4 py-2 text-xs font-mono font-bold uppercase tracking-wider text-ink shadow-brutal hover:bg-lime-hover hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-brutal-sm transition-all">
+        <a href="{{ route('author.posts.create') }}" class="inline-flex min-h-10 items-center gap-1.5 rounded-[8px] border border-[#E2E8F0] bg-lime px-4 py-2 text-xs font-mono font-bold uppercase tracking-wider text-ink shadow-none hover:bg-lime-hover hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[0_4px_12px_rgb(15_23_42_/_0.08)] transition-all">
             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="size-3.5"><path d="M12 5v14M5 12h14"/></svg>
             <span>Viết bài mới</span>
         </a>
     </div>
 
     <!-- Filter Bar -->
-    <form method="GET" class="flex flex-col gap-3 border-2 border-line-strong bg-surface p-4 sm:flex-row sm:items-center shadow-brutal-sm">
+    <form method="GET" class="flex flex-col gap-3 rounded-[12px] border border-[#E2E8F0] bg-surface p-4 sm:flex-row sm:items-center shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
         <div class="w-full sm:w-64">
             <label for="status" class="sr-only">Trạng thái bài viết</label>
-            <select id="status" name="status" class="w-full border border-line bg-paper px-3 py-2 text-xs font-mono text-ink focus:border-line-strong focus:outline-hidden focus:bg-surface focus:shadow-brutal-sm">
+            <select id="status" name="status" class="w-full rounded-[8px] border border-control bg-paper px-3 py-2 text-xs font-mono text-ink focus:border-[#1D4ED8] focus:outline-hidden focus:bg-surface focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)]">
                 <option value="">Mọi trạng thái</option>
                 @foreach($statuses as $status)
-                    <option value="{{ $status->value }}" @selected(($filters['status'] ?? '') === $status->value)>{{ $status->value }}</option>
+                    <option value="{{ $status->value }}" @selected(($filters['status'] ?? '') === $status->value)>{{ $status->label() }}</option>
                 @endforeach
             </select>
         </div>
-        <button type="submit" class="inline-flex min-h-9 cursor-pointer items-center justify-center gap-1.5 border-2 border-line-strong bg-lime px-4 py-1.5 text-xs font-mono font-bold uppercase tracking-wider text-ink shadow-brutal-sm hover:bg-lime-hover active:translate-x-0.5 active:translate-y-0.5 transition-all">
+        <button type="submit" class="inline-flex min-h-9 cursor-pointer items-center justify-center gap-1.5 rounded-[8px] border border-[#E2E8F0] bg-lime px-4 py-1.5 text-xs font-mono font-bold uppercase tracking-wider text-ink shadow-none hover:bg-lime-hover active:translate-x-0.5 active:translate-y-0.5 transition-all">
             <span>Lọc</span>
         </button>
     </form>
 
     <!-- Table -->
-    <div class="overflow-x-auto border-2 border-line-strong bg-surface shadow-brutal">
-        <table class="w-full text-left text-xs">
-            <thead class="border-b-2 border-line-strong bg-paper text-ink font-mono font-bold uppercase tracking-wider">
+    <div class="overflow-x-auto rounded-[12px] border border-[#E2E8F0] bg-surface shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
+        <table class="stack-table w-full text-left text-xs">
+            <thead class="border-b border-[#E2E8F0] bg-paper text-ink font-mono font-bold uppercase tracking-wider">
                 <tr>
                     <th scope="col" class="px-5 py-3.5">Bài viết</th>
                     <th scope="col" class="px-5 py-3.5">Trạng thái</th>
                     <th scope="col" class="px-5 py-3.5 text-right">Thao tác</th>
                 </tr>
             </thead>
-            <tbody class="divide-y border-line">
+            <tbody class="divide-y divide-[#E2E8F0]">
                 @forelse($posts as $post)
                     @php
                         $pendingRequest = $post->requests->firstWhere('status', \App\Enums\PostRequestStatus::Pending);
@@ -51,13 +51,13 @@
                             <p class="mt-0.5 text-xs font-mono text-ink-muted">{{ $post->category->name }}</p>
 
                             @if($post->rejection_reason)
-                                <div class="mt-2 border-2 border-line-strong bg-paper p-3 text-xs font-mono text-danger">
+                                <div class="mt-2 rounded-[12px] border border-[#E2E8F0] bg-paper p-3 text-xs font-mono text-danger">
                                     <strong class="uppercase font-bold">Lý do từ chối duyệt:</strong> {{ $post->rejection_reason }}
                                 </div>
                             @endif
 
                             @if($pendingRequest)
-                                <div class="mt-2 flex items-start justify-between gap-3 border-2 border-line-strong bg-lime p-3 text-xs font-mono text-ink shadow-brutal-sm">
+                                <div class="mt-2 flex items-start justify-between gap-3 rounded-[12px] border border-[#E2E8F0] bg-lime p-3 text-xs font-mono text-ink shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                                     <div class="flex items-start gap-2 min-w-0 flex-1">
                                         <span class="mt-0.5 font-bold">!</span>
                                         <div class="min-w-0 flex-1">
@@ -79,13 +79,13 @@
                                           class="shrink-0">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="inline-flex cursor-pointer items-center gap-1 border border-line-strong bg-surface px-2.5 py-1 text-xs font-mono font-bold text-danger hover:bg-paper transition-all" title="Hủy bỏ yêu cầu này">
+                                        <button type="submit" class="inline-flex cursor-pointer items-center gap-1 rounded-[8px] border border-[#CBD5E1] bg-surface px-2.5 py-1 text-xs font-mono font-bold text-danger hover:bg-paper transition-all" title="Hủy bỏ yêu cầu này">
                                             <span>Hủy yêu cầu</span>
                                         </button>
                                     </form>
                                 </div>
                             @elseif($latestRejectedRequest)
-                                <div class="mt-2 border-2 border-line-strong bg-paper p-3 text-xs font-mono text-ink">
+                                <div class="mt-2 rounded-[12px] border border-[#E2E8F0] bg-paper p-3 text-xs font-mono text-ink">
                                     <div class="flex items-center gap-1 font-bold text-danger uppercase">
                                         <span>Yêu cầu {{ $latestRejectedRequest->type === \App\Enums\PostRequestType::Removal ? 'gỡ bài' : 'đính chính' }} bị từ chối:</span>
                                     </div>
@@ -96,21 +96,21 @@
                         <td class="px-5 py-4 whitespace-nowrap">
                             @php
                                 $statusConfig = match($post->status) {
-                                    \App\Enums\PostStatus::Draft => ['label' => 'Bản nháp', 'class' => 'bg-paper text-ink border-line'],
-                                    \App\Enums\PostStatus::PendingReview => ['label' => 'Chờ duyệt', 'class' => 'bg-lime text-white border-line-strong font-bold'],
-                                    \App\Enums\PostStatus::Published => ['label' => 'Đã xuất bản', 'class' => 'bg-surface text-ink border-line-strong font-bold'],
-                                    \App\Enums\PostStatus::Rejected => ['label' => 'Bị từ chối', 'class' => 'bg-paper text-danger border-line-strong font-bold'],
-                                    \App\Enums\PostStatus::Hidden => ['label' => 'Đã tạm ẩn', 'class' => 'bg-paper text-ink-muted border-line'],
-                                    \App\Enums\PostStatus::Archived => ['label' => 'Đã lưu trữ', 'class' => 'bg-paper text-ink-muted border-line'],
-                                    default => ['label' => $post->status->value, 'class' => 'bg-paper text-ink border-line']
+                                    \App\Enums\PostStatus::Draft => ['label' => 'Bản nháp', 'class' => 'bg-paper text-ink border-[#E2E8F0]'],
+                                    \App\Enums\PostStatus::PendingReview => ['label' => 'Chờ duyệt', 'class' => 'bg-lime text-white border-[#E2E8F0] font-bold'],
+                                    \App\Enums\PostStatus::Published => ['label' => 'Đã xuất bản', 'class' => 'bg-surface text-ink border-[#E2E8F0] font-bold'],
+                                    \App\Enums\PostStatus::Rejected => ['label' => 'Bị từ chối', 'class' => 'bg-paper text-danger border-[#E2E8F0] font-bold'],
+                                    \App\Enums\PostStatus::Hidden => ['label' => 'Đã tạm ẩn', 'class' => 'bg-paper text-ink-muted border-[#E2E8F0]'],
+                                    \App\Enums\PostStatus::Archived => ['label' => 'Đã lưu trữ', 'class' => 'bg-paper text-ink-muted border-[#E2E8F0]'],
+                                    default => ['label' => $post->status->value, 'class' => 'bg-paper text-ink border-[#E2E8F0]']
                                 };
                             @endphp
                             <div class="flex flex-col gap-1 items-start font-mono text-xs">
-                                <span class="border px-2.5 py-0.5 uppercase tracking-wider {{ $statusConfig['class'] }}">
+                                <span class="rounded-[6px] border px-2.5 py-0.5 uppercase tracking-wider {{ $statusConfig['class'] }}">
                                     {{ $statusConfig['label'] }}
                                 </span>
                                 @if($pendingRequest)
-                                    <span class="border border-line-strong bg-lime px-2 py-0.5 text-[10px] font-bold text-white uppercase">
+                                    <span class="rounded-[6px] border border-[#E2E8F0] bg-lime px-2 py-0.5 text-[11px] font-bold text-white uppercase">
                                         Có yêu cầu chờ
                                     </span>
                                 @endif
@@ -118,11 +118,11 @@
                         </td>
                         <td class="px-5 py-4 whitespace-nowrap text-right font-mono">
                             <div class="flex items-center justify-end gap-1.5 flex-wrap">
-                                <a href="{{ route('posts.preview', $post) }}" class="inline-flex min-h-7 cursor-pointer items-center gap-1 border border-line-strong bg-surface px-2.5 py-1 text-xs font-bold uppercase text-ink hover:bg-paper">
+                                <a href="{{ route('posts.preview', $post) }}" class="inline-flex min-h-7 cursor-pointer items-center gap-1 rounded-[8px] border border-[#CBD5E1] bg-surface px-2.5 py-1 text-xs font-bold uppercase text-ink hover:bg-paper">
                                     Xem trước
                                 </a>
                                 @can('update', $post)
-                                    <a href="{{ route('author.posts.edit', $post) }}" class="inline-flex min-h-7 cursor-pointer items-center gap-1 border border-line-strong bg-surface px-2.5 py-1 text-xs font-bold uppercase text-ink hover:bg-paper">
+                                    <a href="{{ route('author.posts.edit', $post) }}" class="inline-flex min-h-7 cursor-pointer items-center gap-1 rounded-[8px] border border-[#CBD5E1] bg-surface px-2.5 py-1 text-xs font-bold uppercase text-ink hover:bg-paper">
                                         Sửa
                                     </a>
                                 @endcan
@@ -134,7 +134,7 @@
                                           data-confirm-type="success"
                                           data-confirm-btn="Xuất bản ngay">
                                         @csrf
-                                        <button type="submit" class="inline-flex min-h-7 cursor-pointer items-center gap-1 border-2 border-line-strong bg-lime px-2.5 py-1 text-xs font-bold uppercase text-ink hover:bg-lime-hover shadow-brutal-sm">
+                                        <button type="submit" class="inline-flex min-h-7 cursor-pointer items-center gap-1 rounded-[8px] border border-[#E2E8F0] bg-lime px-2.5 py-1 text-xs font-bold uppercase text-ink hover:bg-lime-hover shadow-none">
                                             Xuất bản
                                         </button>
                                     </form>
@@ -147,7 +147,7 @@
                                           data-confirm-type="success"
                                           data-confirm-btn="Gửi duyệt ngay">
                                         @csrf
-                                        <button type="submit" class="inline-flex min-h-7 cursor-pointer items-center gap-1 border-2 border-line-strong bg-lime px-2.5 py-1 text-xs font-bold uppercase text-ink hover:bg-lime-hover shadow-brutal-sm">
+                                        <button type="submit" class="inline-flex min-h-7 cursor-pointer items-center gap-1 rounded-[8px] border border-[#E2E8F0] bg-lime px-2.5 py-1 text-xs font-bold uppercase text-ink hover:bg-lime-hover shadow-none">
                                             Gửi duyệt
                                         </button>
                                     </form>
@@ -162,12 +162,12 @@
                                               data-confirm-type="warning"
                                               data-confirm-btn="Rút về nháp">
                                             @csrf
-                                            <button type="submit" class="inline-flex min-h-7 cursor-pointer items-center gap-1 border border-line-strong bg-paper px-2.5 py-1 text-xs font-bold uppercase text-ink hover:bg-surface">
+                                            <button type="submit" class="inline-flex min-h-7 cursor-pointer items-center gap-1 rounded-[8px] border border-[#CBD5E1] bg-paper px-2.5 py-1 text-xs font-bold uppercase text-ink hover:bg-surface">
                                                 Rút về nháp
                                             </button>
                                         </form>
                                     @else
-                                        <button type="button" onclick="alert('Tính năng rút bài về nháp đang được chuẩn bị bởi Ban biên tập. Nếu cần chỉnh sửa gấp, vui lòng liên hệ Admin.')" class="inline-flex min-h-7 cursor-pointer items-center gap-1 border border-line-strong bg-paper px-2.5 py-1 text-xs font-bold uppercase text-ink hover:bg-surface" title="Rút bài về bản nháp để sửa">
+                                        <button type="button" onclick="alert('Tính năng rút bài về nháp đang được chuẩn bị bởi Ban biên tập. Nếu cần chỉnh sửa gấp, vui lòng liên hệ Admin.')" class="inline-flex min-h-7 cursor-pointer items-center gap-1 rounded-[8px] border border-[#CBD5E1] bg-paper px-2.5 py-1 text-xs font-bold uppercase text-ink hover:bg-surface" title="Rút bài về bản nháp để sửa">
                                             Rút về nháp
                                         </button>
                                     @endif
@@ -183,7 +183,7 @@
                                                 data-request-notes="{{ $pendingRequest->notes }}"
                                                 data-request-time="{{ $pendingRequest->created_at->format('d/m/Y H:i') }}"
                                                 data-cancel-action="{{ route('author.posts.requests.destroy', [$post, $pendingRequest]) }}"
-                                                class="inline-flex min-h-7 cursor-pointer items-center gap-1 border border-line-strong bg-lime px-2.5 py-1 text-xs font-bold uppercase text-ink hover:bg-lime-hover shadow-brutal-sm"
+                                                class="inline-flex min-h-7 cursor-pointer items-center gap-1 rounded-[8px] border border-[#E2E8F0] bg-lime px-2.5 py-1 text-xs font-bold uppercase text-ink hover:bg-lime-hover shadow-none"
                                                 title="Bấm để xem chi tiết yêu cầu hoặc hủy yêu cầu">
                                             <span>Đã gửi yêu cầu</span>
                                         </button>
@@ -193,7 +193,7 @@
                                                 data-post-id="{{ $post->id }}"
                                                 data-post-title="{{ $post->title }}"
                                                 data-request-action="{{ route('author.posts.requests.store', $post) }}"
-                                                class="inline-flex min-h-7 cursor-pointer items-center gap-1 border border-line-strong bg-paper px-2.5 py-1 text-xs font-bold uppercase text-ink hover:bg-surface">
+                                                class="inline-flex min-h-7 cursor-pointer items-center gap-1 rounded-[8px] border border-[#CBD5E1] bg-paper px-2.5 py-1 text-xs font-bold uppercase text-ink hover:bg-surface">
                                             <span>Yêu cầu gỡ / sửa</span>
                                         </button>
                                     @endif
@@ -205,7 +205,7 @@
                                             data-post-id="{{ $post->id }}"
                                             data-post-title="{{ $post->title }}"
                                             data-delete-action="{{ route('author.posts.destroy', $post) }}"
-                                            class="inline-flex min-h-7 cursor-pointer items-center gap-1 border border-line-strong bg-paper px-2.5 py-1 text-xs font-bold uppercase text-danger hover:bg-surface">
+                                            class="inline-flex min-h-7 cursor-pointer items-center gap-1 rounded-[8px] border border-[#CBD5E1] bg-paper px-2.5 py-1 text-xs font-bold uppercase text-danger hover:bg-surface">
                                         <span>Xóa</span>
                                     </button>
                                 @endcan
@@ -229,8 +229,8 @@
 <!-- Modal xác nhận xóa bài viết (Chỉ áp dụng cho Draft / Rejected) -->
 <div id="delete-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-ink/60 p-4 sm:p-6" aria-modal="true" role="dialog">
     <div class="flex min-h-full items-center justify-center">
-        <div class="relative w-full max-w-md border-2 border-line-strong bg-surface p-6 shadow-brutal space-y-4">
-            <div class="size-12 grid place-items-center border-2 border-line-strong bg-danger text-paper font-mono font-bold text-xl mx-auto shadow-brutal-sm">
+        <div class="relative w-full max-w-md rounded-[12px] border border-[#E2E8F0] bg-surface p-6 shadow-[0_8px_24px_rgb(15_23_42_/_0.10)] space-y-4">
+            <div class="size-12 grid place-items-center rounded-[12px] border border-[#E2E8F0] bg-danger text-paper font-mono font-bold text-xl mx-auto shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                 !
             </div>
 
@@ -239,23 +239,23 @@
                 <p class="text-xs text-ink-muted">
                     Bạn có chắc chắn muốn xóa bài viết này không?
                 </p>
-                <p id="delete-modal-post-title" class="text-xs font-bold font-mono text-danger line-clamp-2 border border-line bg-paper p-3 text-left">
+                <p id="delete-modal-post-title" class="text-xs font-bold font-mono text-danger line-clamp-2 rounded-[12px] border border-[#E2E8F0] bg-paper p-3 text-left">
                     --
                 </p>
                 <p class="text-[11px] font-mono text-ink-muted">
-                    Hành động này sẽ xóa dữ liệu và ảnh bài viết khỏi danh sách bản nháp của bạn.
+                    Bài viết sẽ được gỡ khỏi danh sách bài viết của bạn.
                 </p>
             </div>
 
-            <div class="pt-3 border-t border-line flex items-center justify-end gap-2.5 font-mono">
-                <button type="button" id="btn-cancel-delete" class="border border-line-strong bg-paper px-4 py-2 text-xs font-bold uppercase text-ink hover:bg-surface cursor-pointer">
+            <div class="pt-3 border-t border-[#E2E8F0] flex items-center justify-end gap-2.5 font-mono">
+                <button type="button" id="btn-cancel-delete" class="rounded-[8px] border border-[#E2E8F0] bg-paper px-4 py-2 text-xs font-bold uppercase text-ink hover:bg-surface cursor-pointer">
                     Hủy bỏ
                 </button>
 
                 <form id="delete-modal-form" method="POST" action="">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="border-2 border-line-strong bg-danger px-4 py-2 text-xs font-bold uppercase text-paper shadow-brutal-sm hover:opacity-90 cursor-pointer">
+                    <button type="submit" class="rounded-[8px] border border-[#E2E8F0] bg-danger px-4 py-2 text-xs font-bold uppercase text-paper shadow-none hover:opacity-90 cursor-pointer">
                         Xác nhận xóa
                     </button>
                 </form>
@@ -267,14 +267,14 @@
 <!-- Modal Form Yêu cầu gỡ bài / Đính chính thông tin (Áp dụng cho Published) -->
 <div id="request-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-ink/60 p-4 sm:p-6" aria-modal="true" role="dialog">
     <div class="flex min-h-full items-center justify-center">
-        <div class="relative w-full max-w-lg border-2 border-line-strong bg-surface shadow-brutal overflow-hidden">
+        <div class="relative w-full max-w-lg rounded-[12px] border border-[#E2E8F0] bg-surface shadow-[0_8px_24px_rgb(15_23_42_/_0.10)] overflow-hidden">
             <!-- Modal Header -->
-            <div class="flex items-center justify-between border-b-2 border-line-strong bg-paper px-5 py-3.5">
+            <div class="flex items-center justify-between border-b border-[#E2E8F0] bg-paper px-5 py-3.5">
                 <div>
                     <h3 class="text-sm font-black uppercase text-ink">Yêu cầu Gỡ bài / Đính chính</h3>
                     <p class="text-[11px] font-mono text-ink-muted">Gửi trực tiếp đến Ban biên tập để xử lý bài viết đã xuất bản.</p>
                 </div>
-                <button type="button" id="btn-close-request" class="size-8 grid place-items-center border border-line-strong bg-surface text-ink font-mono font-bold text-sm hover:bg-paper cursor-pointer" title="Đóng (ESC)">
+                <button type="button" id="btn-close-request" class="size-8 grid place-items-center rounded-[8px] border border-[#CBD5E1] bg-surface text-ink font-mono font-bold text-sm hover:bg-paper cursor-pointer" title="Đóng (ESC)">
                     ✕
                 </button>
             </div>
@@ -283,15 +283,15 @@
             <form id="request-modal-form" method="POST" action="" class="p-6 space-y-4">
                 @csrf
                 <!-- Post info preview -->
-                <div class="border border-line bg-paper p-3 font-mono">
-                    <span class="text-[10px] uppercase font-bold text-ink-muted tracking-wider">Bài viết liên quan</span>
+                <div class="rounded-[12px] border border-[#E2E8F0] bg-paper p-3 font-mono">
+                    <span class="text-[11px] uppercase font-bold text-ink-muted tracking-wider">Bài viết liên quan</span>
                     <p id="request-modal-post-title" class="mt-0.5 text-xs font-bold text-ink line-clamp-1">--</p>
                 </div>
 
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div class="space-y-1.5">
                         <label for="request_type" class="block text-xs font-mono font-bold uppercase tracking-wider text-ink">Loại yêu cầu <span class="text-danger">*</span></label>
-                        <select id="request_type" name="type" required class="w-full border border-line bg-paper px-3 py-2 text-xs font-mono text-ink focus:border-line-strong focus:outline-hidden focus:bg-surface focus:shadow-brutal-sm">
+                        <select id="request_type" name="type" required class="w-full rounded-[8px] border border-control bg-paper px-3 py-2 text-xs font-mono text-ink focus:border-[#1D4ED8] focus:outline-hidden focus:bg-surface focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)]">
                             <option value="removal">Yêu cầu Gỡ bài viết (Take-down)</option>
                             <option value="correction">Yêu cầu Đính chính / Sửa lỗi</option>
                         </select>
@@ -301,20 +301,20 @@
 
                 <div class="space-y-1.5">
                     <label for="request_reason" class="block text-xs font-mono font-bold uppercase tracking-wider text-ink">Lý do chính <span class="text-danger">*</span></label>
-                    <input id="request_reason" name="reason" required maxlength="255" placeholder="Ví dụ: Cần cập nhật số liệu mới, bài viết có nội dung chưa chính xác..." class="w-full border border-line bg-paper px-3 py-2 text-xs text-ink placeholder:text-ink-light focus:border-line-strong focus:outline-hidden focus:bg-surface focus:shadow-brutal-sm">
+                    <input id="request_reason" name="reason" required maxlength="255" placeholder="Ví dụ: Cần cập nhật số liệu mới, bài viết có nội dung chưa chính xác..." class="w-full rounded-[8px] border border-control bg-paper px-3 py-2 text-xs text-ink placeholder:text-ink-light focus:border-[#1D4ED8] focus:outline-hidden focus:bg-surface focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)]">
                 </div>
 
                 <div class="space-y-1.5">
                     <label for="request_notes" class="block text-xs font-mono font-bold uppercase tracking-wider text-ink">Chi tiết đề xuất / Đoạn văn cần sửa đổi</label>
-                    <textarea id="request_notes" name="notes" rows="4" maxlength="2000" placeholder="Mô tả cụ thể vị trí sai sót, lý do cần gỡ bài hoặc nội dung đề xuất thay thế..." class="w-full border border-line bg-paper px-3 py-2 text-xs text-ink placeholder:text-ink-light focus:border-line-strong focus:outline-hidden focus:bg-surface focus:shadow-brutal-sm leading-relaxed"></textarea>
+                    <textarea id="request_notes" name="notes" rows="4" maxlength="2000" placeholder="Mô tả cụ thể vị trí sai sót, lý do cần gỡ bài hoặc nội dung đề xuất thay thế..." class="w-full rounded-[8px] border border-control bg-paper px-3 py-2 text-xs text-ink placeholder:text-ink-light focus:border-[#1D4ED8] focus:outline-hidden focus:bg-surface focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)] leading-relaxed"></textarea>
                 </div>
 
                 <!-- Footer buttons -->
-                <div class="pt-3 border-t border-line flex items-center justify-end gap-2.5 font-mono">
-                    <button type="button" id="btn-cancel-request" class="border border-line-strong bg-paper px-4 py-2 text-xs font-bold uppercase text-ink hover:bg-surface cursor-pointer">
+                <div class="pt-3 border-t border-[#E2E8F0] flex items-center justify-end gap-2.5 font-mono">
+                    <button type="button" id="btn-cancel-request" class="rounded-[8px] border border-[#E2E8F0] bg-paper px-4 py-2 text-xs font-bold uppercase text-ink hover:bg-surface cursor-pointer">
                         Đóng
                     </button>
-                    <button type="submit" class="border-2 border-line-strong bg-lime px-4 py-2 text-xs font-bold uppercase text-ink shadow-brutal-sm hover:bg-lime-hover cursor-pointer">
+                    <button type="submit" class="rounded-[8px] border border-[#E2E8F0] bg-lime px-4 py-2 text-xs font-bold uppercase text-ink shadow-none hover:bg-lime-hover cursor-pointer">
                         Gửi tới Ban biên tập
                     </button>
                 </div>
@@ -326,47 +326,47 @@
 <!-- Modal Chi tiết Yêu cầu Đang chờ xử lý -->
 <div id="request-details-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-ink/60 p-4 sm:p-6" aria-modal="true" role="dialog">
     <div class="flex min-h-full items-center justify-center">
-        <div class="relative w-full max-w-lg border-2 border-line-strong bg-surface shadow-brutal overflow-hidden">
-            <div class="flex items-center justify-between border-b-2 border-line-strong bg-paper px-5 py-3.5">
+        <div class="relative w-full max-w-lg rounded-[12px] border border-[#E2E8F0] bg-surface shadow-[0_8px_24px_rgb(15_23_42_/_0.10)] overflow-hidden">
+            <div class="flex items-center justify-between border-b border-[#E2E8F0] bg-paper px-5 py-3.5">
                 <div>
                     <h3 class="text-sm font-black uppercase text-ink">Chi tiết yêu cầu đang chờ duyệt</h3>
                     <p class="text-[11px] font-mono text-ink-muted">Yêu cầu đang được Ban biên tập xem xét xử lý.</p>
                 </div>
-                <button type="button" id="btn-close-request-details" class="size-8 grid place-items-center border border-line-strong bg-surface text-ink font-mono font-bold text-sm hover:bg-paper cursor-pointer" title="Đóng (ESC)">
+                <button type="button" id="btn-close-request-details" class="size-8 grid place-items-center rounded-[8px] border border-[#CBD5E1] bg-surface text-ink font-mono font-bold text-sm hover:bg-paper cursor-pointer" title="Đóng (ESC)">
                     ✕
                 </button>
             </div>
 
             <div class="p-6 space-y-4 text-xs font-mono">
-                <div class="border border-line bg-paper p-3">
-                    <span class="text-[10px] uppercase font-bold text-ink-muted tracking-wider">Bài viết liên quan</span>
+                <div class="rounded-[12px] border border-[#E2E8F0] bg-paper p-3">
+                    <span class="text-[11px] uppercase font-bold text-ink-muted tracking-wider">Bài viết liên quan</span>
                     <p id="rd-post-title" class="mt-0.5 text-xs font-bold text-ink"></p>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
-                    <div class="border border-line bg-paper p-2.5">
-                        <span class="text-[10px] uppercase text-ink-muted">Loại yêu cầu:</span>
+                    <div class="rounded-[12px] border border-[#E2E8F0] bg-paper p-2.5">
+                        <span class="text-[11px] uppercase text-ink-muted">Loại yêu cầu:</span>
                         <p id="rd-type" class="mt-0.5 font-bold text-ink"></p>
                     </div>
-                    <div class="border border-line bg-paper p-2.5">
-                        <span class="text-[10px] uppercase text-ink-muted">Mức độ ưu tiên:</span>
+                    <div class="rounded-[12px] border border-[#E2E8F0] bg-paper p-2.5">
+                        <span class="text-[11px] uppercase text-ink-muted">Mức độ ưu tiên:</span>
                     </div>
                 </div>
 
-                <div class="border border-line bg-paper p-3">
-                    <span class="text-[10px] uppercase text-ink-muted">Lý do gửi:</span>
+                <div class="rounded-[12px] border border-[#E2E8F0] bg-paper p-3">
+                    <span class="text-[11px] uppercase text-ink-muted">Lý do gửi:</span>
                     <p id="rd-reason" class="mt-1 text-ink"></p>
                 </div>
 
-                <div id="rd-notes-wrap" class="border border-line bg-paper p-3">
-                    <span class="text-[10px] uppercase text-ink-muted">Ghi chú đề xuất:</span>
+                <div id="rd-notes-wrap" class="rounded-[12px] border border-[#E2E8F0] bg-paper p-3">
+                    <span class="text-[11px] uppercase text-ink-muted">Ghi chú đề xuất:</span>
                     <p id="rd-notes" class="mt-1 whitespace-pre-line text-ink"></p>
                 </div>
 
                 <div class="text-[11px] text-ink-muted" id="rd-time"></div>
             </div>
 
-            <div class="flex items-center justify-between border-t-2 border-line-strong bg-paper px-5 py-3.5 font-mono">
+            <div class="flex items-center justify-between border-t border-[#E2E8F0] bg-paper px-5 py-3.5 font-mono">
                 <form id="rd-cancel-form" method="POST" action=""
                       data-confirm="Bạn có chắc chắn muốn hủy yêu cầu này? Bài viết sẽ trở lại trạng thái bình thường."
                       data-confirm-title="Hủy yêu cầu bài viết"
@@ -374,12 +374,12 @@
                       data-confirm-btn="Xác nhận hủy yêu cầu">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="border border-line-strong bg-surface px-3.5 py-1.5 text-xs font-bold uppercase text-danger hover:bg-paper cursor-pointer">
+                    <button type="submit" class="rounded-[8px] border border-[#E2E8F0] bg-surface px-3.5 py-1.5 text-xs font-bold uppercase text-danger hover:bg-paper cursor-pointer">
                         Hủy yêu cầu này
                     </button>
                 </form>
 
-                <button type="button" id="btn-close-request-details-footer" class="border border-line-strong bg-surface px-4 py-1.5 text-xs font-bold uppercase text-ink hover:bg-paper cursor-pointer">
+                <button type="button" id="btn-close-request-details-footer" class="rounded-[8px] border border-[#E2E8F0] bg-surface px-4 py-1.5 text-xs font-bold uppercase text-ink hover:bg-paper cursor-pointer">
                     Đóng
                 </button>
             </div>

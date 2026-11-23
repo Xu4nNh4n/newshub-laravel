@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\ContactMessageNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\View\View;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class PageController extends Controller
 {
@@ -64,7 +67,18 @@ class PageController extends Controller
             'message.min' => 'Nội dung thư phải có ít nhất 10 ký tự.',
         ]);
 
-        Log::info('Contact message received via NewsHub portal', [
+        try {
+            Notification::route('mail', config('mail.contact_address'))
+                ->notify(new ContactMessageNotification($validated));
+        } catch (TransportExceptionInterface $exception) {
+            report($exception);
+
+            return back()
+                ->withInput()
+                ->withErrors(['contact' => 'Chưa thể gửi thư liên hệ lúc này. Vui lòng thử lại sau.']);
+        }
+
+        Log::info('Contact message received via BaoUT portal', [
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'] ?? null,
@@ -73,6 +87,6 @@ class PageController extends Controller
             'ip' => $request->ip(),
         ]);
 
-        return back()->with('status', 'Cảm ơn bạn đã liên hệ! Ban Biên tập / Phòng Truyền thông & Quảng cáo NewsHub đã ghi nhận và sẽ phản hồi trong thời gian sớm nhất.');
+        return back()->with('status', 'Cảm ơn bạn đã liên hệ! Ban Biên tập / Phòng Truyền thông & Quảng cáo BaoUT đã ghi nhận và sẽ phản hồi trong thời gian sớm nhất.');
     }
 }

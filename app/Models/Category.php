@@ -41,6 +41,14 @@ class Category extends Model
         return $query->whereNull('parent_id');
     }
 
+    /** Limit categories to active ones whose parent category is not hidden. */
+    public function scopePubliclyVisible(Builder $query): Builder
+    {
+        return $query
+            ->where('status', CategoryStatus::Active)
+            ->whereDoesntHave('parent', fn (Builder $query): Builder => $query->where('status', CategoryStatus::Hidden));
+    }
+
     /** @return list<int> */
     public function selfAndChildIds(): array
     {

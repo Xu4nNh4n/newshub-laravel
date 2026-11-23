@@ -28,13 +28,13 @@ class ResetPasswordNotification extends Notification
         $expiresInMinutes = config('auth.passwords.'.config('auth.defaults.passwords').'.expire');
 
         return (new MailMessage)
-            ->subject('Đặt lại mật khẩu NewsHub')
+            ->subject('Đặt lại mật khẩu BaoUT')
             ->view(['html' => 'mail.auth-action', 'text' => 'mail.auth-action-text'], [
-                'preheader' => 'Yêu cầu đặt lại mật khẩu tài khoản NewsHub.',
+                'preheader' => 'Yêu cầu đặt lại mật khẩu tài khoản BaoUT.',
                 'eyebrow' => 'YÊU CẦU BẢO MẬT',
                 'title' => 'Đặt lại mật khẩu',
                 'recipientName' => $notifiable->name,
-                'intro' => 'NewsHub vừa nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Sử dụng nút bên dưới để tạo mật khẩu mới.',
+                'intro' => 'BaoUT vừa nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Sử dụng nút bên dưới để tạo mật khẩu mới.',
                 'actionLabel' => 'Đặt lại mật khẩu',
                 'actionUrl' => $resetUrl,
                 'expiryText' => "Liên kết có hiệu lực trong {$expiresInMinutes} phút.",

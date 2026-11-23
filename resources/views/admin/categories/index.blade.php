@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="space-y-6">
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b-2 border-line-strong pb-5">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#E2E8F0] pb-5">
         <div>
             <span class="font-mono text-xs font-bold uppercase tracking-wider text-ink-muted block mb-1">Cấu trúc tòa soạn</span>
             <h1 class="text-2xl font-black uppercase tracking-tight text-ink sm:text-3xl font-heading">Quản lý chuyên mục</h1>
@@ -11,26 +11,26 @@
         <div class="flex items-center gap-2 flex-wrap">
             <button type="button"
                     id="admin-cat-expand-all"
-                    class="inline-flex min-h-10 items-center gap-1.5 border-2 border-line-strong bg-surface px-3.5 py-1.5 font-mono text-xs font-bold uppercase text-ink shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer select-none">
+                    class="inline-flex min-h-10 items-center gap-1.5 rounded-[8px] border border-[#CBD5E1] bg-surface px-3.5 py-1.5 font-mono text-xs font-bold uppercase text-ink shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer select-none">
                 <span>[+] Mở tất cả</span>
             </button>
             <button type="button"
                     id="admin-cat-collapse-all"
-                    class="inline-flex min-h-10 items-center gap-1.5 border-2 border-line-strong bg-surface px-3.5 py-1.5 font-mono text-xs font-bold uppercase text-ink shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer select-none">
+                    class="inline-flex min-h-10 items-center gap-1.5 rounded-[8px] border border-[#CBD5E1] bg-surface px-3.5 py-1.5 font-mono text-xs font-bold uppercase text-ink shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer select-none">
                 <span>[-] Thu gọn</span>
             </button>
             <button type="button"
                     id="btn-open-create-category-modal"
-                    class="inline-flex min-h-10 items-center gap-1.5 border-2 border-line-strong bg-lime px-4 py-1.5 font-mono text-xs font-bold uppercase text-ink shadow-brutal hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
+                    class="inline-flex min-h-10 items-center gap-1.5 rounded-[8px] border border-[#E2E8F0] bg-lime px-4 py-1.5 font-mono text-xs font-bold uppercase text-ink shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
                 <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="size-3.5"><path d="M12 5v14M5 12h14"/></svg>
                 <span>Thêm chuyên mục</span>
             </button>
         </div>
     </div>
 
-    <div class="overflow-x-auto border-2 border-line-strong bg-surface shadow-brutal">
-        <table class="w-full text-left text-xs">
-            <thead class="border-b-2 border-line-strong bg-paper font-mono uppercase text-ink">
+    <div class="overflow-x-auto rounded-[12px] border border-[#E2E8F0] bg-surface shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
+        <table class="stack-table w-full text-left text-xs">
+            <thead class="border-b border-[#E2E8F0] bg-paper font-mono uppercase text-ink">
                 <tr>
                     <th scope="col" class="px-5 py-3 font-bold w-5/12">Chuyên mục</th>
                     <th scope="col" class="px-5 py-3 font-bold w-2/12">Trạng thái</th>
@@ -38,7 +38,7 @@
                     <th scope="col" class="px-5 py-3 font-bold text-right w-3/12">Thao tác</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-line">
+            <tbody class="divide-y divide-[#E2E8F0]">
                 @forelse ($parentCategories as $parent)
                     @php
                         $children = $parent->children;
@@ -54,7 +54,7 @@
                                             data-admin-cat-toggle="{{ $parent->id }}"
                                             aria-expanded="false"
                                             aria-label="Đóng mở danh mục con của {{ $parent->name }}"
-                                            class="grid size-6 shrink-0 place-items-center border border-line-strong bg-paper text-ink hover:bg-lime transition-all cursor-pointer shadow-brutal-sm">
+                                            class="grid size-6 shrink-0 place-items-center rounded-[8px] border border-[#CBD5E1] bg-paper text-ink hover:bg-lime transition-all cursor-pointer shadow-none">
                                         <svg class="size-3 transition-transform duration-200" data-admin-cat-icon="{{ $parent->id }}" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
                                         </svg>
@@ -68,11 +68,11 @@
                                         <p class="font-bold text-ink text-sm group-hover/row:text-danger transition-colors">
                                             {{ $parent->name }}
                                         </p>
-                                        <span class="border border-line-strong bg-paper px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase text-ink">
+                                        <span class="rounded-[6px] border border-[#E2E8F0] bg-paper px-1.5 py-0.5 font-mono text-[11px] font-bold uppercase text-ink">
                                             Danh mục cha
                                         </span>
                                         @if ($hasChildren)
-                                            <span class="border border-line bg-surface px-1.5 py-0.5 font-mono text-[10px] text-ink-muted">
+                                            <span class="rounded-[6px] border border-[#E2E8F0] bg-surface px-1.5 py-0.5 font-mono text-[11px] text-ink-muted">
                                                 {{ $children->count() }} mục con
                                             </span>
                                         @endif
@@ -83,11 +83,11 @@
                         </td>
                         <td class="px-5 py-4 whitespace-nowrap">
                             <span @class([
-                                'inline-flex border px-2 py-0.5 font-mono text-[11px] font-bold uppercase',
-                                'border-line-strong bg-lime text-white' => $parent->status === \App\Enums\CategoryStatus::Active,
-                                'border-line bg-paper text-ink-muted' => $parent->status !== \App\Enums\CategoryStatus::Active,
+                                'inline-flex rounded-[6px] border px-2 py-0.5 font-mono text-[11px] font-bold uppercase',
+                                'border-[#E2E8F0] bg-lime text-white' => $parent->status === \App\Enums\CategoryStatus::Active,
+                                'border-[#E2E8F0] bg-paper text-ink-muted' => $parent->status !== \App\Enums\CategoryStatus::Active,
                             ])>
-                                {{ $parent->status->value }}
+                                {{ $parent->status->label() }}
                             </span>
                         </td>
                         <td class="px-5 py-4 whitespace-nowrap text-ink tabular-nums">
@@ -96,7 +96,7 @@
                             @endphp
                             <span class="font-bold text-ink font-mono">{{ $parent->posts_count }} bài</span>
                             @if ($hasChildren)
-                                <span class="font-mono text-[10px] text-ink-muted block font-normal">(Tổng {{ $totalPosts }} bài)</span>
+                                <span class="font-mono text-[11px] text-ink-muted block font-normal">(Tổng {{ $totalPosts }} bài)</span>
                             @endif
                         </td>
                         <td class="px-5 py-4 whitespace-nowrap text-right" onclick="event.stopPropagation()">
@@ -106,7 +106,7 @@
                                         data-parent-id="{{ $parent->id }}"
                                         data-parent-name="{{ $parent->name }}"
                                         title="Thêm danh mục con cho {{ $parent->name }}"
-                                        class="inline-flex min-h-7 cursor-pointer items-center gap-1 border border-line-strong bg-paper px-2.5 py-1 font-mono text-[11px] font-bold uppercase text-ink shadow-brutal-sm hover:bg-lime transition-all">
+                                        class="inline-flex min-h-7 cursor-pointer items-center gap-1 rounded-[8px] border border-[#CBD5E1] bg-paper px-2.5 py-1 font-mono text-[11px] font-bold uppercase text-ink shadow-none hover:bg-lime transition-all">
                                     <span>+ Con</span>
                                 </button>
                                 <button type="button"
@@ -117,7 +117,7 @@
                                         data-parent-id="{{ $parent->parent_id ?? '' }}"
                                         data-status="{{ $parent->status->value }}"
                                         data-action="{{ route('admin.categories.update', $parent) }}"
-                                        class="inline-flex min-h-7 cursor-pointer items-center border border-line-strong bg-surface px-2.5 py-1 font-mono text-[11px] font-bold uppercase text-ink shadow-brutal-sm hover:bg-lime transition-all">
+                                        class="inline-flex min-h-7 cursor-pointer items-center rounded-[8px] border border-[#CBD5E1] bg-surface px-2.5 py-1 font-mono text-[11px] font-bold uppercase text-ink shadow-none hover:bg-lime transition-all">
                                     Sửa
                                 </button>
                                 <button type="button"
@@ -127,7 +127,7 @@
                                         data-action="{{ route('admin.categories.destroy', $parent) }}"
                                         data-has-children="{{ $hasChildren ? '1' : '0' }}"
                                         data-posts-count="{{ $parent->posts_count }}"
-                                        class="inline-flex min-h-7 cursor-pointer items-center border border-line-strong bg-paper px-2.5 py-1 font-mono text-[11px] font-bold uppercase text-ink shadow-brutal-sm hover:border-danger hover:text-danger transition-all">
+                                        class="inline-flex min-h-7 cursor-pointer items-center rounded-[8px] border border-[#CBD5E1] bg-paper px-2.5 py-1 font-mono text-[11px] font-bold uppercase text-ink shadow-none hover:border-danger hover:text-danger transition-all">
                                     Xóa
                                 </button>
                             </div>
@@ -142,34 +142,34 @@
                                      data-admin-children-drawer="{{ $parent->id }}"
                                      class="grid transition-[grid-template-rows] duration-200 ease-in-out grid-rows-[0fr]">
                                     <div class="overflow-hidden">
-                                        <div class="border-y border-line-strong bg-paper divide-y divide-line">
+                                        <div class="border-y border-[#E2E8F0] bg-paper divide-y divide-[#E2E8F0]">
                                             @foreach ($children as $child)
-                                                <div class="flex items-center text-xs hover:bg-surface transition-colors py-3 px-5">
-                                                    <div class="w-5/12 flex items-center gap-2 pl-9">
+                                                <div class="flex flex-wrap items-center gap-y-2 text-xs hover:bg-surface transition-colors py-3 px-4 sm:flex-nowrap sm:px-5">
+                                                    <div class="w-full flex items-center gap-2 pl-2 sm:w-5/12 sm:pl-9">
                                                         <span class="font-mono text-sm text-ink-muted leading-none shrink-0">↳</span>
                                                         <div class="min-w-0">
                                                             <div class="flex items-center gap-2 flex-wrap">
                                                                 <p class="font-bold text-ink">{{ $child->name }}</p>
-                                                                <span class="border border-line bg-surface px-1.5 py-0.2 font-mono text-[10px] text-ink-muted">
+                                                                <span class="rounded-[6px] border border-[#E2E8F0] bg-surface px-1.5 py-0.2 font-mono text-[11px] text-ink-muted">
                                                                     thuộc {{ $parent->name }}
                                                                 </span>
                                                             </div>
                                                             <p class="font-mono text-[11px] text-ink-muted mt-0.5 truncate">{{ $child->slug }}</p>
                                                         </div>
                                                     </div>
-                                                    <div class="w-2/12 whitespace-nowrap">
+                                                    <div class="mr-3 whitespace-nowrap pl-6 sm:mr-0 sm:w-2/12 sm:pl-0">
                                                         <span @class([
-                                                            'inline-flex border px-2 py-0.5 font-mono text-[10px] font-bold uppercase',
-                                                            'border-line-strong bg-lime text-white' => $child->status === \App\Enums\CategoryStatus::Active,
-                                                            'border-line bg-surface text-ink-muted' => $child->status !== \App\Enums\CategoryStatus::Active,
+                                                            'inline-flex rounded-[6px] border px-2 py-0.5 font-mono text-[11px] font-bold uppercase',
+                                                            'border-[#E2E8F0] bg-lime text-white' => $child->status === \App\Enums\CategoryStatus::Active,
+                                                            'border-[#E2E8F0] bg-surface text-ink-muted' => $child->status !== \App\Enums\CategoryStatus::Active,
                                                         ])>
-                                                            {{ $child->status->value }}
+                                                            {{ $child->status->label() }}
                                                         </span>
                                                     </div>
-                                                    <div class="w-2/12 whitespace-nowrap font-mono text-ink tabular-nums">
+                                                    <div class="whitespace-nowrap font-mono text-ink tabular-nums sm:w-2/12">
                                                         {{ $child->posts_count }} bài
                                                     </div>
-                                                    <div class="w-3/12 whitespace-nowrap text-right">
+                                                    <div class="ml-auto whitespace-nowrap text-right sm:ml-0 sm:w-3/12">
                                                         <div class="flex items-center justify-end gap-1.5">
                                                             <button type="button"
                                                                     data-cat-action="edit"
@@ -179,7 +179,7 @@
                                                                     data-parent-id="{{ $child->parent_id }}"
                                                                     data-status="{{ $child->status->value }}"
                                                                     data-action="{{ route('admin.categories.update', $child) }}"
-                                                                    class="inline-flex min-h-6 cursor-pointer items-center border border-line-strong bg-surface px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase text-ink hover:bg-lime transition-all">
+                                                                    class="inline-flex min-h-6 cursor-pointer items-center rounded-[8px] border border-[#CBD5E1] bg-surface px-2.5 py-0.5 font-mono text-[11px] font-bold uppercase text-ink hover:bg-lime transition-all">
                                                                 Sửa
                                                             </button>
                                                             <button type="button"
@@ -189,7 +189,7 @@
                                                                     data-action="{{ route('admin.categories.destroy', $child) }}"
                                                                     data-has-children="0"
                                                                     data-posts-count="{{ $child->posts_count }}"
-                                                                    class="inline-flex min-h-6 cursor-pointer items-center border border-line bg-surface px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase text-ink hover:border-danger hover:text-danger transition-all">
+                                                                    class="inline-flex min-h-6 cursor-pointer items-center rounded-[8px] border border-[#CBD5E1] bg-surface px-2.5 py-0.5 font-mono text-[11px] font-bold uppercase text-ink hover:border-danger hover:text-danger transition-all">
                                                                 Xóa
                                                             </button>
                                                         </div>
@@ -221,8 +221,8 @@
                                 </div>
                             </td>
                             <td class="px-5 py-4 whitespace-nowrap">
-                                <span class="inline-flex border border-line bg-paper px-2 py-0.5 font-mono text-[11px] font-bold text-ink">
-                                    {{ $orphan->status->value }}
+                                <span class="inline-flex rounded-[6px] border border-[#E2E8F0] bg-paper px-2 py-0.5 font-mono text-[11px] font-bold text-ink">
+                                    {{ $orphan->status->label() }}
                                 </span>
                             </td>
                             <td class="px-5 py-4 whitespace-nowrap font-mono text-ink tabular-nums">
@@ -238,7 +238,7 @@
                                             data-parent-id="{{ $orphan->parent_id ?? '' }}"
                                             data-status="{{ $orphan->status->value }}"
                                             data-action="{{ route('admin.categories.update', $orphan) }}"
-                                            class="inline-flex min-h-7 cursor-pointer items-center border border-line-strong bg-surface px-2.5 py-1 font-mono text-[11px] font-bold uppercase text-ink shadow-brutal-sm hover:bg-lime transition-all">
+                                            class="inline-flex min-h-7 cursor-pointer items-center rounded-[8px] border border-[#CBD5E1] bg-surface px-2.5 py-1 font-mono text-[11px] font-bold uppercase text-ink shadow-none hover:bg-lime transition-all">
                                         Sửa
                                     </button>
                                     <button type="button"
@@ -248,7 +248,7 @@
                                             data-action="{{ route('admin.categories.destroy', $orphan) }}"
                                             data-has-children="0"
                                             data-posts-count="{{ $orphan->posts_count }}"
-                                            class="inline-flex min-h-7 cursor-pointer items-center border border-line-strong bg-paper px-2.5 py-1 font-mono text-[11px] font-bold uppercase text-ink shadow-brutal-sm hover:border-danger hover:text-danger transition-all">
+                                            class="inline-flex min-h-7 cursor-pointer items-center rounded-[8px] border border-[#CBD5E1] bg-paper px-2.5 py-1 font-mono text-[11px] font-bold uppercase text-ink shadow-none hover:border-danger hover:text-danger transition-all">
                                         Xóa
                                     </button>
                                 </div>
@@ -267,18 +267,18 @@
      role="dialog"
      aria-modal="true"
      aria-labelledby="cat-modal-title">
-    <div class="relative w-full max-w-lg border-2 border-line-strong bg-surface p-6 sm:p-8 shadow-brutal transition-all">
+    <div class="relative w-full max-w-lg rounded-[12px] border border-[#E2E8F0] bg-surface p-6 sm:p-8 shadow-[0_8px_24px_rgb(15_23_42_/_0.10)] transition-all">
         <!-- Close button -->
         <button type="button"
                 data-cat-modal-close
-                class="absolute right-4 top-4 border border-line-strong bg-paper p-1 text-ink hover:bg-lime transition-colors cursor-pointer"
+                class="absolute right-4 top-4 rounded-[8px] border border-[#E2E8F0] bg-paper p-1 text-ink hover:bg-lime transition-colors cursor-pointer"
                 aria-label="Đóng">
             <svg class="size-4" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
             </svg>
         </button>
 
-        <div class="mb-5 border-b-2 border-line-strong pb-4">
+        <div class="mb-5 border-b border-[#E2E8F0] pb-4">
             <h2 id="cat-modal-title" class="font-heading text-lg font-black uppercase text-ink">Thêm chuyên mục mới</h2>
             <p id="cat-modal-subtitle" class="font-mono text-xs text-ink-muted mt-1">Thiết lập thông tin tên, đường dẫn tĩnh và danh mục cha.</p>
         </div>
@@ -296,7 +296,7 @@
                        name="name"
                        required
                        placeholder="Ví dụ: Công nghệ, Khoa học..."
-                       class="mt-1.5 w-full border-2 border-line bg-paper px-3.5 py-2.5 text-xs text-ink outline-none focus:border-ink">
+                       class="mt-1.5 w-full rounded-[8px] border border-control bg-paper px-3.5 py-2.5 text-xs text-ink outline-none focus:border-[#1D4ED8] focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)]">
             </div>
 
             <div>
@@ -307,7 +307,7 @@
                        id="cat-slug-input"
                        name="slug"
                        placeholder="Để trống hệ thống sẽ tự sinh từ tên"
-                       class="mt-1.5 w-full border-2 border-line bg-paper px-3.5 py-2.5 text-xs font-mono text-ink outline-none focus:border-ink">
+                       class="mt-1.5 w-full rounded-[8px] border border-control bg-paper px-3.5 py-2.5 text-xs font-mono text-ink outline-none focus:border-[#1D4ED8] focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)]">
             </div>
 
 
@@ -317,7 +317,7 @@
                 </label>
                 <select id="cat-parent-input"
                         name="parent_id"
-                        class="mt-1.5 w-full border-2 border-line bg-paper px-3.5 py-2.5 text-xs text-ink outline-none focus:border-ink">
+                        class="mt-1.5 w-full rounded-[8px] border border-control bg-paper px-3.5 py-2.5 text-xs text-ink outline-none focus:border-[#1D4ED8] focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)]">
                     <option value="">-- Không có (Đây là danh mục chính) --</option>
                     @foreach ($parentCategories as $parent)
                         <option value="{{ $parent->id }}">{{ $parent->name }}</option>
@@ -332,22 +332,22 @@
                 <label for="cat-status-input" class="block font-mono text-xs font-bold uppercase tracking-wider text-ink">Trạng thái</label>
                 <select id="cat-status-input"
                         name="status"
-                        class="mt-1.5 w-full border-2 border-line bg-paper px-3.5 py-2.5 text-xs text-ink outline-none focus:border-ink">
+                        class="mt-1.5 w-full rounded-[8px] border border-control bg-paper px-3.5 py-2.5 text-xs text-ink outline-none focus:border-[#1D4ED8] focus:shadow-[0_0_0_2px_rgb(29_78_216_/_0.25)]">
                     @foreach (\App\Enums\CategoryStatus::cases() as $status)
                         <option value="{{ $status->value }}">{{ $status->value }}</option>
                     @endforeach
                 </select>
             </div>
 
-            <div class="flex items-center justify-end gap-3 pt-5 border-t-2 border-line-strong">
+            <div class="flex items-center justify-end gap-3 pt-5 border-t border-[#E2E8F0]">
                 <button type="button"
                         data-cat-modal-close
-                        class="border-2 border-line bg-surface px-4 py-2 font-mono text-xs font-bold uppercase text-ink hover:border-line-strong transition-colors cursor-pointer">
+                        class="rounded-[8px] border border-[#E2E8F0] bg-surface px-4 py-2 font-mono text-xs font-bold uppercase text-ink hover:border-[#CBD5E1] transition-colors cursor-pointer">
                     Hủy
                 </button>
                 <button type="submit"
                         id="cat-btn-submit"
-                        class="border-2 border-line-strong bg-lime px-5 py-2 font-mono text-xs font-bold uppercase text-ink shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
+                        class="rounded-[8px] border border-[#E2E8F0] bg-lime px-5 py-2 font-mono text-xs font-bold uppercase text-ink shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
                     Lưu chuyên mục
                 </button>
             </div>
@@ -361,11 +361,11 @@
      role="dialog"
      aria-modal="true"
      aria-labelledby="cat-delete-title">
-    <div class="relative w-full max-w-md border-2 border-line-strong bg-surface p-6 shadow-brutal transition-all">
+    <div class="relative w-full max-w-md rounded-[12px] border border-[#E2E8F0] bg-surface p-6 shadow-[0_8px_24px_rgb(15_23_42_/_0.10)] transition-all">
         <!-- Close button -->
         <button type="button"
                 data-cat-delete-modal-close
-                class="absolute right-4 top-4 border border-line-strong bg-paper p-1 text-ink hover:bg-lime transition-colors cursor-pointer"
+                class="absolute right-4 top-4 rounded-[8px] border border-[#E2E8F0] bg-paper p-1 text-ink hover:bg-lime transition-colors cursor-pointer"
                 aria-label="Đóng">
             <svg class="size-4" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
@@ -373,7 +373,7 @@
         </button>
 
         <div class="flex items-start gap-4 mb-4">
-            <div class="grid size-12 shrink-0 place-items-center border-2 border-line-strong bg-danger text-paper font-mono font-black text-xl shadow-brutal-sm">
+            <div class="grid size-12 shrink-0 place-items-center rounded-[12px] border border-[#E2E8F0] bg-danger text-paper font-mono font-black text-xl shadow-[0_1px_3px_rgb(15_23_42_/_0.04)]">
                 !
             </div>
             <div class="min-w-0">
@@ -381,7 +381,7 @@
                 <p class="text-xs text-ink-muted mt-1">
                     Bạn có chắc chắn muốn xóa chuyên mục <span id="cat-delete-target-name" class="font-bold text-danger"></span>?
                 </p>
-                <div id="cat-delete-warning-box" class="mt-2.5 border border-line bg-paper p-2.5 font-mono text-[11px] text-danger hidden">
+                <div id="cat-delete-warning-box" class="mt-2.5 rounded-[12px] border border-[#E2E8F0] bg-paper p-2.5 font-mono text-[11px] text-danger hidden">
                     <span id="cat-delete-warning-text"></span>
                 </div>
                 <p class="mt-2 font-mono text-[11px] text-ink-muted">
@@ -393,14 +393,14 @@
         <form id="cat-delete-form" method="POST" action="">
             @csrf
             @method('DELETE')
-            <div class="flex items-center justify-end gap-3 pt-5 border-t-2 border-line-strong">
+            <div class="flex items-center justify-end gap-3 pt-5 border-t border-[#E2E8F0]">
                 <button type="button"
                         data-cat-delete-modal-close
-                        class="border-2 border-line bg-surface px-4 py-2 font-mono text-xs font-bold uppercase text-ink hover:border-line-strong transition-colors cursor-pointer">
+                        class="rounded-[8px] border border-[#E2E8F0] bg-surface px-4 py-2 font-mono text-xs font-bold uppercase text-ink hover:border-[#CBD5E1] transition-colors cursor-pointer">
                     Hủy bỏ
                 </button>
                 <button type="submit"
-                        class="border-2 border-line-strong bg-danger px-5 py-2 font-mono text-xs font-bold uppercase text-paper shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
+                        class="rounded-[8px] border border-[#E2E8F0] bg-danger px-5 py-2 font-mono text-xs font-bold uppercase text-paper shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer">
                     Xác nhận xóa
                 </button>
             </div>

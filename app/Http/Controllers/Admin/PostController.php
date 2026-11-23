@@ -10,6 +10,7 @@ use App\Http\Requests\Admin\ModeratePostRequest;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
+use App\Services\CsvWriter;
 use App\Services\PostModerationService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -68,21 +69,21 @@ class PostController extends Controller
         return back()->with('status', 'Đã cập nhật trạng thái bài viết.');
     }
 
-    public function export(Request $request): StreamedResponse
+    public function export(Request $request, CsvWriter $csv): StreamedResponse
     {
         Gate::authorize('viewAny', Post::class);
 
-        $response = new StreamedResponse(function (): void {
+        $response = new StreamedResponse(function () use ($csv): void {
             $handle = fopen('php://output', 'w');
             fwrite($handle, "\xEF\xBB\xBF");
-            fputcsv($handle, ['ID', 'Tiêu đề', 'Chuyên mục', 'Tác giả', 'Trạng thái', 'Ngày xuất bản', 'Ngày tạo']);
+            $csv->writeRow($handle, ['ID', 'Tiêu đề', 'Chuyên mục', 'Tác giả', 'Trạng thái', 'Ngày xuất bản', 'Ngày tạo']);
 
             Post::query()
                 ->with(['author:id,name', 'category:id,name'])
                 ->latest('id')
-                ->chunk(200, function ($posts) use ($handle): void {
+                ->chunk(200, function ($posts) use ($handle, $csv): void {
                     foreach ($posts as $post) {
-                        fputcsv($handle, [
+                        $csv->writeRow($handle, [
                             $post->id,
                             $post->title,
                             $post->category?->name ?? '',

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\CommentModerationAction;
+use App\Enums\CommentStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ModerateCommentRequest;
 use App\Models\Comment;
 use App\Services\CommentModerationService;
+use App\Services\CsvWriter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -57,23 +59,23 @@ class CommentController extends Controller
         return back()->with('status', 'Đã cập nhật bình luận.');
     }
 
-    public function export(Request $request): StreamedResponse
+    public function export(Request $request, CsvWriter $csv): StreamedResponse
     {
         Gate::authorize('viewAny', Comment::class);
 
-        $response = new StreamedResponse(function (): void {
+        $response = new StreamedResponse(function () use ($csv): void {
             $handle = fopen('php://output', 'w');
             fwrite($handle, "\xEF\xBB\xBF");
-            fputcsv($handle, ['ID', 'Bài viết', 'Người bình luận', 'Nội dung', 'Trạng thái', 'Ngày tạo']);
+            $csv->writeRow($handle, ['ID', 'Bài viết', 'Người bình luận', 'Nội dung', 'Trạng thái', 'Ngày tạo']);
 
             Comment::query()
                 ->withTrashed()
                 ->with(['user:id,name', 'post:id,title'])
                 ->latest('id')
-                ->chunk(200, function ($comments) use ($handle): void {
+                ->chunk(200, function ($comments) use ($handle, $csv): void {
                     foreach ($comments as $comment) {
-                        $state = $comment->trashed() ? 'Đã xóa' : ($comment->status === 'visible' ? 'Hiển thị' : 'Đã ẩn');
-                        fputcsv($handle, [
+                        $state = $comment->trashed() ? 'Đã xóa' : ($comment->status === CommentStatus::Visible ? 'Hiển thị' : 'Đã ẩn');
+                        $csv->writeRow($handle, [
                             $comment->id,
                             $comment->post?->title ?? '',
                             $comment->user?->name ?? '',

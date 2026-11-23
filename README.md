@@ -1,4 +1,4 @@
-# 📰 NEWSHUB — HỆ THỐNG TÒA SOẠN BÁO ĐIỆN TỬ & MẠNG XUẤT BẢN NỘI DUNG SỐ
+# 📰 BAOUT — HỆ THỐNG TÒA SOẠN BÁO ĐIỆN TỬ & MẠNG XUẤT BẢN NỘI DUNG SỐ
 
 [![Laravel Version](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
 [![PHP Version](https://img.shields.io/badge/PHP-8.4%20%7C%208.5-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://php.net)
@@ -10,7 +10,7 @@
 
 ## 🌟 1. GIỚI THIỆU TỔNG QUAN
 
-**NewsHub** là hệ thống báo điện tử và mạng quản trị xuất bản nội dung số chuyên nghiệp, được xây dựng trên nền tảng **Laravel 12** và **Tailwind CSS v4**. Dự án mô phỏng quy trình tác nghiệp khép kín của một tòa soạn báo chí hiện đại: từ khâu độc giả nộp hồ sơ ứng tuyển tác giả, phóng viên soạn bài và nộp duyệt, ban biên tập thẩm định xuất bản, đến tiếp nhận phản hồi và kiểm duyệt bình luận đa cấp.
+**BaoUT** là hệ thống báo điện tử và mạng quản trị xuất bản nội dung số chuyên nghiệp, được xây dựng trên nền tảng **Laravel 12** và **Tailwind CSS v4**. Dự án mô phỏng quy trình tác nghiệp khép kín của một tòa soạn báo chí hiện đại: từ khâu độc giả nộp hồ sơ ứng tuyển tác giả, phóng viên soạn bài và nộp duyệt, ban biên tập thẩm định xuất bản, đến tiếp nhận phản hồi và kiểm duyệt bình luận đa cấp.
 
 ### 🎯 Điểm nhấn kỹ thuật & trải nghiệm người dùng:
 - 🖋️ **Ngôn ngữ thiết kế Editorial / Neo-Brutalist:** 
@@ -33,7 +33,7 @@
 - 💼 **Quy trình ứng tuyển tác giả trực tuyến:** Độc giả nộp hồ sơ gồm giới thiệu bản thân và tệp CV (PDF/DOCX) để Quản trị viên duyệt và tự động nâng cấp vai trò thành Tác giả.
 - 💬 **Hệ thống bình luận đa cấp (Nested Comments):** Hỗ trợ độc giả trao đổi, phản hồi bình luận lồng nhau; độc giả có trang quản lý bình luận của chính mình (`/my-comments`); Quản trị viên có bảng điều duyệt và xuất dữ liệu bình luận ra CSV.
 - ⚠️ **Xác thực biểu mẫu trực quan (Smart Client-side Validation):** Loại bỏ hoàn toàn bong bóng HTML5 mặc định thô kệch, hiển thị cảnh báo lỗi bằng tiếng Việt ngay dưới từng ô nhập liệu và tự động làm sạch khi người dùng sửa lỗi.
-- ✉️ **Email giao dịch đồng bộ thương hiệu:** Mẫu email gửi liên kết kích hoạt tài khoản và đặt lại mật khẩu được thiết kế đồng bộ với nhận diện NewsHub.
+- ✉️ **Email giao dịch đồng bộ thương hiệu:** Mẫu email gửi liên kết kích hoạt tài khoản và đặt lại mật khẩu được thiết kế đồng bộ với nhận diện BaoUT.
 
 ---
 
